@@ -1,5 +1,5 @@
 ---
-name: "\U0001F41EBUG"
+name: "\U0001F41EBug"
 about: 오류 내용을 입력해주세요
 title: ''
 labels: ''
