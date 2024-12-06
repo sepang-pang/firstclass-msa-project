@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/com.first-class.msa.agent" />
+    <file type="web" url="file://$PROJECT_DIR$/com.first-class.msa.auth" />
+    <file type="web" url="file://$PROJECT_DIR$/com.first-class.msa.business" />
+    <file type="web" url="file://$PROJECT_DIR$/com.first-class.msa.config" />
+    <file type="web" url="file://$PROJECT_DIR$/com.first-class.msa.delivery" />
+    <file type="web" url="file://$PROJECT_DIR$/com.first-class.msa.gateway" />
+    <file type="web" url="file://$PROJECT_DIR$/com.first-class.msa.hub" />
+    <file type="web" url="file://$PROJECT_DIR$/com.first-class.msa.message" />
+    <file type="web" url="file://$PROJECT_DIR$/com.first-class.msa.orders" />
+    <file type="web" url="file://$PROJECT_DIR$/com.first-class.msa.product" />
+    <file type="web" url="file://$PROJECT_DIR$/com.first-class.msa.server" />
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" project-jdk-name="20" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>
