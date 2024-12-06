@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7c1308d6-dd0b-4855-b139-b03d6cbc70ca" name="Changes" comment="" />
+    <list default="true" id="7c1308d6-dd0b-4855-b139-b03d6cbc70ca" name="Changes" comment="[ INIT ] hub-service init commit">
+      <change afterPath="$PROJECT_DIR$/com.first-class.msa.message/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.message/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.message/build.gradle" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -87,23 +92,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Gradle.com.first-class.msa.server [build].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.com.first-class.msa.server [clean].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/osechang/JAVA/firstclass-msa-project&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.com.first-class.msa.server [build].executor": "Run",
+    "Gradle.com.first-class.msa.server [clean].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "develop",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/osechang/JAVA/firstclass-msa-project",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "run.configurations.included.in.services": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunDashboard">
     <option name="configurationTypes">
       <set>
@@ -259,11 +267,87 @@
       <option name="presentableId" value="Default" />
       <updated>1733484124279</updated>
       <workItem from="1733484125424" duration="2406000" />
-      <workItem from="1733487753005" duration="72000" />
+      <workItem from="1733487753005" duration="1286000" />
     </task>
+    <task id="LOCAL-00001" summary="[ INIT ] project init commit">
+      <option name="closed" value="true" />
+      <created>1733487861410</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1733487861410</updated>
+    </task>
+    <task id="LOCAL-00002" summary="[ INIT ] eureka-server init commit">
+      <option name="closed" value="true" />
+      <created>1733488206837</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1733488206837</updated>
+    </task>
+    <task id="LOCAL-00003" summary="[ INIT ] gateway init commit">
+      <option name="closed" value="true" />
+      <created>1733488500349</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1733488500349</updated>
+    </task>
+    <task id="LOCAL-00004" summary="[ INIT ] auth-service init commit">
+      <option name="closed" value="true" />
+      <created>1733488733613</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1733488733613</updated>
+    </task>
+    <task id="LOCAL-00005" summary="[ INIT ] agent-service init commit">
+      <option name="closed" value="true" />
+      <created>1733488829751</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1733488829751</updated>
+    </task>
+    <task id="LOCAL-00006" summary="[ INIT ] business-service init commit">
+      <option name="closed" value="true" />
+      <created>1733488905993</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1733488905993</updated>
+    </task>
+    <task id="LOCAL-00007" summary="[ INIT ] delivery-service init commit">
+      <option name="closed" value="true" />
+      <created>1733488965676</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1733488965676</updated>
+    </task>
+    <task id="LOCAL-00008" summary="[ INIT ] hub-service init commit">
+      <option name="closed" value="true" />
+      <created>1733489012820</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1733489012820</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="[ INIT ] project init commit" />
+    <MESSAGE value="[ INIT ] eureka-server init commit" />
+    <MESSAGE value="[ INIT ] gateway init commit" />
+    <MESSAGE value="[ INIT ] auth-service init commit" />
+    <MESSAGE value="[ INIT ] agent-service init commit" />
+    <MESSAGE value="[ INIT ] business-service init commit" />
+    <MESSAGE value="[ INIT ] delivery-service init commit" />
+    <MESSAGE value="[ INIT ] hub-service init commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="[ INIT ] hub-service init commit" />
   </component>
 </project>
