@@ -2,11 +2,18 @@ package com.first_class.msa.hub.presentation.controller;
 
 import com.first_class.msa.hub.application.dto.ResDTO;
 import com.first_class.msa.hub.application.dto.ResHubPostDTO;
+import com.first_class.msa.hub.application.dto.ResHubSearchDTO;
 import com.first_class.msa.hub.application.service.HubService;
+import com.first_class.msa.hub.domain.model.Hub;
 import com.first_class.msa.hub.presentation.request.ReqHubPostDTO;
 import com.first_class.msa.hub.presentation.request.ReqHubPutByIdDTO;
+import com.querydsl.core.types.Predicate;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +40,21 @@ public class HubController {
                         .code(HttpStatus.OK.value())
                         .message("허브 생성에 성공하였습니다.")
                         .data(hubService.postBy(userId, req))
+                        .build(),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/hubs")
+    public ResponseEntity<ResDTO<ResHubSearchDTO>> searchBy(@QuerydslPredicate(root = Hub.class) Predicate predicate,
+                                                            @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+
+
+        return new ResponseEntity<>(
+                ResDTO.<ResHubSearchDTO>builder()
+                        .code(HttpStatus.OK.value())
+                        .message("허브 검색에 성공하였습니다.")
+                        .data(hubService.searchBy(predicate, pageable))
                         .build(),
                 HttpStatus.OK
         );

@@ -2,7 +2,10 @@ package com.first_class.msa.hub.infrastructure.repository;
 
 import com.first_class.msa.hub.domain.model.Hub;
 import com.first_class.msa.hub.domain.repository.HubRepository;
+import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -21,6 +24,11 @@ public class HubRepositoryImpl implements HubRepository {
     @Override
     public Optional<Hub> findByIdAndDeletedAtIsNull(Long id) {
         return jpaHubRepository.findByIdAndDeletedAtIsNull(id);
+    }
+
+    @Override
+    public Page<Hub> findAll(Predicate predicate, Pageable pageable) {
+        return jpaHubRepository.findAll(predicate, pageable);
     }
 
     @Override

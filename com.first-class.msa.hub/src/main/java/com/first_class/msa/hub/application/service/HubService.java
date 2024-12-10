@@ -1,12 +1,16 @@
 package com.first_class.msa.hub.application.service;
 
+import com.first_class.msa.hub.application.dto.ResHubSearchDTO;
 import com.first_class.msa.hub.application.dto.ResHubPostDTO;
 import com.first_class.msa.hub.domain.model.Hub;
 import com.first_class.msa.hub.domain.repository.HubRepository;
 import com.first_class.msa.hub.presentation.request.ReqHubPostDTO;
 import com.first_class.msa.hub.presentation.request.ReqHubPutByIdDTO;
+import com.querydsl.core.types.Predicate;
 import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +31,23 @@ public class HubService {
 
         return ResHubPostDTO.of(hubRepository.save(hubForSaving));
     }
+
+    @Transactional(readOnly = true)
+    public ResHubSearchDTO searchBy(Predicate predicate, Pageable pageable) {
+
+        /*
+            TODO
+             1. 허브 이름 검색
+             2. 허브 주소 검색
+             3. 가까운 순, 멀리있는 순 조회 (고려)
+             4. 캐싱 적용
+        */
+
+        Page<Hub> hubPageByFilteringAndSorting = hubRepository.findAll(predicate, pageable);
+
+        return ResHubSearchDTO.of(hubPageByFilteringAndSorting);
+    }
+
 
     @Transactional
     public void putBy(Long userId, Long hubId, ReqHubPutByIdDTO dto) {

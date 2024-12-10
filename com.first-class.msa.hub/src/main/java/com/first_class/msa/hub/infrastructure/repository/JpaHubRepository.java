@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface JpaHubRepository extends JpaRepository<Hub, Long> {
+public interface JpaHubRepository extends JpaRepository<Hub, Long>, HubQueryBinder {
 
     boolean existsByLatitudeAndLongitudeAndDeletedAtIsNull(double latitude, double longitude);
 
