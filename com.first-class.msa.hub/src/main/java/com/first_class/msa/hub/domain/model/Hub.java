@@ -1,11 +1,9 @@
 package com.first_class.msa.hub.domain.model;
 
 import com.first_class.msa.hub.presentation.request.ReqHubPostDTO;
+import com.first_class.msa.hub.presentation.request.ReqHubPutByIdDTO;
 import io.hypersistence.utils.hibernate.id.Tsid;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import lombok.AccessLevel;
@@ -19,7 +17,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Table(name = "p_hubs")
+@Table(name = "p_hubs",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"latitude", "longitude"}))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Hub {
 
@@ -88,5 +87,14 @@ public class Hub {
                 .addressDetail(dto.getHubDTO().getAddressDetail())
                 .userId(userId)
                 .build();
+    }
+
+    public void modifyHub(Long userId, ReqHubPutByIdDTO dto) {
+        this.name = dto.getHubDTO().getName();
+        this.latitude = dto.getHubDTO().getLatitude();
+        this.longitude = dto.getHubDTO().getLongitude();
+        this.address = dto.getHubDTO().getAddress();
+        this.addressDetail = dto.getHubDTO().getAddressDetail();
+        this.modifiedBy = userId;
     }
 }
