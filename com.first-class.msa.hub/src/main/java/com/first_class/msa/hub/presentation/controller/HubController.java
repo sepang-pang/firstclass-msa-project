@@ -44,6 +44,9 @@ public class HubController {
                                                 @Valid @RequestBody ReqHubPutByIdDTO dto) {
 
         // --
+        // TODO : MASTER 권한 검증
+        // --
+        // --
         // TODO : DataIntegrityViolationException 예외처리
         // --
 
@@ -61,6 +64,10 @@ public class HubController {
     @DeleteMapping("/hubs/{hubId}")
     public ResponseEntity<ResDTO<Object>> deleteBy(@RequestParam(name = "userId") Long userId,
                                                    @PathVariable(name = "hubId") Long hubId) {
+
+        // --
+        // TODO : MASTER 권한 검증
+        // --
 
         hubService.deleteBy(userId, hubId);
 
