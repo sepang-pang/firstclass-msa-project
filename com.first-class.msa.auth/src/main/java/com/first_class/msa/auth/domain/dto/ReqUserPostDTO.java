@@ -17,17 +17,17 @@ public class ReqUserPostDTO {
     private String password;
     private String username;
     private String phone;
-    private String role;
+    private Role role;
     private String slackEmail;
 
-    public static User toEntity(ReqUserPostDTO dto) {
-        return User.builder()
-                .account(dto.getAccount())
-                .password(dto.getPassword())
-                .username(dto.getUsername())
-                .phone(dto.getPhone())
-                .role(Role.valueOf(dto.getRole()))
-                .slackEmail(dto.getSlackEmail())
-                .build();
+    public User toEntity() {
+        return User.createUser(
+                this.account,
+                this.password,
+                this.username,
+                this.phone,
+                this.role,
+                this.slackEmail
+        );
     }
 }

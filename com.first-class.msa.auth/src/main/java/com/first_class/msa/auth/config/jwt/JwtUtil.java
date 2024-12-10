@@ -1,5 +1,6 @@
 package com.first_class.msa.auth.config.jwt;
 
+import com.first_class.msa.auth.domain.model.Role;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,12 +14,13 @@ public class JwtUtil {
     private String secretKey;
 
     // JWT 토큰 생성
-    public String generateToken(String account) {
+    public String generateToken(String account, Role role) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + 1000 * 60 * 60 * 24); // 1일 만료 시간
 
         return Jwts.builder()
                 .setSubject(account)
+                .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, secretKey)
@@ -32,6 +34,15 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
+    }
+
+    //권한 추출
+    public String extractRole(String token) {
+        return Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .getBody()
+                .get("role", String.class);
     }
 
     // JWT 토큰 유효성 검증

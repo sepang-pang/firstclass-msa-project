@@ -73,6 +73,16 @@ public class User implements UserDetails {
         this.password = encodedPassword;
     }
 
+    public static User createUser(String account, String password, String username, String phone, Role role, String slackEmail) {
+        return User.builder()
+                .account(account)
+                .password(password)
+                .username(username)
+                .phone(phone)
+                .role(role)
+                .slackEmail(slackEmail)
+                .build();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
