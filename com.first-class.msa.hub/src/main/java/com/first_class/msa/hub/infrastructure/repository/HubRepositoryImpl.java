@@ -17,7 +17,7 @@ public class HubRepositoryImpl implements HubRepository {
     }
 
     @Override
-    public void save(Hub hub) {
-        jpaHubRepository.save(hub);
+    public Hub save(Hub hub) {
+        return jpaHubRepository.save(hub);
     }
 }

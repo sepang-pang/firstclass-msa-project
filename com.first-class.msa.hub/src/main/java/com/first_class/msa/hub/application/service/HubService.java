@@ -24,9 +24,7 @@ public class HubService {
 
         Hub hubForSaving = Hub.createHub(userId, dto);
 
-        hubRepository.save(hubForSaving);
-
-        return ResHubPostDTO.of(hubForSaving);
+        return ResHubPostDTO.of(hubRepository.save(hubForSaving));
     }
 
     private boolean isDuplicateHub(double latitude, double longitude) {

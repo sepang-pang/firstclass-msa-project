@@ -6,5 +6,5 @@ public interface HubRepository {
 
     boolean existsByLatitudeAndLongitudeAndDeletedIsNull(double latitude, double longitude);
 
-    void save(Hub hub);
+    Hub save(Hub hub);
 }
