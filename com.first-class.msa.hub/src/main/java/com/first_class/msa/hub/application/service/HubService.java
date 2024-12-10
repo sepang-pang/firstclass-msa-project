@@ -9,6 +9,7 @@ import com.first_class.msa.hub.presentation.request.ReqHubPutByIdDTO;
 import com.querydsl.core.types.Predicate;
 import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -32,22 +33,22 @@ public class HubService {
         return ResHubPostDTO.of(hubRepository.save(hubForSaving));
     }
 
-    @Transactional(readOnly = true)
-    public ResHubSearchDTO searchBy(Predicate predicate, Pageable pageable) {
 
-        /*
-            TODO
-             1. 허브 이름 검색
-             2. 허브 주소 검색
-             3. 가까운 순, 멀리있는 순 조회 (고려)
-             4. 캐싱 적용
-        */
+    // --
+    // XXX : 페이징 검색 기능에 캐싱은 필요할까 ? : 캐시 히트율이 높지 않을 거 같다.
+    // --
+    @Transactional(readOnly = true)
+    @Cacheable(value = "hubSearchCache", key = "#predicate.hashCode() + '-' + #pageable.pageNumber + '-' + #pageable.pageSize")
+    public ResHubSearchDTO searchBy(Predicate predicate, Pageable pageable) {
 
         Page<Hub> hubPageByFilteringAndSorting = hubRepository.findAll(predicate, pageable);
 
         return ResHubSearchDTO.of(hubPageByFilteringAndSorting);
     }
 
+    // --
+    // TODO : 허브 상세 조회 구현하기 => 이동정보, 업체, 상품 구현 후
+    // --
 
     @Transactional
     public void putBy(Long userId, Long hubId, ReqHubPutByIdDTO dto) {
