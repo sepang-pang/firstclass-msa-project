@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.web.PagedModel;
 
 import java.util.List;
 
@@ -21,20 +19,24 @@ public class ResHubSearchDTO {
 
     public static ResHubSearchDTO of(Page<Hub> hubPage) {
         return ResHubSearchDTO.builder()
-                .hubPage(new HubPage(hubPage))
+                .hubPage(HubPage.from(hubPage))
                 .build();
     }
 
-    public static class HubPage extends PagedModel<HubPage.HubDTO> {
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class HubPage {
 
-        private HubPage(Page<Hub> hubPage) {
-            super(
-                    new PageImpl<>(
-                            HubDTO.from(hubPage.getContent()),
-                            hubPage.getPageable(),
-                            hubPage.getTotalElements()
-                    )
-            );
+        private List<HubDTO> content;
+        private PageDetails page;
+
+        public static HubPage from(Page<Hub> hubPage) {
+            return HubPage.builder()
+                    .content(HubDTO.from(hubPage.getContent()))
+                    .page(PageDetails.from(hubPage))
+                    .build();
         }
 
         @Getter
@@ -67,6 +69,29 @@ public class ResHubSearchDTO {
                         .build();
             }
 
+        }
+
+        @Getter
+        @Builder
+        @NoArgsConstructor
+        @AllArgsConstructor
+        public static class PageDetails {
+            // --
+            // FIXME : 페이징 처리에 대한 캐싱 기능이 필요 없다고 판단되면, 이전 양식으로 되돌아 갈 것임.
+            // --
+            private int size;
+            private int number;
+            private long totalElements;
+            private int totalPages;
+
+            public static PageDetails from(Page<Hub> hubPage) {
+                return PageDetails.builder()
+                        .size(hubPage.getSize())
+                        .number(hubPage.getNumber())
+                        .totalElements(hubPage.getTotalElements())
+                        .totalPages(hubPage.getTotalPages())
+                        .build();
+            }
         }
     }
 }
