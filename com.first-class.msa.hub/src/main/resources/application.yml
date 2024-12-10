@@ -1,6 +1,6 @@
 spring:
   application:
-    name: product-service
+    name: hub-service
 
   datasource:
     url: ${DB_URL}
@@ -23,5 +23,5 @@ eureka:
     service-url:
       defaultZone: http://localhost:19090/eureka/
 
-#server:
-#  port: 19093
+server:
+  port: 19080
