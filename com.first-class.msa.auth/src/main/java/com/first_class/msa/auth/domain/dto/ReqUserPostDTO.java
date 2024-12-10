@@ -20,14 +20,4 @@ public class ReqUserPostDTO {
     private Role role;
     private String slackEmail;
 
-    public User toEntity() {
-        return User.createUser(
-                this.account,
-                this.password,
-                this.username,
-                this.phone,
-                this.role,
-                this.slackEmail
-        );
-    }
 }
