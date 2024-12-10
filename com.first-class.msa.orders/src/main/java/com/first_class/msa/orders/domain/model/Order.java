@@ -47,7 +47,7 @@ public class Order extends BaseTime {
 	private OrderTotalPrice orderTotalPrice;
 
 	@OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<OrderLine> orderProducts = new ArrayList<>();
+	private List<OrderLine> orderLineList = new ArrayList<>();
 
 
 
