@@ -1,11 +1,15 @@
 package com.first_class.msa.hub.domain.model;
 
+import com.first_class.msa.hub.presentation.request.ReqHubPostDTO;
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,7 +19,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Table(name = "hubs")
+@Table(name = "p_hubs")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Hub {
 
@@ -23,12 +27,16 @@ public class Hub {
     @Column(name = "hub_id")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
+    @DecimalMin(value = "-90.0")
+    @DecimalMax(value = "90.0")
     @Column(name = "latitude", nullable = false)
     private double latitude;
 
+    @DecimalMin(value = "-180.0")
+    @DecimalMax(value = "180.0")
     @Column(name = "longitude", nullable = false)
     private double longitude;
 
@@ -43,18 +51,42 @@ public class Hub {
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(name = "modified_at" , nullable = false)
+    @Column(name = "modified_at", nullable = false)
     private LocalDateTime modifiedAt;
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
     @Column(name = "created_by", updatable = false)
-    private String createdBy;
+    private Long createdBy;
 
     @Column(name = "modified_by", nullable = false)
-    private String modifiedBy;
+    private Long modifiedBy;
 
     @Column(name = "deleted_by")
-    private String deletedBy;
+    private Long deletedBy;
+
+    @Builder
+    public Hub (String name, double latitude, double longitude,
+                String address, String addressDetail, Long userId) {
+
+        this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.address = address;
+        this.addressDetail = addressDetail;
+        this.createdBy = userId;
+        this.modifiedBy = userId;
+    }
+
+    public static Hub createHub(Long userId, ReqHubPostDTO dto) {
+        return Hub.builder()
+                .name(dto.getHubDTO().getName())
+                .latitude(dto.getHubDTO().getLatitude())
+                .longitude(dto.getHubDTO().getLongitude())
+                .address(dto.getHubDTO().getAddress())
+                .addressDetail(dto.getHubDTO().getAddressDetail())
+                .userId(userId)
+                .build();
+    }
 }
