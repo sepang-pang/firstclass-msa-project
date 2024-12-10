@@ -52,7 +52,22 @@ public class HubController {
         return new ResponseEntity<>(
                 ResDTO.builder()
                         .code(HttpStatus.OK.value())
-                        .message("게시글 수정에 성공했습니다.")
+                        .message("허브 수정에 성공했습니다.")
+                        .build(),
+                HttpStatus.OK
+        );
+    }
+
+    @DeleteMapping("/hubs/{hubId}")
+    public ResponseEntity<ResDTO<Object>> deleteBy(@RequestParam(name = "userId") Long userId,
+                                                   @PathVariable(name = "hubId") Long hubId) {
+
+        hubService.deleteBy(userId, hubId);
+
+        return new ResponseEntity<>(
+                ResDTO.builder()
+                        .code(HttpStatus.OK.value())
+                        .message("허브 삭제에 성공했습니다.")
                         .build(),
                 HttpStatus.OK
         );

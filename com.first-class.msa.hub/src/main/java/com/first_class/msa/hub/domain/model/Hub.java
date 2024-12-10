@@ -97,4 +97,10 @@ public class Hub {
         this.addressDetail = dto.getHubDTO().getAddressDetail();
         this.modifiedBy = userId;
     }
+
+    public void deleteHub(Long userId) {
+        this.deletedAt = LocalDateTime.now();
+        this.modifiedBy = userId;
+        this.deletedBy = userId;
+    }
 }

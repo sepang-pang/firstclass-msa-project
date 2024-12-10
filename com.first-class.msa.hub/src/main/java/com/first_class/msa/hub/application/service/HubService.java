@@ -36,6 +36,18 @@ public class HubService {
         hubForModification.modifyHub(userId, dto);
     }
 
+    @Transactional
+    public void deleteBy(Long userId, Long hubId) {
+
+        // --
+        // XXX : 삭제 후 해당 허브를 참조하는 테이블 처리 여부 생각하기
+        // --
+
+        Hub hubForDeletion = getHubBy(hubId);
+
+        hubForDeletion.deleteHub(userId);
+    }
+
 
     private Hub getHubBy(Long hubId) {
         return hubRepository.findByIdAndDeletedAtIsNull(hubId)
@@ -46,5 +58,6 @@ public class HubService {
     private boolean isDuplicateHub(double latitude, double longitude) {
         return hubRepository.existsByLatitudeAndLongitudeAndDeletedIsNull(latitude, longitude);
     }
+
 
 }
