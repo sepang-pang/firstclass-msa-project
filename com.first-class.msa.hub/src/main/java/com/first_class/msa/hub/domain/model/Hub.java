@@ -69,9 +69,10 @@ public class Hub {
     private String deletedBy;
 
     @Builder
-    public Hub (String name, double latitude, double longitude,
+    public Hub (Long managerId, String name, double latitude, double longitude,
                 String address, String addressDetail, String account) {
 
+        this.managerId = managerId;
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -83,6 +84,7 @@ public class Hub {
 
     public static Hub createHub(String account, ReqHubPostDTO dto) {
         return Hub.builder()
+                .managerId(dto.getHubDTO().getManagerId())
                 .name(dto.getHubDTO().getName())
                 .latitude(dto.getHubDTO().getLatitude())
                 .longitude(dto.getHubDTO().getLongitude())
