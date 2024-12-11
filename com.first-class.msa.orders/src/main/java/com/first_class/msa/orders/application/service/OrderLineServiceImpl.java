@@ -36,10 +36,15 @@ public class OrderLineServiceImpl implements OrderLineService {
 		// List<ResProductDto> resProductDTO = productService.getProductList(productIds);
 		return resProductDTO.stream()
 			.map(resProductDto -> {
-				ReqOrderDTO.ReqOrderLineDTO matchingRequest = resProductDto.stream()
-					.filter(orderProductRequest -> orderProductRequest.getProductId().equals(resProductDto.getId()))
+				ReqOrderDTO.ReqOrderLineDTO matchingRequest = orderLinePostDTOList.stream()
+					.filter(reqOrderLineDTO -> reqOrderLineDTO.getProductId().equals(resProductDto.getId()))
 					.findFirst()
-					.orElseThrow(() -> new ApiException(ErrorMessage.NOT_FOUND_PRODUCT));
+					.orElseThrow(() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOT_FOUND_PRODUCT)));
+
+				if(resProductDto.getCount() < matchingRequest.getCount()){
+					throw new IllegalArgumentException(new ApiException(ErrorMessage.INSUFFICIENT_COUNT));
+				}
+
 
 				Count count = new Count(matchingRequest.getCount());
 				return OrderLine.createOrderLine(order, resProductDto.getId(), count, resProductDto.getSupplyPrice());
