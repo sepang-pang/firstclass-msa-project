@@ -32,7 +32,7 @@ spring:
         - id: hub-service
           uri: lb://hub-service
           predicates:
-            - Path=/hub/**
+            - Path=/hubs/**
 
         - id: message-service
           uri: lb://message-service
@@ -47,7 +47,7 @@ spring:
         - id: product-service
           uri: lb://product-service
           predicates:
-            - Path=/product/**
+            - Path=/products/**
 
       discovery:
         locator:
