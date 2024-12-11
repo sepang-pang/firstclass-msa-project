@@ -18,11 +18,11 @@ public class BusinessService {
     private final HubClient hubClient;
 
     @Transactional
-    public ResBusinessPostDTO postBy(Long userId, ReqBusinessPostDTO dto) {
+    public ResBusinessPostDTO postBy(Long userId, String account, ReqBusinessPostDTO dto) {
 
         validateBusiness(dto);
 
-        Business businessForSaving = Business.createBusiness(userId, dto);
+        Business businessForSaving = Business.createBusiness(userId, account, dto);
 
         businessRepository.save(businessForSaving);
 
