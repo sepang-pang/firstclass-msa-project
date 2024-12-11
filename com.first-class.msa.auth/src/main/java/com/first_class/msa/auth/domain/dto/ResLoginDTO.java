@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResLoginDTO {
+
     private String jwtToken;
     private String message;
 }

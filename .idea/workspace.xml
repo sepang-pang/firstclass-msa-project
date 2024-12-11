@@ -5,17 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7c1308d6-dd0b-4855-b139-b03d6cbc70ca" name="Changes" comment="[ INIT ] hub-service init commit">
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.auth/src/main/java/com/first_class/msa/auth/config/jwt/JwtAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.auth/src/main/java/com/first_class/msa/auth/config/jwt/JwtAuthenticationFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.auth/src/main/java/com/first_class/msa/auth/config/jwt/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.auth/src/main/java/com/first_class/msa/auth/config/jwt/JwtUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.auth/src/main/java/com/first_class/msa/auth/domain/dto/ReqUserPostDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.auth/src/main/java/com/first_class/msa/auth/domain/dto/ReqUserPostDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.auth/src/main/java/com/first_class/msa/auth/domain/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.auth/src/main/java/com/first_class/msa/auth/domain/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.auth/src/main/java/com/first_class/msa/auth/domain/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.auth/src/main/java/com/first_class/msa/auth/domain/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.agent/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.agent/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.auth/src/main/java/com/first_class/msa/auth/domain/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.auth/src/main/java/com/first_class/msa/auth/domain/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.auth/src/main/java/com/first_class/msa/auth/domain/dto/ReqLoginDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.auth/src/main/java/com/first_class/msa/auth/domain/dto/ReqLoginDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.auth/src/main/java/com/first_class/msa/auth/domain/dto/ResLoginDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.auth/src/main/java/com/first_class/msa/auth/domain/dto/ResLoginDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.auth/src/main/java/com/first_class/msa/auth/domain/dto/ResUserPostDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.auth/src/main/java/com/first_class/msa/auth/domain/dto/ResUserPostDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.auth/src/main/java/com/first_class/msa/auth/domain/service/UserDetailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.auth/src/main/java/com/first_class/msa/auth/domain/service/UserDetailService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/com.first-class.msa.auth/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.auth/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.gateway/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.gateway/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.gateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.gateway/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -151,6 +151,9 @@
       <recent name="com.first_class.msa.auth.domain.dto" />
       <recent name="com.first_class.msa.auth.domain.repository" />
     </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.first_class.msa.gateway" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="configurationTypes">
@@ -255,7 +258,7 @@
       </method>
     </configuration>
     <configuration name="HubApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <module name="com.first-class.msa.hub.main" />
+      <module name="hub.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.first_class.msa.hub.HubApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -317,7 +320,7 @@
       <workItem from="1733487753005" duration="1286000" />
       <workItem from="1733708765354" duration="476000" />
       <workItem from="1733709256489" duration="27002000" />
-      <workItem from="1733793957778" duration="1973000" />
+      <workItem from="1733793957778" duration="7627000" />
     </task>
     <task id="LOCAL-00001" summary="[ INIT ] project init commit">
       <option name="closed" value="true" />

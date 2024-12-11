@@ -9,6 +9,45 @@ spring:
   cloud:
     gateway:
       routes:
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/auth/**
+
+        - id: agent-service
+          uri: lb://agent-service
+          predicates:
+            - Path=/agent/**
+            -
+        - id: business-service
+          uri: lb://business-service
+          predicates:
+            - Path=/business/**
+
+        - id: delivery-service
+          uri: lb://delivery-service
+          predicates:
+            - Path=/delivery/**
+
+        - id: hub-service
+          uri: lb://hub-service
+          predicates:
+            - Path=/hub/**
+
+        - id: message-service
+          uri: lb://message-service
+          predicates:
+            - Path=/message/**
+
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/order/**
+
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/product/**
 
       discovery:
         locator:
