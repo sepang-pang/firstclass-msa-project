@@ -43,7 +43,7 @@ public class JwtAuthorizationFilter implements GlobalFilter {
             return exchange.getResponse().setComplete();
         }
 
-        // 사용자 정보 헤더 추가 후 요청 전달
+        // 사용자 정보 헤더 추가 및 요청 전달
         return chain.filter(addUserInfoHeader(exchange, token));
     }
 
@@ -54,14 +54,14 @@ public class JwtAuthorizationFilter implements GlobalFilter {
     private String getJwtFromHeader(ServerWebExchange exchange) {
         String authHeader = exchange.getRequest().getHeaders().getFirst(AUTHORIZATION_HEADER);
         if (StringUtils.hasText(authHeader) && authHeader.startsWith(BEARER_PREFIX)) {
-            return authHeader.substring(BEARER_PREFIX.length());
+            return authHeader; // Bearer 포함하여 반환
         }
         return null;
     }
 
     private boolean validateToken(String token) {
         try {
-            getClaimsJws(token); // 내부에서 JWT 검증
+            getClaimsJws(token.replace(BEARER_PREFIX, "")); // Bearer 제거 후 검증
             return true;
         } catch (SecurityException | MalformedJwtException | SignatureException e) {
             log.error("유효하지 않은 JWT 서명입니다.", e);
@@ -74,7 +74,7 @@ public class JwtAuthorizationFilter implements GlobalFilter {
     }
 
     private ServerWebExchange addUserInfoHeader(ServerWebExchange exchange, String token) {
-        Claims claims = getClaimsJws(token).getBody();
+        Claims claims = getClaimsJws(token.replace(BEARER_PREFIX, "")).getBody();
 
         String userId = claims.getSubject(); // "sub" 필드에서 userId 추출
         String role = claims.get("role", String.class); // "role" 필드에서 권한 추출
@@ -84,6 +84,7 @@ public class JwtAuthorizationFilter implements GlobalFilter {
                 .mutate()
                 .header("X-User-Id", userId)
                 .header("X-Role", role)
+                .header(AUTHORIZATION_HEADER, token) // Bearer 포함한 토큰 헤더에 추가
                 .build();
 
         return exchange.mutate().request(request).build();

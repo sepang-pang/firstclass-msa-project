@@ -18,13 +18,16 @@ public class JwtUtil {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + 1000 * 60 * 60 * 24); // 1일 만료 시간
 
-        return Jwts.builder()
+        String token = Jwts.builder()
                 .setSubject(account)
                 .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
+
+        return "Bearer " + token;
+
     }
 
     // JWT 토큰에서 사용자 계정 추출
