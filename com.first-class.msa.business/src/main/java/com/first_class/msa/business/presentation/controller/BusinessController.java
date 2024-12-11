@@ -22,10 +22,6 @@ public class BusinessController {
                                                                          @RequestHeader("X-User-Account") String account,
                                                                          @Valid @RequestBody ReqBusinessPostDTO dto) {
 
-        // --
-        // TODO : 권한체크 ( 마스터, 허브 매니저, 업체 매니저 ) / auth 서비스와 통신하여 실제 DB 에 접근 후 권한을 체크한다.
-        // --
-
         return new ResponseEntity<>(
                 SuccessResponseDTO.<ResBusinessPostDTO>builder()
                         .code(HttpStatus.OK.value())
