@@ -43,6 +43,9 @@ public class Order extends BaseTime {
 	@Column(name = "user_id" ,nullable = false)
 	private Long userId;
 
+	@Column(name = "hub_id", nullable = false)
+	private Long hubId;
+
 	@Embedded
 	@Column(name = "request_info", nullable = false)
 	private RequestInfo requestInfo;
@@ -55,7 +58,6 @@ public class Order extends BaseTime {
 	private List<OrderLine> orderLineList = new ArrayList<>();
 
 	public static Order createOrder(Long businessId,Long userId, RequestInfo requestInfo) {
-		// TODO: 2024-12-11 userId 추가
 		return Order.builder()
 			.businessId(businessId)
 			.userId(userId)
@@ -66,6 +68,10 @@ public class Order extends BaseTime {
 
 	public void addOrderLineList(List<OrderLine> orderLineList){
 		this.orderLineList = orderLineList;
+	}
+
+	public void addHubId(Long hubId){
+		this.hubId = hubId;
 	}
 
 

@@ -1,11 +1,17 @@
 package com.first_class.msa.orders.application.service;
 
+import org.springframework.data.domain.Pageable;
+
 import com.first_class.msa.orders.application.dto.ResOrderPostDTO;
-import com.first_class.msa.orders.presentation.request.ReqOrderDTO;
+import com.first_class.msa.orders.application.dto.ResOrderSearchDTO;
+import com.first_class.msa.orders.presentation.request.ReqOrderPostDTO;
 
 public interface OrderService {
 
-	ResOrderPostDTO postBy(Long businessId, Long userId, ReqOrderDTO reqOrderPostDTO);
+	ResOrderPostDTO postBy(Long businessId, Long userId, ReqOrderPostDTO reqOrderPostDTO);
 
-	void putBy(Long businessId, Long userId, ReqOrderDTO reqOrderPostDTO);
+	ResOrderSearchDTO getAllOrderBy(Long userId, String userRole, Pageable pageable);
+
+
+
 }

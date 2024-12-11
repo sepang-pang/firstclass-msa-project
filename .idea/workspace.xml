@@ -4,12 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7c1308d6-dd0b-4855-b139-b03d6cbc70ca" name="Changes" comment="[ FEAT ] RabbitMQ 설정 추가 (#4)">
+    <list default="true" id="7c1308d6-dd0b-4855-b139-b03d6cbc70ca" name="Changes" comment="[ RENAME ] DTO명 변경 ( #4 )">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/OrdersApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/OrdersApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/OrderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/OrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/OrderServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/domain/model/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/domain/model/Order.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/domain/model/OrderLine.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/domain/model/OrderLine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/domain/repository/OrderRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/domain/repository/OrderRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/repository/OrderQueryRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/repository/OrderQueryRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/repository/OrderQueryRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/repository/OrderQueryRepositoryImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/repository/OrderRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/repository/OrderRepositoryImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/libs/message/ErrorMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/libs/message/ErrorMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/presentation/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/presentation/controller/OrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/presentation/request/ReqOrderDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/presentation/request/ReqOrderPostDTO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,8 +88,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -137,7 +144,7 @@
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;feat/#4/order-seongho&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/JeongSeongHo/Desktop/Java_Spring_Project/MSA/com.first-class.msa/com.first-class.msa.orders&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/JeongSeongHo/Desktop/Java_Spring_Project/MSA/com.first-class.msa&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -156,6 +163,9 @@
     ]
   }
 }</component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.first_class.msa.auth.domain.dto" />
@@ -178,6 +188,28 @@
     </option>
   </component>
   <component name="RunManager" selected="Spring Boot.OrdersApplication">
+    <configuration name="com.first-class.msa.orders [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/com.first-class.msa.orders" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
     <configuration name="com.first-class.msa.orders [dependencies]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -308,9 +340,9 @@
     </configuration>
     <configuration name="OrdersApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <envs>
-        <env name="DB_URL" value="jdbc:postgresql://localhost:19070/orderdb" />
-        <env name="DB_USER" value="postgres" />
         <env name="DB_PASSWORD" value="postgres" />
+        <env name="DB_URL" value="jdbc:postgresql://localhost:5432/orderdb" />
+        <env name="DB_USER" value="postgres" />
       </envs>
       <module name="com.first-class.msa.orders.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.first_class.msa.orders.OrdersApplication" />
@@ -333,6 +365,7 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Gradle.com.first-class.msa.orders [build]" />
       <item itemvalue="Gradle.com.first-class.msa.orders [dependencies]" />
       <item itemvalue="Gradle.com.first-class.msa.server [build]" />
       <item itemvalue="Gradle.com.first-class.msa.server [clean]" />
@@ -350,6 +383,7 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.com.first-class.msa.orders [build]" />
         <item itemvalue="Gradle.com.first-class.msa.orders [dependencies]" />
         <item itemvalue="Spring Boot.AuthApplication (1)" />
         <item itemvalue="Gradle.com.first-class.msa.server [build]" />
@@ -379,6 +413,8 @@
       <workItem from="1733709256489" duration="27002000" />
       <workItem from="1733793957778" duration="1973000" />
       <workItem from="1733816579768" duration="22607000" />
+      <workItem from="1733879289511" duration="27436000" />
+      <workItem from="1733912896692" duration="2034000" />
     </task>
     <task id="LOCAL-00001" summary="[ INIT ] project init commit">
       <option name="closed" value="true" />
@@ -516,7 +552,63 @@
       <option name="project" value="LOCAL" />
       <updated>1733847803674</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="[ FEAT ] QueryDsl Config 추가 ( #4 )">
+      <option name="closed" value="true" />
+      <created>1733889292322</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1733889292322</updated>
+    </task>
+    <task id="LOCAL-00019" summary="[ FEAT ] Order 생성 기능 구현 ( #4 )">
+      <option name="closed" value="true" />
+      <created>1733889387701</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1733889387701</updated>
+    </task>
+    <task id="LOCAL-00020" summary="[ FIX ] ResOrderPostDTO 불필요한 필드 제거 ( #4 )">
+      <option name="closed" value="true" />
+      <created>1733889602750</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1733889602750</updated>
+    </task>
+    <task id="LOCAL-00021" summary="[ FEAT ] ResOrderPostDTO 필드 추가 ( #4 )">
+      <option name="closed" value="true" />
+      <created>1733889796944</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1733889796944</updated>
+    </task>
+    <task id="LOCAL-00022" summary="[ RENAME ] ResOrderPostDTO 클래스명 변경 ( #4 )">
+      <option name="closed" value="true" />
+      <created>1733893731548</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1733893731548</updated>
+    </task>
+    <task id="LOCAL-00023" summary="[ FIX ] 주문상품 생성 로직 변경 및 재고 검증 추가 ( #4 )">
+      <option name="closed" value="true" />
+      <created>1733896209917</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1733896209917</updated>
+    </task>
+    <task id="LOCAL-00024" summary="[ RENAME ] DTO명 변경 ( #4 )">
+      <option name="closed" value="true" />
+      <created>1733907171753</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1733907171753</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -542,15 +634,22 @@
     <MESSAGE value="[ INIT ] business-service init commit" />
     <MESSAGE value="[ INIT ] delivery-service init commit" />
     <MESSAGE value="[ INIT ] hub-service init commit" />
-    <MESSAGE value="[ INIT ] Entity 및 valueobject 생성 (#4)" />
-    <MESSAGE value="[ FEAT ] GlobalException 구현 (#4)" />
-    <MESSAGE value="[ INIT ] repository 구성 (#4)" />
-    <MESSAGE value="[ INIT ] Service, Controller 생성 (#4)" />
-    <MESSAGE value="[ FEAT ] valueobject 어노테이션 추가 (#4)" />
-    <MESSAGE value="[ INIT ] idea (#4)" />
-    <MESSAGE value="[ FEAT ] RabbitMQ 설정 추가 (#4)" />
-    <MESSAGE value="[ RENAME ] publisher 클래스명 변경 (#4)" />
-    <MESSAGE value="[ FEAT ] RabbitMQ 설정 추가 (#4)" />
-    <option name="LAST_COMMIT_MESSAGE" value="[ FEAT ] RabbitMQ 설정 추가 (#4)" />
+    <MESSAGE value="[ INIT ] Entity 및 valueobject 생성 ( #4 )" />
+    <MESSAGE value="[ FEAT ] GlobalException 구현 ( #4 )" />
+    <MESSAGE value="[ INIT ] repository 구성 ( #4 )" />
+    <MESSAGE value="[ INIT ] Service, Controller 생성 ( #4 )" />
+    <MESSAGE value="[ FEAT ] valueobject 어노테이션 추가 ( #4 )" />
+    <MESSAGE value="[ INIT ] idea ( #4 )" />
+    <MESSAGE value="[ FEAT ] RabbitMQ 설정 추가 ( #4 )" />
+    <MESSAGE value="[ RENAME ] publisher 클래스명 변경 ( #4 )" />
+    <MESSAGE value="[ FEAT ] RabbitMQ 설정 추가 ( #4 )" />
+    <MESSAGE value="[ FEAT ] QueryDsl Config 추가 ( #4 )" />
+    <MESSAGE value="[ FEAT ] Order 생성 기능 구현 ( #4 )" />
+    <MESSAGE value="[ FIX ] ResOrderPostDTO 불필요한 필드 제거 ( #4 )" />
+    <MESSAGE value="[ FEAT ] ResOrderPostDTO 필드 추가 ( #4 )" />
+    <MESSAGE value="[ RENAME ] ResOrderPostDTO 클래스명 변경 ( #4 )" />
+    <MESSAGE value="[ FIX ] 주문상품 생성 로직 변경 및 재고 검증 추가 ( #4 )" />
+    <MESSAGE value="[ RENAME ] DTO명 변경 ( #4 )" />
+    <option name="LAST_COMMIT_MESSAGE" value="[ RENAME ] DTO명 변경 ( #4 )" />
   </component>
 </project>

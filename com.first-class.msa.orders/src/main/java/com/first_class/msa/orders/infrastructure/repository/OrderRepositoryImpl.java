@@ -1,7 +1,9 @@
 package com.first_class.msa.orders.infrastructure.repository;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import com.first_class.msa.orders.application.dto.ResOrderSearchDTO;
 import com.first_class.msa.orders.domain.model.Order;
 import com.first_class.msa.orders.domain.repository.OrderRepository;
 
@@ -18,6 +20,9 @@ public class OrderRepositoryImpl implements OrderRepository {
 		return orderJpaRepository.save(order);
 	}
 
-
+	@Override
+	public ResOrderSearchDTO findAll(Long userId, Pageable pageable) {
+		return orderQueryRepository.findAll(userId, pageable);
+	}
 
 }
