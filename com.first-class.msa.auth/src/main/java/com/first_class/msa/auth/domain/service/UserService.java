@@ -2,7 +2,7 @@ package com.first_class.msa.auth.domain.service;
 
 import com.first_class.msa.auth.config.jwt.JwtUtil;
 import com.first_class.msa.auth.domain.dto.ReqLoginDTO;
-import com.first_class.msa.auth.domain.model.Role;
+import com.first_class.msa.auth.domain.dto.ReqRoleValidationDTO;
 import com.first_class.msa.auth.domain.model.User;
 import com.first_class.msa.auth.domain.dto.ReqUserPostDTO;
 import com.first_class.msa.auth.domain.repository.UserRepository;
@@ -47,10 +47,21 @@ public class UserService {
         }
 
         // JWT 토큰 생성
-        return jwtUtil.generateToken(user.getAccount(),user.getRole());
+        return jwtUtil.generateToken(user.getUserId(), user.getAccount(), user.getRole());
     }
 
-    public User findById(String userId) {
+
+    public boolean checkBy(Long userId, ReqRoleValidationDTO dto) {
+
+        User userForRoleChecking = findById(userId);
+
+        return dto.getRoles() == null
+                ? userForRoleChecking.getRole().name().equals(dto.getRole())
+                : dto.getRoles().contains(userForRoleChecking.getRole().name());
+    }
+
+
+    public User findById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
     }

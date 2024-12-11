@@ -1,15 +1,17 @@
-package com.first_class.msa.auth.domain.dto;
+package com.first_class.msa.hub.application.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
 @Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResLoginDTO {
-
+public class ResDTO<T> {
+    private Integer code;
     private String message;
+    private T data;
 }
+
