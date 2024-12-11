@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.first_class.msa.orders.application.dto.ResDTO;
 import com.first_class.msa.orders.application.dto.ResOrderPostDTO;
 import com.first_class.msa.orders.application.service.OrderService;
-import com.first_class.msa.orders.presentation.request.ReqOrderPostDTO;
+import com.first_class.msa.orders.presentation.request.ReqOrderDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,13 +26,13 @@ public class OrderController {
 	public ResponseEntity<ResDTO<ResOrderPostDTO>> postBy(
 		@PathVariable Long businessId,
 		@RequestHeader("X-User-Id") Long userId,
-		@RequestBody ReqOrderPostDTO reqOrderPostDTO)
+		@RequestBody ReqOrderDTO reqOrderDTO)
 	{
 		return new ResponseEntity<>(
 			ResDTO.<ResOrderPostDTO>builder()
 				.code(HttpStatus.CREATED.value())
 				.message("주문 생성 성공")
-				.data(orderService.postBy(businessId, userId, reqOrderPostDTO))
+				.data(orderService.postBy(businessId, userId, reqOrderDTO))
 				.build(),
 			HttpStatus.CREATED
 		);

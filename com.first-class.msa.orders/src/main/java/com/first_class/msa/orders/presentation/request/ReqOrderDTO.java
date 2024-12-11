@@ -5,12 +5,12 @@ import java.util.List;
 import lombok.Getter;
 
 @Getter
-public class ReqOrderPostDTO {
+public class ReqOrderDTO {
 	private String requestInfo;
-	private List<ReqOrderLinePostDTO> reqOrderLinePostDTOList;
+	private List<ReqOrderLineDTO> reqOrderLinePostDTOList;
 
 	@Getter
-	public static class ReqOrderLinePostDTO{
+	public static class ReqOrderLineDTO{
 		private Long productId;
 		private int count;
 		private int supplyPrice;

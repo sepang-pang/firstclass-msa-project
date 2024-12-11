@@ -11,7 +11,7 @@ import com.first_class.msa.orders.domain.model.valueobject.Count;
 import com.first_class.msa.orders.infrastructure.messaging.OrderEventPublisher;
 import com.first_class.msa.orders.libs.exception.ApiException;
 import com.first_class.msa.orders.libs.message.ErrorMessage;
-import com.first_class.msa.orders.presentation.request.ReqOrderPostDTO;
+import com.first_class.msa.orders.presentation.request.ReqOrderDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,18 +25,18 @@ public class OrderLineServiceImpl implements OrderLineService {
 	@Override
 	@Transactional
 	public List<OrderLine> createOrderLineList(
-		List<ReqOrderPostDTO.ReqOrderLinePostDTO> orderLinePostDTOList,
+		List<ReqOrderDTO.ReqOrderLineDTO> orderLinePostDTOList,
 		Order order
 	) {
 		List<Long> productIdList
 			= orderLinePostDTOList.stream()
-			.map(ReqOrderPostDTO.ReqOrderLinePostDTO::getProductId)
+			.map(ReqOrderDTO.ReqOrderLineDTO::getProductId)
 			.toList();
 		// TODO: 2024-12-11 Product 정보 요청
 		// List<ResProductDto> resProductDTO = productService.getProductList(productIds);
 		return resProductDTO.stream()
 			.map(resProductDto -> {
-				ReqOrderPostDTO.ReqOrderLinePostDTO matchingRequest = resProductDto.stream()
+				ReqOrderDTO.ReqOrderLineDTO matchingRequest = resProductDto.stream()
 					.filter(orderProductRequest -> orderProductRequest.getProductId().equals(resProductDto.getId()))
 					.findFirst()
 					.orElseThrow(() -> new ApiException(ErrorMessage.NOT_FOUND_PRODUCT));

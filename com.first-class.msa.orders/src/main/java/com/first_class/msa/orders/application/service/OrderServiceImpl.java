@@ -10,7 +10,7 @@ import com.first_class.msa.orders.domain.model.Order;
 import com.first_class.msa.orders.domain.model.OrderLine;
 import com.first_class.msa.orders.domain.model.valueobject.RequestInfo;
 import com.first_class.msa.orders.domain.repository.OrderRepository;
-import com.first_class.msa.orders.presentation.request.ReqOrderPostDTO;
+import com.first_class.msa.orders.presentation.request.ReqOrderDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,12 +22,12 @@ public class OrderServiceImpl implements OrderService{
 	private final OrderEventService orderEventService;
 	@Override
 	@Transactional
-	public ResOrderPostDTO postBy(Long businessId, Long userId, ReqOrderPostDTO reqOrderPostDTO){
+	public ResOrderPostDTO postBy(Long businessId, Long userId, ReqOrderDTO reqOrderDTO){
 
-		RequestInfo requestInfo = new RequestInfo(reqOrderPostDTO.getRequestInfo());
+		RequestInfo requestInfo = new RequestInfo(reqOrderDTO.getRequestInfo());
 		Order order = Order.createOrder(businessId, userId,requestInfo);
 		List<OrderLine> orderLineList
-			= orderLineService.createOrderLineList(reqOrderPostDTO.getReqOrderLinePostDTOList(), order);
+			= orderLineService.createOrderLineList(reqOrderDTO.getReqOrderLinePostDTOList(), order);
 
 		order.addOrderLineList(orderLineList);
 		order.updateOrderTotalPrice(orderLineList);
@@ -38,5 +38,11 @@ public class OrderServiceImpl implements OrderService{
 
 
 		return orderPostDTO;
+	}
+
+	@Override
+	@Transactional
+	public void putBy(Long businessId, Long userId, ReqOrderDTO reqOrderPostDTO) {
+
 	}
 }

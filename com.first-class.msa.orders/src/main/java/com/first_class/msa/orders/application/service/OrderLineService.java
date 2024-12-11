@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.first_class.msa.orders.domain.model.Order;
 import com.first_class.msa.orders.domain.model.OrderLine;
-import com.first_class.msa.orders.presentation.request.ReqOrderPostDTO;
+import com.first_class.msa.orders.presentation.request.ReqOrderDTO;
 
 public interface OrderLineService {
 
-	List<OrderLine> createOrderLineList(List<ReqOrderPostDTO.ReqOrderLinePostDTO> orderLinePostDTOList, Order order);
+	List<OrderLine> createOrderLineList(List<ReqOrderDTO.ReqOrderLineDTO> orderLinePostDTOList, Order order);
 }
