@@ -54,27 +54,27 @@ public class Business {
     private LocalDateTime deletedAt;
 
     @Column(name = "created_by", updatable = false)
-    private Long createdBy;
+    private String createdBy;
 
     @Column(name = "modified_by", nullable = false)
-    private Long modifiedBy;
+    private String modifiedBy;
 
     @Column(name = "deleted_by")
-    private Long deletedBy;
+    private String deletedBy;
 
     @Builder
-    public Business(Long userId, Long hubId, String name, BusinessType type, String address, String addressDetail) {
+    public Business(Long userId, Long hubId, String name, BusinessType type, String address, String addressDetail, String account) {
         this.userId = userId;
         this.hubId = hubId;
         this.name = name;
         this.type = type;
         this.address = address;
         this.addressDetail = addressDetail;
-        this.createdBy = userId;
-        this.modifiedBy = userId;
+        this.createdBy = account;
+        this.modifiedBy = account;
     }
 
-    public static Business createBusiness(Long userId, ReqBusinessPostDTO dto) {
+    public static Business createBusiness(Long userId, String account, ReqBusinessPostDTO dto) {
         return Business.builder()
                 .userId(userId)
                 .hubId(dto.getBusinessDTO().getHubId())
@@ -82,6 +82,7 @@ public class Business {
                 .type(BusinessType.fromLabel(dto.getBusinessDTO().getType()))
                 .address(dto.getBusinessDTO().getAddress())
                 .addressDetail(dto.getBusinessDTO().getAddressDetail())
+                .account(account)
                 .build();
     }
 }
