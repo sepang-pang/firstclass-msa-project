@@ -4,19 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7c1308d6-dd0b-4855-b139-b03d6cbc70ca" name="Changes" comment="[ INIT ] Service, Controller 생성">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/9ae92337-064a-44d1-9c57-3e2db8da1c51.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="7c1308d6-dd0b-4855-b139-b03d6cbc70ca" name="Changes" comment="[ FEAT ] RabbitMQ 설정 추가 (#4)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/OrdersApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/OrdersApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/OrderService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/domain/model/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/domain/model/Order.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/domain/model/valueobject/Count.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/domain/model/valueobject/Count.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/domain/model/valueobject/OrderTotalPrice.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/domain/model/valueobject/OrderTotalPrice.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/domain/model/valueobject/RequestInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/domain/model/valueobject/RequestInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/domain/model/valueobject/SupplyPrice.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/domain/model/valueobject/SupplyPrice.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/domain/model/OrderLine.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/domain/model/OrderLine.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +20,9 @@
     <option name="groupingKeys">
       <option value="directory" />
     </option>
+  </component>
+  <component name="CodeInsightWorkspaceSettings">
+    <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$/com.first-class.msa.agent">
@@ -85,8 +81,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
-        <option value="Interface" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -124,42 +120,42 @@
     <option name="openDirectoriesWithSingleClick" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Gradle.Build com.first-class.msa.auth.executor": "Run",
-    "Gradle.Build com.first-class.msa.server.executor": "Run",
-    "Gradle.com.first-class.msa.server [build].executor": "Run",
-    "Gradle.com.first-class.msa.server [clean].executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Spring Boot.AuthApplication (1).executor": "Run",
-    "Spring Boot.AuthApplication.executor": "Run",
-    "Spring Boot.ServerApplication.executor": "Run",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "feat/#4/order-seongho",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/JeongSeongHo/Desktop/Java_Spring_Project/MSA/com.first-class.msa/com.first-class.msa.orders",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "run.configurations.included.in.services": "true",
-    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Gradle.Build com.first-class.msa.auth.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build com.first-class.msa.server.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.com.first-class.msa.server [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.com.first-class.msa.server [clean].executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Spring Boot.AuthApplication (1).executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.AuthApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ServerApplication.executor&quot;: &quot;Run&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat/#4/order-seongho&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/JeongSeongHo/Desktop/Java_Spring_Project/MSA/com.first-class.msa/com.first-class.msa.orders&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.import&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "postgresql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.first_class.msa.auth.domain.dto" />
@@ -382,7 +378,7 @@
       <workItem from="1733708765354" duration="476000" />
       <workItem from="1733709256489" duration="27002000" />
       <workItem from="1733793957778" duration="1973000" />
-      <workItem from="1733816579768" duration="16079000" />
+      <workItem from="1733816579768" duration="22607000" />
     </task>
     <task id="LOCAL-00001" summary="[ INIT ] project init commit">
       <option name="closed" value="true" />
@@ -480,11 +476,62 @@
       <option name="project" value="LOCAL" />
       <updated>1733843385437</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="[ FEAT ] valueobject 어노테이션 추가 (#6)">
+      <option name="closed" value="true" />
+      <created>1733847001040</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1733847001040</updated>
+    </task>
+    <task id="LOCAL-00014" summary="[ INIT ] idea (#6)">
+      <option name="closed" value="true" />
+      <created>1733847207713</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1733847207713</updated>
+    </task>
+    <task id="LOCAL-00015" summary="[ Feat ] RabbitMQ 설정 추가 (#4)">
+      <option name="closed" value="true" />
+      <created>1733847279614</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1733847279614</updated>
+    </task>
+    <task id="LOCAL-00016" summary="[ RENAME ] publisher 클래스명 변경 (#4)">
+      <option name="closed" value="true" />
+      <created>1733847776069</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1733847776069</updated>
+    </task>
+    <task id="LOCAL-00017" summary="[ FEAT ] RabbitMQ 설정 추가 (#4)">
+      <option name="closed" value="true" />
+      <created>1733847803674</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1733847803674</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="[ INIT ] project init commit" />
@@ -495,10 +542,15 @@
     <MESSAGE value="[ INIT ] business-service init commit" />
     <MESSAGE value="[ INIT ] delivery-service init commit" />
     <MESSAGE value="[ INIT ] hub-service init commit" />
-    <MESSAGE value="[ INIT ] Entity 및 valueobject 생성" />
-    <MESSAGE value="[ FEAT ] GlobalException 구현" />
-    <MESSAGE value="[ INIT ] repository 구성" />
-    <MESSAGE value="[ INIT ] Service, Controller 생성" />
-    <option name="LAST_COMMIT_MESSAGE" value="[ INIT ] Service, Controller 생성" />
+    <MESSAGE value="[ INIT ] Entity 및 valueobject 생성 (#4)" />
+    <MESSAGE value="[ FEAT ] GlobalException 구현 (#4)" />
+    <MESSAGE value="[ INIT ] repository 구성 (#4)" />
+    <MESSAGE value="[ INIT ] Service, Controller 생성 (#4)" />
+    <MESSAGE value="[ FEAT ] valueobject 어노테이션 추가 (#4)" />
+    <MESSAGE value="[ INIT ] idea (#4)" />
+    <MESSAGE value="[ FEAT ] RabbitMQ 설정 추가 (#4)" />
+    <MESSAGE value="[ RENAME ] publisher 클래스명 변경 (#4)" />
+    <MESSAGE value="[ FEAT ] RabbitMQ 설정 추가 (#4)" />
+    <option name="LAST_COMMIT_MESSAGE" value="[ FEAT ] RabbitMQ 설정 추가 (#4)" />
   </component>
 </project>

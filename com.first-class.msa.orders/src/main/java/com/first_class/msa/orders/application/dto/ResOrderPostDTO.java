@@ -28,7 +28,6 @@ public class ResOrderPostDTO {
 	public static class OrderDTO {
 
 		private Long orderId;
-		private String status;
 		private List<OrderLineDTO> orderLineList;
 
 		public static OrderDTO from(Order order) {
