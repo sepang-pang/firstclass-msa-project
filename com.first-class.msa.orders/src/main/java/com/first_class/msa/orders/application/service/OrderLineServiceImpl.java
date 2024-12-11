@@ -39,17 +39,15 @@ public class OrderLineServiceImpl implements OrderLineService {
 					.findFirst()
 					.orElseThrow(() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOT_FOUND_PRODUCT)));
 
-				if(resProductDto.getCount() < matchingRequest.getCount()){
+				if (resProductDto.getCount() < matchingRequest.getCount()) {
 					throw new IllegalArgumentException(new ApiException(ErrorMessage.INSUFFICIENT_COUNT));
 				}
 
-
 				Count count = new Count(matchingRequest.getCount());
-				return OrderLine.createOrderLine(order, resProductDto.getId(), count, resProductDto.getSupplyPrice());
+				order.addHubId(resProductDto.getHubId());
+				return OrderLine.createOrderLine(order, resProductDto.getId(), count,	resProductDto.getSupplyPrice());
 			})
-			.toList();;
+			.toList(); ;
 	}
-
-
 
 }

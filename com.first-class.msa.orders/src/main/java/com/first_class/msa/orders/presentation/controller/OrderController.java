@@ -45,14 +45,13 @@ public class OrderController {
 	@GetMapping
 	public ResponseEntity<ResDTO<ResOrderSearchDTO>> getAllOrderBy(
 		@RequestHeader("X-User-Id") Long userId,
-		@RequestHeader("X-Role") String userRole,
 		Pageable pageable
 	){
 		return new ResponseEntity<>(
 			ResDTO.<ResOrderSearchDTO>builder()
 				.code(HttpStatus.OK.value())
 				.message("주문 조회 성공")
-				.data(orderService.getAllOrderBy(userId, userRole, pageable))
+				.data(orderService.getAllOrderBy(userId, pageable))
 				.build(),
 			HttpStatus.OK
 		);

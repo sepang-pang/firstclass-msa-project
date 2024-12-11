@@ -9,7 +9,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import com.first_class.msa.orders.application.dto.ResOrderSearchDTO;
+import com.first_class.msa.orders.application.dto.AuthSearchConditionDTO;
 import com.first_class.msa.orders.domain.model.QOrder;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -24,9 +26,9 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
 
 	QOrder qOrder = QOrder.order;
 
-	// TODO: 2024-12-11 hubId, businessId 로직 추가
+	// TODO: 2024-12-12 동적 쿼리 추가 처리 구현 필요
 	@Override
-	public ResOrderSearchDTO findAll(Long userId, Pageable pageable) {
+	public ResOrderSearchDTO findAll(AuthSearchConditionDTO authSearchConditionDTO, Pageable pageable) {
 
 		List<ResOrderSearchDTO.OrderPage> results = jpaQueryFactory
 			.select(Projections.constructor(
@@ -36,7 +38,7 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
 				qOrder.orderTotalPrice.value
 			))
 			.from(qOrder)
-			.where(userIdEquals(userId))
+			.where(buildDynamicConditions(authSearchConditionDTO))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();
@@ -45,7 +47,7 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
 			jpaQueryFactory
 				.select(qOrder.count())
 				.from(qOrder)
-				.where(userIdEquals(userId))
+				.where(buildDynamicConditions(authSearchConditionDTO))
 				.fetchOne()
 		).orElse(0L);
 
@@ -53,8 +55,37 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
 		return ResOrderSearchDTO.of(page);
 	}
 
+	private BooleanBuilder buildDynamicConditions(AuthSearchConditionDTO authSearchConditionDTO) {
+		BooleanBuilder builder = new BooleanBuilder();
+
+		// 권한에 따른 조건 추가
+		switch (authSearchConditionDTO.getUserRole()) {
+			case "MASTER":
+				break;
+			case "HUB_MANAGER":
+				builder.and(hubIdEquals(authSearchConditionDTO.getHubId()));
+				break;
+			case "BUSINESS_MANAGER":
+				builder.and(businessIdEquals(authSearchConditionDTO.getBusinessId()));
+				break;
+			default:
+				builder.and(userIdEquals(authSearchConditionDTO.getUserId()));
+				break;
+		}
+
+		return builder;
+	}
+
 	private BooleanExpression userIdEquals(Long userId) {
 		return userId != null ? qOrder.userId.eq(userId): null;
+	}
+
+	private BooleanExpression businessIdEquals(Long businessId) {
+		return businessId != null ? qOrder.businessId.eq(businessId) : null;
+	}
+
+	private BooleanExpression hubIdEquals(Long hubId) {
+		return hubId != null ? qOrder.hubId.eq(hubId) : null;
 	}
 
 }

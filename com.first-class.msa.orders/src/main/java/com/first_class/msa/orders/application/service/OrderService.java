@@ -10,7 +10,7 @@ public interface OrderService {
 
 	ResOrderPostDTO postBy(Long businessId, Long userId, ReqOrderPostDTO reqOrderPostDTO);
 
-	ResOrderSearchDTO getAllOrderBy(Long userId, String userRole, Pageable pageable);
+	ResOrderSearchDTO getAllOrderBy(Long userId, Pageable pageable);
 
 
 

@@ -4,6 +4,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import com.first_class.msa.orders.application.dto.ResOrderSearchDTO;
+import com.first_class.msa.orders.application.dto.AuthSearchConditionDTO;
 import com.first_class.msa.orders.domain.model.Order;
 import com.first_class.msa.orders.domain.repository.OrderRepository;
 
@@ -21,8 +22,8 @@ public class OrderRepositoryImpl implements OrderRepository {
 	}
 
 	@Override
-	public ResOrderSearchDTO findAll(Long userId, Pageable pageable) {
-		return orderQueryRepository.findAll(userId, pageable);
+	public ResOrderSearchDTO findAll(AuthSearchConditionDTO authSearchConditionDTO, Pageable pageable) {
+		return orderQueryRepository.findAll(authSearchConditionDTO, pageable);
 	}
 
 }

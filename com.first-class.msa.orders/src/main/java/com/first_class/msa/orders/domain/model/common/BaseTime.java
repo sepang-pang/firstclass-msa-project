@@ -1,7 +1,6 @@
 package com.first_class.msa.orders.domain.model.common;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -34,13 +33,14 @@ public class BaseTime {
 	@Setter
 	@CreatedBy
 	@Column(name = "created_by", updatable = false)
-	private UUID createdBy;
+	private Long createdBy;
 
+	@Setter
 	@LastModifiedBy
 	@Column(name = "updated_by")
-	private UUID updatedBy;
+	private Long updatedBy;
 
 	@Setter
 	@Column(name = "deleted_by")
-	private UUID deletedBy;
+	private Long deletedBy;
 }

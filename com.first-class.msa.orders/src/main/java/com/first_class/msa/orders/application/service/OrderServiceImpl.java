@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.first_class.msa.orders.application.dto.ResOrderPostDTO;
 import com.first_class.msa.orders.application.dto.ResOrderSearchDTO;
+import com.first_class.msa.orders.application.dto.AuthSearchConditionDTO;
 import com.first_class.msa.orders.domain.model.Order;
 import com.first_class.msa.orders.domain.model.OrderLine;
 import com.first_class.msa.orders.domain.model.valueobject.RequestInfo;
@@ -24,6 +25,7 @@ public class OrderServiceImpl implements OrderService{
 	private final OrderEventService orderEventService;
 	private final HubService hubService;
 	private final BusinessService businessService;
+	private final AuthService authService;
 	
 	@Override
 	@Transactional
@@ -31,6 +33,8 @@ public class OrderServiceImpl implements OrderService{
 
 		RequestInfo requestInfo = new RequestInfo(reqOrderPostDTO.getRequestInfo());
 		Order order = Order.createOrder(businessId, userId,requestInfo);
+		order.setCreatedBy(userId);
+		order.setUpdatedBy(userId);
 		List<OrderLine> orderLineList
 			= orderLineService.createOrderLineList(reqOrderPostDTO.getReqOrderLinePostDTOList(), order);
 
@@ -47,23 +51,27 @@ public class OrderServiceImpl implements OrderService{
 
 	// TODO: 2024-12-11 권한에 따라서 수정 예정 
 	@Override
-	public ResOrderSearchDTO getAllOrderBy(Long userId, String userRole, Pageable pageable) {
-		if(userRole.equals("MASTER")){
-			orderRepository.findAll(userId, pageable);
+	public ResOrderSearchDTO getAllOrderBy(Long userId, Pageable pageable) {
+		// 메서드 변경 예정
+		return orderRepository.findAll(SearchCondition(userId), pageable);
+	}
 
-		} else if(userRole.equals("HUB_MANAGER")){
-			// TODO: 2024-12-11 허브에 UserId 확인 및 서치 추가
-			orderRepository.findAll(userId, pageable);
+	private AuthSearchConditionDTO SearchCondition(Long userId){
+		AuthSearchConditionDTO authSearchConditionDTO;
+		if(authService.validate("MASTER")){
+			authSearchConditionDTO = AuthSearchConditionDTO.createForMaster();
 
-		} else if(userRole.equals("BUSINESS_MANAGER")) {
-			// TODO: 2024-12-11 업체에 userId 확인 및 서치
-			orderRepository.findAll(userId, pageable);
+		} else if(authService.validate("HUB_MANAGER")){
+			// TODO: 2024-12-11 허브에 UserId 확인 및 서치 추가 businessId 필요
+			authSearchConditionDTO = AuthSearchConditionDTO.createForHubManager(hubId);
 
+		} else if(authService.validate("BUSINESS_MANAGER")) {
+			// TODO: 2024-12-11 업체에 userId 확인 및 서치 hubId 필요
+			authSearchConditionDTO = AuthSearchConditionDTO.createForBusinessManager(businessId);
 		} else {
-			orderRepository.findAll(userId, pageable);
+			authSearchConditionDTO = AuthSearchConditionDTO.createForDefault(userId);
 		}
-
-		return orderRepository.findAll(userId, pageable);
+		return authSearchConditionDTO;
 	}
 
 }
