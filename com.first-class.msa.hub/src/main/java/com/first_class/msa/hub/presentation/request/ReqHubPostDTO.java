@@ -18,6 +18,9 @@ public class ReqHubPostDTO {
     @NoArgsConstructor
     public static class HubDTO {
 
+        @NotNull(message = "허브 담당자의 정보를 입력해주세요")
+        private Long managerId;
+
         @NotBlank(message = "허브 이름을 입력해주세요")
         private String name;
 
