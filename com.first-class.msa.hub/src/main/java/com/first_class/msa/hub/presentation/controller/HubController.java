@@ -115,4 +115,9 @@ public class HubController {
         return hubService.existsBy(hubId);
     }
 
+    @GetMapping("/hubs")
+    public Long getHubIdBy(@RequestParam Long userId) {
+        return hubService.getHubIdBy(userId);
+    }
+
 }

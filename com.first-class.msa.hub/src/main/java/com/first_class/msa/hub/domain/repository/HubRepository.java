@@ -13,6 +13,8 @@ public interface HubRepository {
 
     Optional<Hub> findByIdAndDeletedAtIsNull(Long id);
 
+    Long findByManagerIdAndDeletedAtIsNull(Long userId);
+
     Hub save(Hub hub);
 
     Page<Hub> findAll(Predicate predicate, Pageable pageable);

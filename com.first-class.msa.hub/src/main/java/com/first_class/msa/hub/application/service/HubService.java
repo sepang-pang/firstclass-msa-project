@@ -86,4 +86,7 @@ public class HubService {
         return hubRepository.existsByLatitudeAndLongitudeAndDeletedIsNull(latitude, longitude);
     }
 
+    public Long getHubIdBy(Long userId) {
+        return hubRepository.findByManagerIdAndDeletedAtIsNull(userId);
+    }
 }

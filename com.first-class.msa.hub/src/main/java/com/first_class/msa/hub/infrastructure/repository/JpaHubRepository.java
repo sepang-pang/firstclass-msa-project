@@ -12,4 +12,7 @@ public interface JpaHubRepository extends JpaRepository<Hub, Long>, HubQueryBind
     Optional<Hub> findByIdAndDeletedAtIsNull(Long id);
 
     boolean existsByIdAndDeletedAtIsNull(Long hubId);
+
+    Long findByManagerIdAndDeletedAtIsNull(Long userId);
+
 }
