@@ -28,11 +28,15 @@ public class ResOrderPostDTO {
 	public static class OrderDTO {
 
 		private Long orderId;
+		private String requestInfo;
+		private Integer orderTotalPrice;
 		private List<OrderLineDTO> orderLineList;
 
 		public static OrderDTO from(Order order) {
 			return OrderDTO.builder()
 				.orderId(order.getId())
+				.requestInfo(order.getRequestInfo().getValue())
+				.orderTotalPrice(order.getOrderTotalPrice().getValue())
 				.orderLineList(OrderLineDTO.from(order.getOrderLineList()))
 				.build();
 		}
