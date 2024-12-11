@@ -9,6 +9,7 @@ import com.first_class.msa.auth.domain.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,11 +42,12 @@ public class UserController {
         String jwtToken = userService.signIn(reqLoginDTO);
 
         ResLoginDTO responseDTO = ResLoginDTO.builder()
-                .jwtToken(jwtToken)
                 .message("로그인 성공")
                 .build();
 
-        return ResponseEntity.ok(responseDTO);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.AUTHORIZATION, jwtToken)
+                .body(responseDTO);
     }
 
     @GetMapping("/logout")

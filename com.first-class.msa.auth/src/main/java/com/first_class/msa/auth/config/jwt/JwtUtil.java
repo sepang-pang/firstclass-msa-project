@@ -14,26 +14,38 @@ public class JwtUtil {
     private String secretKey;
 
     // JWT 토큰 생성
-    public String generateToken(String account, Role role) {
+    public String generateToken(Long userId, String account, Role role) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + 1000 * 60 * 60 * 24); // 1일 만료 시간
 
-        return Jwts.builder()
-                .setSubject(account)
+        String token = Jwts.builder()
+                .setSubject(String.valueOf(userId))
+                .claim("account", account)
                 .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
+
+        return "Bearer " + token;
     }
 
     // JWT 토큰에서 사용자 계정 추출
-    public String extractAccount(String token) {
+    public String extractUserId(String token) {
         return Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
+    }
+
+    // account 클레임 추출
+    public String extractAccount(String token) {
+        return Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .getBody()
+                .get("account", String.class);
     }
 
     //권한 추출
