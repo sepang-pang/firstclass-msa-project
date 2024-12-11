@@ -26,7 +26,10 @@ public class Hub {
     @Column(name = "hub_id")
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "manager_id", nullable = false)
+    private Long managerId;
+
+    @Column(name = "hub_name", nullable = false)
     private String name;
 
     @DecimalMin(value = "-90.0")
