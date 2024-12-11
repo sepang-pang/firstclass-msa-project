@@ -10,4 +10,6 @@ public interface JpaHubRepository extends JpaRepository<Hub, Long>, HubQueryBind
     boolean existsByLatitudeAndLongitudeAndDeletedAtIsNull(double latitude, double longitude);
 
     Optional<Hub> findByIdAndDeletedAtIsNull(Long id);
+
+    boolean existsByIdAndDeletedAtIsNull(Long hubId);
 }

@@ -32,6 +32,11 @@ public class HubRepositoryImpl implements HubRepository {
     }
 
     @Override
+    public boolean existsByIdAndDeletedAtIsNull(Long hubId) {
+        return jpaHubRepository.existsByIdAndDeletedAtIsNull(hubId);
+    }
+
+    @Override
     public Hub save(Hub hub) {
         return jpaHubRepository.save(hub);
     }

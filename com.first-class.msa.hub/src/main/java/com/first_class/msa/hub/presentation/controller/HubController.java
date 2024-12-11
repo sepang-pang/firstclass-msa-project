@@ -102,4 +102,10 @@ public class HubController {
         );
     }
 
+
+    @GetMapping("/hubs/{hubId}/exists")
+    public boolean existsBy(@PathVariable(name = "hubId") Long hubId) {
+        return hubService.existsBy(hubId);
+    }
+
 }

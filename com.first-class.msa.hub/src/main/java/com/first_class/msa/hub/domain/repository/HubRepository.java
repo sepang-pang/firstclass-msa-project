@@ -16,4 +16,6 @@ public interface HubRepository {
     Hub save(Hub hub);
 
     Page<Hub> findAll(Predicate predicate, Pageable pageable);
+
+    boolean existsByIdAndDeletedAtIsNull(Long hubId);
 }
