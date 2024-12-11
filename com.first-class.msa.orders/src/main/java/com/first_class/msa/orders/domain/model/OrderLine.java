@@ -46,4 +46,12 @@ public class OrderLine extends BaseTime {
 	@Embedded
 	private SupplyPrice supplyPrice;
 
+	public static OrderLine createOrderLine(Order order, Long productId, Count count, SupplyPrice supplyPrice) {
+		return OrderLine.builder()
+			.order(order)
+			.productId(productId)
+			.count(count)
+			.supplyPrice(supplyPrice)
+			.build();
+	}
 }

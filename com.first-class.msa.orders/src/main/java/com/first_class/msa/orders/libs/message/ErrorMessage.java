@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum ErrorMessage {
+	NOT_FOUND_PRODUCT(HttpStatus.BAD_REQUEST, "상품을 찾을 수 없습니다."),
 	SUPPLY_PRICE_NOT_MINUS(HttpStatus.BAD_REQUEST, "수량은 음수일 수 없습니다."),
 	SUPPLY_PRICE_EMPTY(HttpStatus.BAD_REQUEST, "총 가격이 비어있습니다."),
 	REQUEST_INFO_REQUEST_EMPTY(HttpStatus.BAD_REQUEST, "요청사항은 필수입니다."),

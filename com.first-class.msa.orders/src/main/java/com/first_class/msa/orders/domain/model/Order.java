@@ -1,6 +1,5 @@
 package com.first_class.msa.orders.domain.model;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +37,12 @@ public class Order extends BaseTime {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Column(name = "business_id", nullable = false)
+	private Long businessId;
+
+	@Column(name = "user_id" ,nullable = false)
+	private Long userId;
+
 	@Embedded
 	@Column(name = "request_info", nullable = false)
 	private RequestInfo requestInfo;
@@ -49,8 +54,28 @@ public class Order extends BaseTime {
 	@OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<OrderLine> orderLineList = new ArrayList<>();
 
+	public static Order createOrder(Long businessId,Long userId, RequestInfo requestInfo) {
+		// TODO: 2024-12-11 userId 추가
+		return Order.builder()
+			.businessId(businessId)
+			.userId(userId)
+			.requestInfo(requestInfo)
+			.build();
+
+	}
+
+	public void addOrderLineList(List<OrderLine> orderLineList){
+		this.orderLineList = orderLineList;
+	}
 
 
-
+	public void updateOrderTotalPrice(List<OrderLine> orderLineList) {
+		this.orderTotalPrice =
+			new OrderTotalPrice(
+			orderLineList.stream()
+			.mapToInt(orderLine -> orderLine.getCount().getValue() * orderLine.getSupplyPrice().getValue())
+				.sum()
+			);
+	}
 
 }

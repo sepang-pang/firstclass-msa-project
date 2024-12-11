@@ -1,13 +1,9 @@
 package com.first_class.msa.orders.application.service;
 
-import org.springframework.stereotype.Service;
+import com.first_class.msa.orders.application.dto.ResOrderPostDTO;
+import com.first_class.msa.orders.presentation.request.ReqOrderPostDTO;
 
-import com.first_class.msa.orders.domain.repository.OrderRepository;
+public interface OrderService {
 
-import lombok.RequiredArgsConstructor;
-
-@Service
-@RequiredArgsConstructor
-public class OrderService {
-	private final OrderRepository orderRepository;
+	ResOrderPostDTO postBy(Long businessId, Long userId, ReqOrderPostDTO reqOrderPostDTO);
 }
