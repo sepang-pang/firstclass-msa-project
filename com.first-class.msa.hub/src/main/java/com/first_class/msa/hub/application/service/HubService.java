@@ -22,13 +22,13 @@ public class HubService {
     private final HubRepository hubRepository;
 
     @Transactional
-    public ResHubPostDTO postBy(Long userId, ReqHubPostDTO dto) {
+    public ResHubPostDTO postBy(String account, ReqHubPostDTO dto) {
 
         if (isDuplicateHub(dto.getHubDTO().getLatitude(), dto.getHubDTO().getLongitude())) {
             throw new DuplicateRequestException("중복된 좌표의 허브입니다.");
         }
 
-        Hub hubForSaving = Hub.createHub(userId, dto);
+        Hub hubForSaving = Hub.createHub(account, dto);
 
         return ResHubPostDTO.of(hubRepository.save(hubForSaving));
     }
@@ -51,15 +51,15 @@ public class HubService {
     // --
 
     @Transactional
-    public void putBy(Long userId, Long hubId, ReqHubPutByIdDTO dto) {
+    public void putBy(String account, Long hubId, ReqHubPutByIdDTO dto) {
 
         Hub hubForModification = getHubBy(hubId);
 
-        hubForModification.modifyHub(userId, dto);
+        hubForModification.modifyHub(account, dto);
     }
 
     @Transactional
-    public void deleteBy(Long userId, Long hubId) {
+    public void deleteBy(String account, Long hubId) {
 
         // --
         // XXX : 삭제 후 해당 허브를 참조하는 테이블 처리 여부 생각하기
@@ -67,7 +67,7 @@ public class HubService {
 
         Hub hubForDeletion = getHubBy(hubId);
 
-        hubForDeletion.deleteHub(userId);
+        hubForDeletion.deleteHub(account);
     }
 
     @Transactional(readOnly = true)
