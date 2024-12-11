@@ -26,14 +26,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = request.getHeader("Authorization");
 
         if (token != null && token.startsWith("Bearer ")) {
-            token = token.substring(7);
+            String jwtToken = token;
 
             // JwtUtil 인스턴스를 통해 validateToken 메서드를 호출합니다.
-            if (jwtUtil.validateToken(token, jwtUtil.extractAccount(token))) {
+            if (jwtUtil.validateToken(jwtToken, jwtUtil.extractAccount(jwtToken))) {
 
                 // 토큰이 유효하면 SecurityContext에 인증 정보 설정
-                String account = jwtUtil.extractAccount(token);
-                String role = jwtUtil.extractRole(token);
+                Long userId = Long.valueOf(jwtUtil.extractUserId(jwtToken));
+                String account = jwtUtil.extractAccount(jwtToken);
+                String role = jwtUtil.extractRole(jwtToken);
 
                 SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(account, null, List.of(new SimpleGrantedAuthority(role))));
             }
