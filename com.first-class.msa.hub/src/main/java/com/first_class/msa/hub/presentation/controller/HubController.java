@@ -25,10 +25,11 @@ public class HubController {
     private final HubService hubService;
 
     // --
-    // FIXME : 임시로 @RequestParam 을 통해 userId 를 받아오고 있습니다. 추후 gateway 구현 정도에 따라 변경될 부분입니다.
+    // NOTE : userId 는 추후 Controller 단에서 권한 검증 간 사용될 것입니다.
     // --
     @PostMapping("/hubs")
-    public ResponseEntity<ResDTO<ResHubPostDTO>> postBy(@RequestParam(name = "userId") Long userId,
+    public ResponseEntity<ResDTO<ResHubPostDTO>> postBy(@RequestHeader("X-User-Id") Long userId,
+                                                        @RequestHeader("X-User-Account") String account,
                                                         @Valid @RequestBody ReqHubPostDTO req) {
 
         // --
@@ -39,7 +40,7 @@ public class HubController {
                 ResDTO.<ResHubPostDTO>builder()
                         .code(HttpStatus.OK.value())
                         .message("허브 생성에 성공하였습니다.")
-                        .data(hubService.postBy(userId, req))
+                        .data(hubService.postBy(account, req))
                         .build(),
                 HttpStatus.OK
         );
@@ -61,7 +62,8 @@ public class HubController {
     }
 
     @PutMapping("/hubs/{hubId}")
-    public ResponseEntity<ResDTO<Object>> putBy(@RequestParam(name = "userId") Long userId,
+    public ResponseEntity<ResDTO<Object>> putBy(@RequestHeader("X-User-Id") Long userId,
+                                                @RequestHeader("X-User-Account") String account,
                                                 @PathVariable(name = "hubId") Long hubId,
                                                 @Valid @RequestBody ReqHubPutByIdDTO dto) {
 
@@ -72,7 +74,7 @@ public class HubController {
         // TODO : DataIntegrityViolationException 예외처리
         // --
 
-        hubService.putBy(userId, hubId, dto);
+        hubService.putBy(account, hubId, dto);
 
         return new ResponseEntity<>(
                 ResDTO.builder()
@@ -84,14 +86,15 @@ public class HubController {
     }
 
     @DeleteMapping("/hubs/{hubId}")
-    public ResponseEntity<ResDTO<Object>> deleteBy(@RequestParam(name = "userId") Long userId,
+    public ResponseEntity<ResDTO<Object>> deleteBy(@RequestHeader("X-User-Id") Long userId,
+                                                   @RequestHeader("X-User-Account") String account,
                                                    @PathVariable(name = "hubId") Long hubId) {
 
         // --
         // TODO : MASTER 권한 검증
         // --
 
-        hubService.deleteBy(userId, hubId);
+        hubService.deleteBy(account, hubId);
 
         return new ResponseEntity<>(
                 ResDTO.builder()

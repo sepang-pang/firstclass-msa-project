@@ -60,50 +60,50 @@ public class Hub {
     private LocalDateTime deletedAt;
 
     @Column(name = "created_by", updatable = false)
-    private Long createdBy;
+    private String createdBy;
 
     @Column(name = "modified_by", nullable = false)
-    private Long modifiedBy;
+    private String modifiedBy;
 
     @Column(name = "deleted_by")
-    private Long deletedBy;
+    private String deletedBy;
 
     @Builder
     public Hub (String name, double latitude, double longitude,
-                String address, String addressDetail, Long userId) {
+                String address, String addressDetail, String account) {
 
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
         this.address = address;
         this.addressDetail = addressDetail;
-        this.createdBy = userId;
-        this.modifiedBy = userId;
+        this.createdBy = account;
+        this.modifiedBy = account;
     }
 
-    public static Hub createHub(Long userId, ReqHubPostDTO dto) {
+    public static Hub createHub(String account, ReqHubPostDTO dto) {
         return Hub.builder()
                 .name(dto.getHubDTO().getName())
                 .latitude(dto.getHubDTO().getLatitude())
                 .longitude(dto.getHubDTO().getLongitude())
                 .address(dto.getHubDTO().getAddress())
                 .addressDetail(dto.getHubDTO().getAddressDetail())
-                .userId(userId)
+                .account(account)
                 .build();
     }
 
-    public void modifyHub(Long userId, ReqHubPutByIdDTO dto) {
+    public void modifyHub(String account, ReqHubPutByIdDTO dto) {
         this.name = dto.getHubDTO().getName();
         this.latitude = dto.getHubDTO().getLatitude();
         this.longitude = dto.getHubDTO().getLongitude();
         this.address = dto.getHubDTO().getAddress();
         this.addressDetail = dto.getHubDTO().getAddressDetail();
-        this.modifiedBy = userId;
+        this.modifiedBy = account;
     }
 
-    public void deleteHub(Long userId) {
+    public void deleteHub(String account) {
         this.deletedAt = LocalDateTime.now();
-        this.modifiedBy = userId;
-        this.deletedBy = userId;
+        this.modifiedBy = account;
+        this.deletedBy = account;
     }
 }
