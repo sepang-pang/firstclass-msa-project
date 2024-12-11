@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/auth")
 public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/signUp")
+    @PostMapping("/sign-up")
     public ResponseEntity<ResUserPostDTO> signUp(@RequestBody ReqUserPostDTO reqUserPostDTO) {
 
         String account = userService.save(reqUserPostDTO);
@@ -35,7 +35,7 @@ public class UserController {
         return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
-    @PostMapping("/signIn")
+    @PostMapping("/sign-in")
     public ResponseEntity<ResLoginDTO> signIn(@RequestBody ReqLoginDTO reqLoginDTO) {
 
         String jwtToken = userService.signIn(reqLoginDTO);

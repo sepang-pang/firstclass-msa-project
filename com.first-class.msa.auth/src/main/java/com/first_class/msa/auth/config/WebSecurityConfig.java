@@ -38,9 +38,9 @@ public class WebSecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeRequests(authorize -> authorize
-                        .requestMatchers("/users/signIn").permitAll()
-                        .requestMatchers("/users/signUp").permitAll()
-                        .requestMatchers("/users/logout").permitAll()
+                        .requestMatchers("/auth/sign-in").permitAll()
+                        .requestMatchers("/auth/sign-up").permitAll()
+                        .requestMatchers("/auth/logout").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
