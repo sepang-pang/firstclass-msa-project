@@ -3,6 +3,7 @@ package com.first_class.msa.business.application.service;
 import com.first_class.msa.business.application.dto.ResBusinessPostDTO;
 import com.first_class.msa.business.domain.model.Business;
 import com.first_class.msa.business.domain.repository.BusinessRepository;
+import com.first_class.msa.business.infrastructure.client.AuthClient;
 import com.first_class.msa.business.infrastructure.client.HubClient;
 import com.first_class.msa.business.presentation.request.ReqBusinessPostDTO;
 import com.first_class.msa.business.presentation.request.ReqBusinessPutByIdDTO;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -19,11 +21,12 @@ public class BusinessService {
 
     private final BusinessRepository businessRepository;
     private final HubClient hubClient;
+    private final AuthClient authClient;
 
     @Transactional
     public ResBusinessPostDTO postBy(Long userId, String account, ReqBusinessPostDTO dto) {
 
-        validateBusiness(dto);
+        validate(userId, dto, authClient.getRoleBy(userId));
 
         Business businessForSaving = Business.createBusiness(userId, account, dto);
 
@@ -54,6 +57,26 @@ public class BusinessService {
     private Business getBusinessBy(Long businessId) {
         return businessRepository.findByIdAndDeletedAtIsNull(businessId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 업체입니다."));
+    }
+
+    private void validate(Long userId, ReqBusinessPostDTO dto, String userRole) {
+        checkUserRole(userRole);
+        checkHubManagerRole(userId, dto, userRole);
+        validateBusiness(dto);
+    }
+
+    private static void checkUserRole(String userRole) {
+        if (!Set.of("MANAGER", "HUB_MANAGER").contains(userRole)) {
+            throw new IllegalArgumentException("접근 권한이 없습니다.");
+        }
+    }
+
+    private void checkHubManagerRole(Long userId, ReqBusinessPostDTO dto, String userRole) {
+        if ("HUB_MANAGER".equals(userRole)) {
+            if (!Objects.equals(hubClient.getHubIdBy(userId), dto.getBusinessDTO().getHubId())) {
+                throw new IllegalArgumentException("허브 관리자는 자신이 담당한 허브에서만 업체를 생성할 수 있습니다.");
+            }
+        }
     }
 
     private void validateBusiness(ReqBusinessPostDTO dto) {
