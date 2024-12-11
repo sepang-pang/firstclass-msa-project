@@ -14,12 +14,12 @@ public class JwtUtil {
     private String secretKey;
 
     // JWT 토큰 생성
-    public String generateToken(String userId, String account, Role role) {
+    public String generateToken(Long userId, String account, Role role) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + 1000 * 60 * 60 * 24); // 1일 만료 시간
 
         String token = Jwts.builder()
-                .setSubject(userId)
+                .setSubject(String.valueOf(userId))
                 .claim("account", account)
                 .claim("role", role)
                 .setIssuedAt(new Date())

@@ -27,7 +27,7 @@ public class User implements UserDetails {
     @Id
     @Tsid
     @Column(name = "user_id", nullable = false, updatable = false, unique = true)
-    private String userId;
+    private Long userId;
 
     @Column(name = "account", nullable = false, unique = true)
     private String account;
