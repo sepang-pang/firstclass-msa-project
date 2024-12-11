@@ -48,7 +48,7 @@ public class JwtAuthorizationFilter implements GlobalFilter {
     }
 
     private boolean isExcludedPath(String path) {
-        return path.equals("/user/signIn") || path.equals("/user/signUp");
+        return path.equals("/auth/sign-in") || path.equals("/auth/sign-up");
     }
 
     private String getJwtFromHeader(ServerWebExchange exchange) {

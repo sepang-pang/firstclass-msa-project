@@ -18,7 +18,7 @@ spring:
           uri: lb://agent-service
           predicates:
             - Path=/agent/**
-            -
+
         - id: business-service
           uri: lb://business-service
           predicates:
