@@ -5,6 +5,8 @@ import com.first_class.msa.business.domain.repository.BusinessRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class BusinessRepositoryImpl implements BusinessRepository {
@@ -14,6 +16,11 @@ public class BusinessRepositoryImpl implements BusinessRepository {
     @Override
     public boolean existsByNameAndDeletedAtIsNull(String name) {
         return jpaBusinessRepository.existsByNameAndDeletedAtIsNull(name);
+    }
+
+    @Override
+    public Optional<Business> findByIdAndDeletedAtIsNull(Long id) {
+        return jpaBusinessRepository.findByIdAndDeletedAtIsNull(id);
     }
 
     @Override

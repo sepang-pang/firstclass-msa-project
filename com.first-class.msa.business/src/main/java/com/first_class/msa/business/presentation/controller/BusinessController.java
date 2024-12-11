@@ -4,6 +4,7 @@ import com.first_class.msa.business.application.dto.ResBusinessPostDTO;
 import com.first_class.msa.business.application.dto.SuccessResponseDTO;
 import com.first_class.msa.business.application.service.BusinessService;
 import com.first_class.msa.business.presentation.request.ReqBusinessPostDTO;
+import com.first_class.msa.business.presentation.request.ReqBusinessPutByIdDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,27 @@ public class BusinessController {
                         .code(HttpStatus.OK.value())
                         .message("업체 생성에 성공하였습니다.")
                         .data(businessService.postBy(userId, account, dto))
+                        .build(),
+                HttpStatus.OK
+        );
+    }
+
+    @PutMapping("/business/{businessId}")
+    public ResponseEntity<SuccessResponseDTO<Object>> putBy(@RequestHeader("X-User-Id") Long userId,
+                                                          @RequestHeader("X-User-Account") String account,
+                                                          @PathVariable Long businessId,
+                                                          @Valid @RequestBody ReqBusinessPutByIdDTO dto) {
+
+        // --
+        // TODO : 권한체크 ( 마스터, 허브 매니저, 업체 매니저 ) / auth 서비스와 통신하여 실제 DB 에 접근 후 권한을 체크한다.
+        // --
+
+        businessService.putBy(userId, account, businessId, dto);
+
+        return new ResponseEntity<>(
+                SuccessResponseDTO.builder()
+                        .code(HttpStatus.OK.value())
+                        .message("업체 수정에 성공하였습니다.")
                         .build(),
                 HttpStatus.OK
         );

@@ -2,6 +2,7 @@ package com.first_class.msa.business.domain.model;
 
 
 import com.first_class.msa.business.presentation.request.ReqBusinessPostDTO;
+import com.first_class.msa.business.presentation.request.ReqBusinessPutByIdDTO;
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -84,5 +85,15 @@ public class Business {
                 .addressDetail(dto.getBusinessDTO().getAddressDetail())
                 .account(account)
                 .build();
+    }
+
+    public void modifyBusiness(Long userId, String account, ReqBusinessPutByIdDTO dto) {
+        this.userId = userId;
+        this.modifiedBy = account;
+        this.hubId = dto.getBusinessDTO().getHubId();
+        this.name = dto.getBusinessDTO().getName();
+        this.type = BusinessType.fromLabel(dto.getBusinessDTO().getType());
+        this.address = dto.getBusinessDTO().getAddress();
+        this.addressDetail = dto.getBusinessDTO().getAddressDetail();
     }
 }
