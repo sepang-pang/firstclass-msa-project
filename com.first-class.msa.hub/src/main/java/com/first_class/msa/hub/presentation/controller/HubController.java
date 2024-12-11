@@ -1,10 +1,12 @@
 package com.first_class.msa.hub.presentation.controller;
 
+import com.first_class.msa.hub.application.dto.ReqRoleValidationDTO;
 import com.first_class.msa.hub.application.dto.ResDTO;
 import com.first_class.msa.hub.application.dto.ResHubPostDTO;
 import com.first_class.msa.hub.application.dto.ResHubSearchDTO;
 import com.first_class.msa.hub.application.service.HubService;
 import com.first_class.msa.hub.domain.model.Hub;
+import com.first_class.msa.hub.infrastructure.client.AuthClient;
 import com.first_class.msa.hub.presentation.request.ReqHubPostDTO;
 import com.first_class.msa.hub.presentation.request.ReqHubPutByIdDTO;
 import com.querydsl.core.types.Predicate;
@@ -23,18 +25,20 @@ import org.springframework.web.bind.annotation.*;
 public class HubController {
 
     private final HubService hubService;
+    private final AuthClient authClient;
 
-    // --
-    // NOTE : userId 는 추후 Controller 단에서 권한 검증 간 사용될 것입니다.
-    // --
     @PostMapping("/hubs")
     public ResponseEntity<ResDTO<ResHubPostDTO>> postBy(@RequestHeader("X-User-Id") Long userId,
                                                         @RequestHeader("X-User-Account") String account,
                                                         @Valid @RequestBody ReqHubPostDTO req) {
 
-        // --
-        // TODO : MASTER 권한 검증
-        // --
+        if (!authClient.checkBy(userId, ReqRoleValidationDTO.from("MANAGER"))) {
+            throw new IllegalArgumentException("관리자가 아닙니다. 접근 권한이 없습니다.");
+        }
+
+        if (!authClient.checkBy(req.getHubDTO().getManagerId(), ReqRoleValidationDTO.from("HUB_MANAGER"))) {
+            throw new IllegalArgumentException("허브 관리자가 아닙니다.");
+        }
 
         return new ResponseEntity<>(
                 ResDTO.<ResHubPostDTO>builder()
