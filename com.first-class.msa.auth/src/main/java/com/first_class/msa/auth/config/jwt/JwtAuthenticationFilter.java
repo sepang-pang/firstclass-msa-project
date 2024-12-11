@@ -32,6 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (jwtUtil.validateToken(jwtToken, jwtUtil.extractAccount(jwtToken))) {
 
                 // 토큰이 유효하면 SecurityContext에 인증 정보 설정
+                String userId = jwtUtil.extractUserId(jwtToken);
                 String account = jwtUtil.extractAccount(jwtToken);
                 String role = jwtUtil.extractRole(jwtToken);
 

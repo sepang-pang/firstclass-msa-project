@@ -77,12 +77,14 @@ public class JwtAuthorizationFilter implements GlobalFilter {
         Claims claims = getClaimsJws(token.replace(BEARER_PREFIX, "")).getBody();
 
         String userId = claims.getSubject(); // "sub" 필드에서 userId 추출
+        String account = claims.get("account", String.class);
         String role = claims.get("role", String.class); // "role" 필드에서 권한 추출
 
         // 사용자 정보를 요청 헤더에 추가
         ServerHttpRequest request = exchange.getRequest()
                 .mutate()
                 .header("X-User-Id", userId)
+                .header("X-User-Account", account)
                 .header("X-Role", role)
                 .header(AUTHORIZATION_HEADER, token) // Bearer 포함한 토큰 헤더에 추가
                 .build();
