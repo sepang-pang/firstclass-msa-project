@@ -60,32 +60,34 @@ public class BusinessService {
     }
 
     private void validate(Long userId, ReqBusinessPostDTO dto, String userRole) {
-        checkUserRole(userRole);
-        checkHubManagerRole(userId, dto, userRole);
-        validateBusiness(dto);
+        validateRole(userRole);
+        validateHubAccess(userId, dto.getBusinessDTO().getHubId(), userRole);
+        validateBusinessName(dto);
     }
 
-    private static void checkUserRole(String userRole) {
+    private void validateRole(String userRole) {
         if (!Set.of("MANAGER", "HUB_MANAGER").contains(userRole)) {
             throw new IllegalArgumentException("접근 권한이 없습니다.");
         }
     }
 
-    private void checkHubManagerRole(Long userId, ReqBusinessPostDTO dto, String userRole) {
-        if ("HUB_MANAGER".equals(userRole)) {
-            if (!Objects.equals(hubClient.getHubIdBy(userId), dto.getBusinessDTO().getHubId())) {
+    private void validateHubAccess(Long userId, Long hubId, String userRole) {
+        if ("MANAGER".equals(userRole)) {
+            Long hubIdForChecking = hubClient.getHubIdBy(userId);
+
+            if (hubIdForChecking == null) {
+                throw new IllegalArgumentException("사용자가 담당하는 허브를 찾을 수 없습니다.");
+            }
+
+            if (!Objects.equals(hubIdForChecking, hubId)) {
                 throw new IllegalArgumentException("허브 관리자는 자신이 담당한 허브에서만 업체를 생성할 수 있습니다.");
             }
         }
     }
 
-    private void validateBusiness(ReqBusinessPostDTO dto) {
+    private void validateBusinessName(ReqBusinessPostDTO dto) {
         if (isDuplicateName(dto.getBusinessDTO().getName())) {
             throw new DuplicateRequestException("이미 등록된 업체명입니다. 다른 이름을 사용하거나 기존 업체 정보를 확인해주세요");
-        }
-
-        if (!isExistsHub(dto.getBusinessDTO().getHubId())) {
-            throw new IllegalArgumentException("허브 정보를 찾을 수 없습니다. 허브 ID를 확인해주세요.");
         }
     }
 
