@@ -22,6 +22,9 @@ public class ReqBusinessPostDTO {
         @NotNull(message = "업체 정보를 입력해주세요")
         private Long hubId;
 
+        @NotNull(message = "업체 관리자 정보를 입력해주세요")
+        private Long managerId;
+
         @NotBlank(message = "업체 이름을 입력해주세요")
         private String name;
 
