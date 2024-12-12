@@ -5,9 +5,11 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.first_class.msa.orders.application.dto.ResProductGetDTO;
 import com.first_class.msa.orders.domain.model.Order;
 import com.first_class.msa.orders.domain.model.OrderLine;
 import com.first_class.msa.orders.domain.model.valueobject.Count;
+import com.first_class.msa.orders.domain.model.valueobject.SupplyPrice;
 import com.first_class.msa.orders.libs.exception.ApiException;
 import com.first_class.msa.orders.libs.message.ErrorMessage;
 import com.first_class.msa.orders.presentation.request.ReqOrderPostDTO;
@@ -30,12 +32,12 @@ public class OrderLineServiceImpl implements OrderLineService {
 			= orderLinePostDTOList.stream()
 			.map(ReqOrderPostDTO.ReqOrderLinePostDTO::getProductId)
 			.toList();
-		// TODO: 2024-12-11 Product 정보 요청
-		// List<ResProductDto> resProductDTO = productService.getProductList(productIdList);
-		return resProductDTO.stream()
+
+		List<ResProductGetDTO> resProductListDTO = productService.checkProductListBy(productIdList);
+		return resProductListDTO.stream()
 			.map(resProductDto -> {
-				ReqOrderPostDTO.ReqOrderLineDTO matchingRequest = orderLinePostDTOList.stream()
-					.filter(reqOrderLineDTO -> reqOrderLineDTO.getProductId().equals(resProductDto.getId()))
+				ReqOrderPostDTO.ReqOrderLinePostDTO matchingRequest = orderLinePostDTOList.stream()
+					.filter(reqOrderLineDTO -> reqOrderLineDTO.getProductId().equals(resProductDto.getProductId()))
 					.findFirst()
 					.orElseThrow(() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOT_FOUND_PRODUCT)));
 
@@ -44,10 +46,10 @@ public class OrderLineServiceImpl implements OrderLineService {
 				}
 
 				Count count = new Count(matchingRequest.getCount());
-				order.addHubId(resProductDto.getHubId());
-				return OrderLine.createOrderLine(order, resProductDto.getId(), count,	resProductDto.getSupplyPrice());
+				SupplyPrice supplyPrice = new SupplyPrice(matchingRequest.getSupplyPrice());
+				return OrderLine.createOrderLine(order, resProductDto.getProductId(), count, supplyPrice);
 			})
-			.toList(); ;
+			.toList();
 	}
 
 }

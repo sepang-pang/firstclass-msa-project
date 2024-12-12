@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.first_class.msa.orders.application.dto.ReqRoleValidationDTO;
+import com.first_class.msa.orders.application.dto.ResBusinessDTO;
 import com.first_class.msa.orders.application.dto.ResOrderPostDTO;
 import com.first_class.msa.orders.application.dto.ResOrderSearchDTO;
 import com.first_class.msa.orders.application.dto.AuthSearchConditionDTO;
@@ -32,11 +34,13 @@ public class OrderServiceImpl implements OrderService{
 	public ResOrderPostDTO postBy(Long businessId, Long userId, ReqOrderPostDTO reqOrderPostDTO){
 
 		RequestInfo requestInfo = new RequestInfo(reqOrderPostDTO.getRequestInfo());
-		Order order = Order.createOrder(businessId, userId,requestInfo);
-		order.setCreatedBy(userId);
-		order.setUpdatedBy(userId);
+		ResBusinessDTO resbusinessDTO = businessService.checkBusinessBy(businessId);
+		Order order = Order.createOrder(businessId, resbusinessDTO.getHubId(), userId, requestInfo);
+		order.setCreateByAndUpdateBy(userId);
+
 		List<OrderLine> orderLineList
 			= orderLineService.createOrderLineList(reqOrderPostDTO.getReqOrderLinePostDTOList(), order);
+
 
 		order.addOrderLineList(orderLineList);
 		order.updateOrderTotalPrice(orderLineList);
@@ -58,15 +62,15 @@ public class OrderServiceImpl implements OrderService{
 
 	private AuthSearchConditionDTO SearchCondition(Long userId){
 		AuthSearchConditionDTO authSearchConditionDTO;
-		if(authService.validate("MASTER")){
+		if(authService.checkBy(userId, ReqRoleValidationDTO.from("MASTER"))){
 			authSearchConditionDTO = AuthSearchConditionDTO.createForMaster();
 
-		} else if(authService.validate("HUB_MANAGER")){
-			// TODO: 2024-12-11 허브에 UserId 확인 및 서치 추가 businessId 필요
+		} else if(authService.checkBy(userId, ReqRoleValidationDTO.from("HUB_MANAGER"))){
+			// TODO: 2024-12-11 허브에 userId 확인 및 서치 hubId 필요
 			authSearchConditionDTO = AuthSearchConditionDTO.createForHubManager(hubId);
 
-		} else if(authService.validate("BUSINESS_MANAGER")) {
-			// TODO: 2024-12-11 업체에 userId 확인 및 서치 hubId 필요
+		} else if(authService.checkBy(userId, ReqRoleValidationDTO.from("BUSINESS_MANAGER"))) {
+			// TODO: 2024-12-11 업체에 UserId 확인 및 서치 추가 businessId 필요
 			authSearchConditionDTO = AuthSearchConditionDTO.createForBusinessManager(businessId);
 		} else {
 			authSearchConditionDTO = AuthSearchConditionDTO.createForDefault(userId);

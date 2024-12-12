@@ -40,7 +40,7 @@ public class Order extends BaseTime {
 	@Column(name = "business_id", nullable = false)
 	private Long businessId;
 
-	@Column(name = "user_id" ,nullable = false)
+	@Column(name = "user_id", nullable = false)
 	private Long userId;
 
 	@Column(name = "hub_id", nullable = false)
@@ -57,30 +57,31 @@ public class Order extends BaseTime {
 	@OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<OrderLine> orderLineList = new ArrayList<>();
 
-	public static Order createOrder(Long businessId,Long userId, RequestInfo requestInfo) {
+	public static Order createOrder(Long businessId, Long hubId, Long userId, RequestInfo requestInfo) {
 		return Order.builder()
 			.businessId(businessId)
+			.hubId(hubId)
 			.userId(userId)
 			.requestInfo(requestInfo)
 			.build();
 
 	}
 
-	public void addOrderLineList(List<OrderLine> orderLineList){
+	public void setCreateByAndUpdateBy(Long userId){
+		this.setCreatedBy(userId);
+		this.setUpdatedBy(userId);
+	}
+
+	public void addOrderLineList(List<OrderLine> orderLineList) {
 		this.orderLineList = orderLineList;
 	}
-
-	public void addHubId(Long hubId){
-		this.hubId = hubId;
-	}
-
 
 	public void updateOrderTotalPrice(List<OrderLine> orderLineList) {
 		this.orderTotalPrice =
 			new OrderTotalPrice(
-			orderLineList.stream()
-			.mapToInt(orderLine -> orderLine.getCount().getValue() * orderLine.getSupplyPrice().getValue())
-				.sum()
+				orderLineList.stream()
+					.mapToInt(orderLine -> orderLine.getCount().getValue() * orderLine.getSupplyPrice().getValue())
+					.sum()
 			);
 	}
 
