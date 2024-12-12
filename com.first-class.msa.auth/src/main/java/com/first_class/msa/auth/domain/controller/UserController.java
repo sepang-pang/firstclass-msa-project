@@ -55,5 +55,8 @@ public class UserController {
         return new ResponseEntity<>("로그아웃 성공", HttpStatus.OK);
     }
 
-
+    @GetMapping("/{userId}")
+    public ResRoleGetByIdDTO getRoleBy(@PathVariable Long userId) {
+        return userService.getRoleBy(userId);
+    }
 }

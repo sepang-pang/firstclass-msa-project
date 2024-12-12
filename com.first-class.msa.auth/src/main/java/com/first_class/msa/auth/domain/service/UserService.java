@@ -2,6 +2,7 @@ package com.first_class.msa.auth.domain.service;
 
 import com.first_class.msa.auth.config.jwt.JwtUtil;
 import com.first_class.msa.auth.domain.dto.ReqLoginDTO;
+import com.first_class.msa.auth.domain.dto.ResRoleGetByIdDTO;
 import com.first_class.msa.auth.domain.model.User;
 import com.first_class.msa.auth.domain.dto.ReqUserPostDTO;
 import com.first_class.msa.auth.domain.repository.UserRepository;
@@ -47,6 +48,15 @@ public class UserService {
 
         // JWT 토큰 생성
         return jwtUtil.generateToken(user.getUserId(), user.getAccount(), user.getRole());
+    }
+
+
+    public ResRoleGetByIdDTO getRoleBy(Long userId) {
+        User userForRole = findById(userId);
+
+        return ResRoleGetByIdDTO.builder()
+                .role(userForRole.getRole().name())
+                .build();
     }
 
 
