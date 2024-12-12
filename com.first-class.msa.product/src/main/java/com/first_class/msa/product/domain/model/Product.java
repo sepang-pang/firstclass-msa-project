@@ -66,4 +66,29 @@ public class Product {
         this.createdBy = account;
         this.modifiedBy = account;
     }
+
+    public static Product createProduct(Long businessId, Long hubId, String name,
+                                        int price, int quantity, String account) {
+        return Product.builder()
+                .businessId(businessId)
+                .hubId(hubId)
+                .name(name)
+                .price(price)
+                .quantity(quantity)
+                .account(account)
+                .build();
+    }
+
+    public void modifyProduct(String name, int price, int quantity, String account) {
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.modifiedBy = account;
+    }
+
+    public void deleteProduct(String account) {
+        this.modifiedBy = account;
+        this.deletedBy = account;
+        this.deletedAt = LocalDateTime.now();
+    }
 }
