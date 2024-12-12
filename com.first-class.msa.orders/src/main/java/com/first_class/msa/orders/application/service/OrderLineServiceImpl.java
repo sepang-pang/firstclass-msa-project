@@ -33,7 +33,7 @@ public class OrderLineServiceImpl implements OrderLineService {
 			.map(ReqOrderPostDTO.ReqOrderLinePostDTO::getProductId)
 			.toList();
 
-		List<ResProductGetDTO> resProductListDTO = productService.checkProductListBy(productIdList);
+		List<ResProductGetDTO> resProductListDTO = productService.getAllProductBy(productIdList);
 		return resProductListDTO.stream()
 			.map(resProductDto -> {
 				ReqOrderPostDTO.ReqOrderLinePostDTO matchingRequest = orderLinePostDTOList.stream()
