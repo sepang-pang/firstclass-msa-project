@@ -4,22 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7c1308d6-dd0b-4855-b139-b03d6cbc70ca" name="Changes" comment="[ FEAT ] Order 단선 상세 조회 구현 ( #4 )">
-      <change afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/event/OrderDeleteProductEvent.java" afterDir="false" />
+    <list default="true" id="7c1308d6-dd0b-4855-b139-b03d6cbc70ca" name="Changes" comment="[ Fix ] Address 추가에 따른 로직 수정  ( #4 )">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/dto/ResOrderDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/dto/ResOrderDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/dto/ResOrderSearchDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/dto/ResOrderSearchDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/OrderEventService.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/OrderEventService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/OrderEventServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/OrderEventServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/OrderService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/OrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/OrderServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/domain/model/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/domain/model/Order.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/domain/model/OrderLine.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/domain/model/OrderLine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/config/RabbitMQConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/config/RabbitMQConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/event/OrderCancelledMassage.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/event/OrderCreateEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/event/OrderCreateProductEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/repository/OrderQueryRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/repository/OrderQueryRepositoryImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/presentation/request/ReqOrderPostDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/presentation/request/ReqOrderPostDTO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,9 +72,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Enum" />
         <option value="Interface" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -587,7 +574,23 @@
       <option name="project" value="LOCAL" />
       <updated>1733992889578</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="[ FEAT ] Order 삭제 기능 구현 ( #4 )">
+      <option name="closed" value="true" />
+      <created>1733998439845</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1733998439845</updated>
+    </task>
+    <task id="LOCAL-00024" summary="[ Fix ] Address 추가에 따른 로직 수정  ( #4 )">
+      <option name="closed" value="true" />
+      <created>1733998496178</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1733998496178</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -626,7 +629,9 @@
     <MESSAGE value="[ RENAME ] DeliveryClient 메서드명 변경 ( #4 )" />
     <MESSAGE value="[ FIX ] Order Search default 조건 삭제 ( #4 )" />
     <MESSAGE value="[ FEAT ] Order 단선 상세 조회 구현 ( #4 )" />
-    <option name="LAST_COMMIT_MESSAGE" value="[ FEAT ] Order 단선 상세 조회 구현 ( #4 )" />
+    <MESSAGE value="[ FEAT ] Order 삭제 기능 구현 ( #4 )" />
+    <MESSAGE value="[ Fix ] Address 추가에 따른 로직 수정  ( #4 )" />
+    <option name="LAST_COMMIT_MESSAGE" value="[ Fix ] Address 추가에 따른 로직 수정  ( #4 )" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
