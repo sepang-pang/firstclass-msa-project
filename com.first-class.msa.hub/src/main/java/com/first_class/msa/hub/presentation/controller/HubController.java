@@ -115,8 +115,8 @@ public class HubController {
         return hubService.existsBy(hubId);
     }
 
-    @GetMapping("/hubs")
-    public Long getHubIdBy(@RequestParam Long userId) {
+    @GetMapping("/hub/by-user/{userId}")
+    public Long getHubIdBy(@PathVariable Long userId) {
         return hubService.getHubIdBy(userId);
     }
 
