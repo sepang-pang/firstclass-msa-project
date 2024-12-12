@@ -14,11 +14,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResOrderPostDTO {
+public class ResOrderDTO {
 	private OrderDTO orderDTO;
 
-	public static ResOrderPostDTO of(Order order){
-		return ResOrderPostDTO.builder().orderDTO(OrderDTO.from(order)).build();
+	public static ResOrderDTO of(Order order){
+		return ResOrderDTO.builder().orderDTO(OrderDTO.from(order)).build();
 	}
 
 	@Getter

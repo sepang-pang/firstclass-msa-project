@@ -8,11 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.first_class.msa.orders.application.dto.AuthSearchConditionDTO;
 import com.first_class.msa.orders.application.dto.ResBusinessDTO;
-import com.first_class.msa.orders.application.dto.ResDeliveryDTO;
-import com.first_class.msa.orders.application.dto.ResHubDto;
-import com.first_class.msa.orders.application.dto.ResOrderPostDTO;
+import com.first_class.msa.orders.application.dto.ResDeliveryOrderSearchDTO;
+import com.first_class.msa.orders.application.dto.ResDeliveryOrderSearchDetailDTO;
+import com.first_class.msa.orders.application.dto.ResHubDTO;
+import com.first_class.msa.orders.application.dto.ResOrderDTO;
 import com.first_class.msa.orders.application.dto.ResOrderSearchDTO;
-import com.first_class.msa.orders.application.dto.ResOrderSearchDetailDTO;
 import com.first_class.msa.orders.domain.model.Order;
 import com.first_class.msa.orders.domain.model.OrderLine;
 import com.first_class.msa.orders.domain.model.valueobject.RequestInfo;
@@ -36,7 +36,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	@Transactional
-	public ResOrderPostDTO postBy(Long businessId, Long userId, ReqOrderPostDTO reqOrderPostDTO) {
+	public ResOrderDTO postBy(Long businessId, Long userId, ReqOrderPostDTO reqOrderPostDTO) {
 
 		RequestInfo requestInfo = new RequestInfo(reqOrderPostDTO.getRequestInfo());
 		ResBusinessDTO resbusinessDTO = businessService.getBusinessBy(businessId);
@@ -50,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
 		order.updateOrderTotalPrice(orderLineList);
 		order = orderRepository.save(order);
 
-		ResOrderPostDTO orderPostDTO = ResOrderPostDTO.of(order);
+		ResOrderDTO orderPostDTO = ResOrderDTO.of(order);
 		orderEventService.orderCreateEvent(order.getId(), userId, orderPostDTO.getOrderDTO().getOrderLineList());
 
 		return orderPostDTO;
@@ -84,5 +84,41 @@ public class OrderServiceImpl implements OrderService {
 		};
 	}
 
+	@Transactional(readOnly = true)
+	public ResOrderDTO getOrderDetailBy(Long userId, Long orderId) {
+		String userRole = authService.getRoleBy(userId).getRole();
+		Order order = orderRepository.findById(orderId)
+			.orElseThrow(() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOT_FOUND_ORDER)));
+		AuthCondition(userId, userRole, order);
+
+		return ResOrderDTO.of(order);
+	}
+
+	private void AuthCondition(Long userId, String userRole, Order order) {
+		switch (userRole) {
+			case "HUB_MANAGER" -> {
+				ResHubDTO resHubDto = hubService.getHubBy(userId);
+				if (!order.getHubId().equals(resHubDto.getHubId())) {
+					throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_USER_ROLE_HUB_MANAGER));
+				}
+			}
+			case "BUSINESS_MANAGER" -> {
+				ResBusinessDTO businessDTO = businessService.getBusinessUserBy(userId);
+				if (!order.getBusinessId().equals(businessDTO.getBusinessId())) {
+					throw new IllegalArgumentException(
+						new ApiException(ErrorMessage.INVALID_USER_ROLE_BUSINESS_MANAGER));
+				}
+			}
+			case "DELIVERY_MANAGER" -> {
+				ResDeliveryOrderSearchDetailDTO resDeliveryOrderSearchDetailDTO
+					= deliveryService.getDeliveryBy(userId, order.getId());
+				if (!(resDeliveryOrderSearchDetailDTO.getOrderId().equals(order.getId()) &&
+					resDeliveryOrderSearchDetailDTO.getDeliveryUserId().equals(userId))
+				)
+					throw new IllegalArgumentException(
+						new ApiException(ErrorMessage.INVALID_USER_ROLE_DELIVERY_MANAGER));
+			}
+		}
+	}
 
 }

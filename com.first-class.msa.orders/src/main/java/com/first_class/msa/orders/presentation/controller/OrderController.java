@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.first_class.msa.orders.application.dto.ResDTO;
-import com.first_class.msa.orders.application.dto.ResOrderPostDTO;
+import com.first_class.msa.orders.application.dto.ResOrderDTO;
 import com.first_class.msa.orders.application.dto.ResOrderSearchDTO;
 import com.first_class.msa.orders.application.service.OrderService;
 import com.first_class.msa.orders.presentation.request.ReqOrderPostDTO;
@@ -26,13 +26,13 @@ public class OrderController {
 	private final OrderService orderService;
 
 	@PostMapping("/{businessId}")
-	public ResponseEntity<ResDTO<ResOrderPostDTO>> postBy(
+	public ResponseEntity<ResDTO<ResOrderDTO>> postBy(
 		@PathVariable Long businessId,
 		@RequestHeader("X-User-Id") Long userId,
 		@RequestBody ReqOrderPostDTO reqOrderPostDTO)
 	{
 		return new ResponseEntity<>(
-			ResDTO.<ResOrderPostDTO>builder()
+			ResDTO.<ResOrderDTO>builder()
 				.code(HttpStatus.CREATED.value())
 				.message("주문 생성 성공")
 				.data(orderService.postBy(businessId, userId, reqOrderPostDTO))
@@ -56,4 +56,20 @@ public class OrderController {
 			HttpStatus.OK
 		);
 	}
+
+	@GetMapping("/{orderId}")
+	public ResponseEntity<ResDTO<ResOrderDTO>> getOrderDetailBy(
+		@RequestHeader("X-User-Id") Long userId,
+		@PathVariable Long orderId
+	){
+		return new ResponseEntity<>(
+			ResDTO.<ResOrderDTO>builder()
+				.code(HttpStatus.OK.value())
+				.data(orderService.getOrderDetailBy(userId ,orderId))
+				.build(),
+			HttpStatus.OK
+		);
+	}
+
+
 }
