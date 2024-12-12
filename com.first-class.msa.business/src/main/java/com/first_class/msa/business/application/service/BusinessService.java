@@ -11,6 +11,7 @@ import com.first_class.msa.business.presentation.request.ReqBusinessPostDTO;
 import com.first_class.msa.business.presentation.request.ReqBusinessPutByIdDTO;
 import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,6 +57,7 @@ public class BusinessService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "businessSearchCache", key = "{#pageable.pageNumber, #pageable.pageSize, #name, #address, #type, #sort}")
     public ResBusinessSearchDTO searchBy(Pageable pageable, String name, String address, String type, String sort) {
         return ResBusinessSearchDTO.of(businessRepository.findBusinessByDeletedAtIsNullWithConditions(pageable, name, address, type, sort));
     }
