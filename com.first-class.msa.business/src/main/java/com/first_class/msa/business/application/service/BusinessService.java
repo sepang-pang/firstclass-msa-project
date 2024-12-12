@@ -2,6 +2,7 @@ package com.first_class.msa.business.application.service;
 
 import com.first_class.msa.business.application.dto.ResBusinessPostDTO;
 import com.first_class.msa.business.application.dto.ResBusinessSearchDTO;
+import com.first_class.msa.business.application.dto.ResRoleGetByUserIdDTO;
 import com.first_class.msa.business.domain.model.Business;
 import com.first_class.msa.business.domain.model.RoleType;
 import com.first_class.msa.business.domain.repository.BusinessRepository;
@@ -31,13 +32,13 @@ public class BusinessService {
     @Transactional
     public ResBusinessPostDTO postBy(Long userId, String account, ReqBusinessPostDTO dto) {
 
-        String roleForValidation = authClient.getRoleBy(userId);
+        ResRoleGetByUserIdDTO dtoForValidation = authClient.getRoleBy(userId);
 
         // -- 권한 검증
-        validateUserRole(roleForValidation, Set.of(RoleType.MANAGER, RoleType.HUB_MANAGER));
+        validateUserRole(dtoForValidation.getRole(), Set.of(RoleType.MANAGER, RoleType.HUB_MANAGER));
 
         // -- 허브 관리자 검증 : 담당 허브일 경우에만 업체를 생성할 수 있음
-        validateHubForManager(userId, dto.getBusinessDTO().getHubId(), roleForValidation);
+        validateHubForManager(userId, dto.getBusinessDTO().getHubId(), dtoForValidation.getRole());
 
         // -- 업체 이름 중복 검증
         validateBusinessNameDuplication(dto.getBusinessDTO().getName());
@@ -68,16 +69,16 @@ public class BusinessService {
     @CacheEvict(cacheNames = "businessSearchCache", allEntries = true)
     public void putBy(Long userId, String account, Long businessId, ReqBusinessPutByIdDTO dto) {
 
-        String roleForValidation = authClient.getRoleBy(userId);
+        ResRoleGetByUserIdDTO roleForValidation = authClient.getRoleBy(userId);
 
         // -- 권한 검증
-        validateUserRole(roleForValidation, Set.of(RoleType.MANAGER, RoleType.HUB_MANAGER, RoleType.BUSINESS_MANAGER));
+        validateUserRole(roleForValidation.getRole(), Set.of(RoleType.MANAGER, RoleType.HUB_MANAGER, RoleType.BUSINESS_MANAGER));
 
         Business businessForModification = getBusinessBy(businessId);
 
         // -- 허브 관리자 : 담당 허브에 속한 업체만 수정 가능합
         // -- 업체 관리자 : 본인 업체만 수정 가능함
-        validateHubOrBusinessManagerAccess(userId, roleForValidation, businessForModification);
+        validateHubOrBusinessManagerAccess(userId, roleForValidation.getRole(), businessForModification);
 
         // -- 유효성 검사
         validateHubChangeRequest(businessForModification, dto.getBusinessDTO().getHubId());
@@ -97,15 +98,15 @@ public class BusinessService {
     @CacheEvict(cacheNames = "businessSearchCache", allEntries = true)
     public void deleteBy(Long userId, String account, Long businessId) {
 
-        String roleForValidation = authClient.getRoleBy(userId);
+        ResRoleGetByUserIdDTO dtoForValidation = authClient.getRoleBy(userId);
 
         // -- 권한 검증
-        validateUserRole(roleForValidation, Set.of(RoleType.MANAGER, RoleType.HUB_MANAGER));
+        validateUserRole(dtoForValidation.getRole(), Set.of(RoleType.MANAGER, RoleType.HUB_MANAGER));
 
         Business businessForDeletion = getBusinessBy(businessId);
 
         // -- 허브 관리자 검증 : 담당 허브에 속한 업체만 삭제 가능
-        if (Objects.equals(roleForValidation, RoleType.HUB_MANAGER)) {
+        if (Objects.equals(dtoForValidation.getRole(), RoleType.HUB_MANAGER)) {
             validateHubManager(userId, businessForDeletion);
         }
 
@@ -115,12 +116,12 @@ public class BusinessService {
 
     private void validateUserRole(String roleForValidation, Set<String> validRoles) {
         if (!validRoles.contains(roleForValidation)) {
-            throw new IllegalArgumentException("접근 권한이 없습니다.");
+            throw new IllegalArgumentException("접근 권한이 없습니다 : " + roleForValidation);
         }
     }
 
     private void validateHubForManager(Long userId, Long hubId, String roleForValidation) {
-        if ("MANAGER".equals(roleForValidation)) {
+        if (RoleType.HUB_MANAGER.equals(roleForValidation)) {
             Long hubIdForChecking = hubClient.getHubIdBy(userId);
 
             if (hubIdForChecking == null) {
