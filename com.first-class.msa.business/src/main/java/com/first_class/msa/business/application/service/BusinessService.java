@@ -82,6 +82,24 @@ public class BusinessService {
         );
     }
 
+    @Transactional
+    public void deleteBy(Long userId, String account, Long businessId) {
+
+        String roleForValidation = authClient.getRoleBy(userId);
+
+        // -- 권한 검증
+        validateUserRole(roleForValidation, Set.of(RoleType.MANAGER, RoleType.HUB_MANAGER));
+
+        Business businessForDeletion = getBusinessBy(businessId);
+
+        // -- 허브 관리자 검증 : 담당 허브에 속한 업체만 삭제 가능
+        if (Objects.equals(roleForValidation, RoleType.HUB_MANAGER)) {
+            validateHubManager(userId, businessForDeletion);
+        }
+
+        businessForDeletion.deleteBusiness(account);
+    }
+
 
     private void validateUserRole(String roleForValidation, Set<String> validRoles) {
         if (!validRoles.contains(roleForValidation)) {

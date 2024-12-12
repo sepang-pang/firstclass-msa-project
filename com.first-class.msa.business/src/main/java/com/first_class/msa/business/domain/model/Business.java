@@ -98,4 +98,10 @@ public class Business {
         this.address = address;
         this.addressDetail = addressDetail;
     }
+
+    public void deleteBusiness(String account) {
+        this.modifiedBy = account;
+        this.deletedBy = account;
+        this.deletedAt = LocalDateTime.now();
+    }
 }

@@ -34,9 +34,9 @@ public class BusinessController {
 
     @PutMapping("/business/{businessId}")
     public ResponseEntity<SuccessResponseDTO<Object>> putBy(@RequestHeader("X-User-Id") Long userId,
-                                                          @RequestHeader("X-User-Account") String account,
-                                                          @PathVariable Long businessId,
-                                                          @Valid @RequestBody ReqBusinessPutByIdDTO dto) {
+                                                            @RequestHeader("X-User-Account") String account,
+                                                            @PathVariable Long businessId,
+                                                            @Valid @RequestBody ReqBusinessPutByIdDTO dto) {
 
         businessService.putBy(userId, account, businessId, dto);
 
@@ -44,6 +44,22 @@ public class BusinessController {
                 SuccessResponseDTO.builder()
                         .code(HttpStatus.OK.value())
                         .message("업체 수정에 성공하였습니다.")
+                        .build(),
+                HttpStatus.OK
+        );
+    }
+
+    @DeleteMapping("/business/{businessId}")
+    public ResponseEntity<SuccessResponseDTO<Object>> deleteBy(@RequestHeader("X-User-Id") Long userId,
+                                                               @RequestHeader("X-User-Account") String account,
+                                                               @PathVariable Long businessId) {
+
+        businessService.deleteBy(userId, account, businessId);
+
+        return new ResponseEntity<>(
+                SuccessResponseDTO.builder()
+                        .code(HttpStatus.OK.value())
+                        .message("업체 삭제에 성공하였습니다.")
                         .build(),
                 HttpStatus.OK
         );
