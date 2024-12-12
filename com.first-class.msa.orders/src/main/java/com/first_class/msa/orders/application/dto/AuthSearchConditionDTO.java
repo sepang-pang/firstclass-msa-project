@@ -44,11 +44,4 @@ public class AuthSearchConditionDTO {
 			.userRole("DEFAULT")
 			.build();
 	}
-
-	public static AuthSearchConditionDTO createForDefault(Long userId) {
-		return AuthSearchConditionDTO.builder()
-			.userId(userId)
-			.userRole("DEFAULT")
-			.build();
-	}
 }

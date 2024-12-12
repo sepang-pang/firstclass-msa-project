@@ -72,7 +72,7 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
 				builder.and(deliveryOrderEquals(authSearchConditionDTO.getOrderIdList()));
 				break;
 			default:
-				builder.and(userIdEquals(authSearchConditionDTO.getUserId()));
+				Object o = null;
 				break;
 		}
 

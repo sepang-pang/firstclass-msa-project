@@ -59,30 +59,29 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	@Transactional(readOnly = true)
 	public ResOrderSearchDTO getAllOrderBy(Long userId, Pageable pageable) {
-		return orderRepository.findAll(SearchCondition(userId), pageable);
+		String userRole = authService.getRoleBy(userId).getRole();
+		return orderRepository.findAll(SearchCondition(userId, userRole), pageable);
 	}
 
-	private AuthSearchConditionDTO SearchCondition(Long userId) {
-		AuthSearchConditionDTO authSearchConditionDTO;
-		if (authService.getRoleBy(userId).getRole().equals("MASTER")) {
-			authSearchConditionDTO = AuthSearchConditionDTO.createForMaster();
+	private AuthSearchConditionDTO SearchCondition(Long userId, String userRole) {
 
-		} else if (authService.getRoleBy(userId).getRole().equals("HUB_MANAGER")) {
-			ResHubDto resHubDto = hubService.getHubBy(userId);
-			authSearchConditionDTO = AuthSearchConditionDTO.createForHubManager(resHubDto.getHubId());
-
-		} else if (authService.getRoleBy(userId).getRole().equals("BUSINESS_MANAGER")) {
-			ResBusinessDTO businessDTO = businessService.getBusinessUserBy(userId);
-			authSearchConditionDTO = AuthSearchConditionDTO.createForBusinessManager(businessDTO.getBusinessId());
-
-		} else if (authService.getRoleBy(userId).getRole().equals("DELIVERY_MANAGER")) {
-			ResDeliveryDTO resDeliveryDTO = deliveryService.getAllDeliveryBy(userId);
-			authSearchConditionDTO = AuthSearchConditionDTO.createForDeliveryManager(resDeliveryDTO.getOrderIdList());
-
-		} else {
-			authSearchConditionDTO = AuthSearchConditionDTO.createForDefault(userId);
-		}
-		return authSearchConditionDTO;
+		return switch (userRole) {
+			case "MASTER" -> AuthSearchConditionDTO.createForMaster();
+			case "HUB_MANAGER" -> {
+				ResHubDTO resHubDto = hubService.getHubBy(userId);
+				yield AuthSearchConditionDTO.createForHubManager(resHubDto.getHubId());
+			}
+			case "BUSINESS_MANAGER" -> {
+				ResBusinessDTO businessDTO = businessService.getBusinessUserBy(userId);
+				yield AuthSearchConditionDTO.createForBusinessManager(businessDTO.getBusinessId());
+			}
+			case "DELIVERY_MANAGER" -> {
+				ResDeliveryOrderSearchDTO resDeliveryOrderSearchDTO = deliveryService.getAllDeliveryBy(userId);
+				yield AuthSearchConditionDTO.createForDeliveryManager(
+					resDeliveryOrderSearchDTO.getOrderIdList());
+			}
+			default -> throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_USER_ROLE));
+		};
 	}
 
 
