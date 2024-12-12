@@ -10,8 +10,8 @@ import com.first_class.msa.orders.application.service.BusinessService;
 public interface BusinessClient extends BusinessService {
 
 	@GetMapping({"/business/{businessId}"})
-	ResBusinessDTO checkBusinessBy(@PathVariable(name = "businessId") Long businessId);
+	ResBusinessDTO getBusinessBy(@PathVariable(name = "businessId") Long businessId);
 
 	@GetMapping({"/business/{userId}"})
-	ResBusinessDTO checkBusinessUserBy(@PathVariable Long userId);
+	ResBusinessDTO getBusinessUserBy(@PathVariable Long userId);
 }

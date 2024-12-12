@@ -13,5 +13,5 @@ import com.first_class.msa.orders.application.service.ProductService;
 public interface ProductClient extends ProductService {
 
 	@GetMapping("/products")
-	List<ResProductGetDTO> getProductList(@RequestParam List<Long> productIdList);
+	List<ResProductGetDTO> getAllProductBy(@RequestParam List<Long> productIdList);
 }

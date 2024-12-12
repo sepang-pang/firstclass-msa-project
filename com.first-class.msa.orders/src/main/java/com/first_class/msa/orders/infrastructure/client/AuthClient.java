@@ -9,5 +9,5 @@ import com.first_class.msa.orders.application.service.AuthService;
 @FeignClient(name = "auth-service")
 public interface AuthClient extends AuthService {
 	@GetMapping("/auth/{userId}")
-	ResRoleGetByIdDTO checkBy(@PathVariable(name = "userId") Long userId);
+	ResRoleGetByIdDTO getRoleBy(@PathVariable(name = "userId") Long userId);
 }

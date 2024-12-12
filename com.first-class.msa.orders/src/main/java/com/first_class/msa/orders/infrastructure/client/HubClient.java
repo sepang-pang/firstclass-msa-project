@@ -11,6 +11,6 @@ import com.first_class.msa.orders.application.service.HubService;
 public interface HubClient extends HubService {
 
 	@GetMapping("/hubs/{userId}")
-	ResHubDto checkHubBy(@PathVariable(name = "userId") Long userId);
+	ResHubDto getHubBy(@PathVariable(name = "userId") Long userId);
 
 }
