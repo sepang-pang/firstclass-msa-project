@@ -40,11 +40,14 @@ public class BusinessService {
         // -- 허브 관리자 검증 : 담당 허브일 경우에만 업체를 생성할 수 있음
         validateHubForManager(userId, dto.getBusinessDTO().getHubId(), dtoForValidation.getRole());
 
+        // -- 업체 관리자 권한 검증 : 요청한 업체 관리자가 업체 관리자 권한 소유자인지 검증
+        validateBusinessManagerRole(dto.getBusinessDTO().getManagerId());
+
         // -- 업체 이름 중복 검증
         validateBusinessNameDuplication(dto.getBusinessDTO().getName());
 
         Business businessForSaving = Business.createBusiness(
-                userId,
+                dto.getBusinessDTO().getManagerId(),
                 account,
                 dto.getBusinessDTO().getHubId(),
                 dto.getBusinessDTO().getName(),
@@ -147,6 +150,12 @@ public class BusinessService {
     private Business getBusinessBy(Long businessId) {
         return businessRepository.findByIdAndDeletedAtIsNull(businessId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 업체입니다."));
+    }
+
+    private void validateBusinessManagerRole(Long managerId) {
+        if (!Objects.equals(RoleType.BUSINESS_MANAGER, authClient.getRoleBy(managerId).getRole())) {
+            throw new IllegalArgumentException("업체 관리자가 아닙니다. 다시 확인해주세요.");
+        }
     }
 
     private void validateHubOrBusinessManagerAccess(Long userId, String roleForValidation, Business businessForModification) {
