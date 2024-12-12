@@ -12,6 +12,7 @@ import com.first_class.msa.orders.application.service.DeliveryService;
 @FeignClient(name = "delivery-service")
 public interface DeliveryClient extends DeliveryService {
 
-	@GetMapping("/deliveries/orders")
+	@GetMapping("/orders/deliveries")
 	ResDeliveryDTO getAllDeliveryBy(@RequestParam List<Long> orderIdList);
+
 }
