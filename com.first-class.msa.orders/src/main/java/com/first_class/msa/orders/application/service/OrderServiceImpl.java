@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.first_class.msa.orders.application.dto.ReqRoleValidationDTO;
 import com.first_class.msa.orders.application.dto.ResBusinessDTO;
+import com.first_class.msa.orders.application.dto.ResHubDto;
 import com.first_class.msa.orders.application.dto.ResOrderPostDTO;
 import com.first_class.msa.orders.application.dto.ResOrderSearchDTO;
 import com.first_class.msa.orders.application.dto.AuthSearchConditionDTO;
@@ -66,16 +67,17 @@ public class OrderServiceImpl implements OrderService{
 			authSearchConditionDTO = AuthSearchConditionDTO.createForMaster();
 
 		} else if(authService.checkBy(userId, ReqRoleValidationDTO.from("HUB_MANAGER"))){
-			// TODO: 2024-12-11 허브에 userId 확인 및 서치 hubId 필요
-			authSearchConditionDTO = AuthSearchConditionDTO.createForHubManager(hubId);
+			ResHubDto resHubDto = hubService.checkHubBy(userId);
+			authSearchConditionDTO = AuthSearchConditionDTO.createForHubManager(resHubDto.getHubId());
 
 		} else if(authService.checkBy(userId, ReqRoleValidationDTO.from("BUSINESS_MANAGER"))) {
-			// TODO: 2024-12-11 업체에 UserId 확인 및 서치 추가 businessId 필요
-			authSearchConditionDTO = AuthSearchConditionDTO.createForBusinessManager(businessId);
+			ResBusinessDTO businessDTO = businessService.checkBusinessUserBy(userId);
+			authSearchConditionDTO = AuthSearchConditionDTO.createForBusinessManager(businessDTO.getBusinessId());
 		} else {
 			authSearchConditionDTO = AuthSearchConditionDTO.createForDefault(userId);
 		}
 		return authSearchConditionDTO;
 	}
+
 
 }

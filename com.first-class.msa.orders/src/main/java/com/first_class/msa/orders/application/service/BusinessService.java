@@ -6,5 +6,6 @@ public interface BusinessService {
 
 	ResBusinessDTO checkBusinessBy(Long businessId);
 
+	ResBusinessDTO checkBusinessUserBy(Long userId);
 
 }
