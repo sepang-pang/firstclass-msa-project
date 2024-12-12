@@ -168,7 +168,7 @@ public class BusinessService {
     }
 
     private static void validateBusinessManager(Long userId, Business businessForModification) {
-        if (!Objects.equals(userId, businessForModification.getUserId())) {
+        if (!Objects.equals(userId, businessForModification.getManagerId())) {
             throw new IllegalArgumentException("본인의 업체만 수정할 수 있습니다.");
         }
     }

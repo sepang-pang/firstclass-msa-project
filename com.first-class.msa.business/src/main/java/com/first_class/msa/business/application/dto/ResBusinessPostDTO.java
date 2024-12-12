@@ -28,7 +28,7 @@ public class ResBusinessPostDTO {
     public static class BusinessDTO {
 
         private Long id;
-        private Long userId;
+        private Long managerId;
         private Long hubId;
         private String name;
         private String type;
@@ -38,7 +38,7 @@ public class ResBusinessPostDTO {
         public static BusinessDTO from(Business business) {
             return BusinessDTO.builder()
                     .id(business.getId())
-                    .userId(business.getUserId())
+                    .managerId(business.getManagerId())
                     .hubId(business.getHubId())
                     .name(business.getName())
                     .type(business.getType().getLabel())

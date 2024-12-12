@@ -22,8 +22,8 @@ public class Business {
     @Column(name = "business_id")
     private Long id;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @Column(name = "manager_id", nullable = false)
+    private Long managerId;
 
     @Column(name = "hub_id", nullable = false)
     private Long hubId;
@@ -62,8 +62,8 @@ public class Business {
     private String deletedBy;
 
     @Builder
-    public Business(Long userId, Long hubId, String name, BusinessType type, String address, String addressDetail, String account) {
-        this.userId = userId;
+    public Business(Long managerId, Long hubId, String name, BusinessType type, String address, String addressDetail, String account) {
+        this.managerId = managerId;
         this.hubId = hubId;
         this.name = name;
         this.type = type;
@@ -73,11 +73,11 @@ public class Business {
         this.modifiedBy = account;
     }
 
-    public static Business createBusiness(Long userId, String account, Long hubId,
+    public static Business createBusiness(Long managerId, String account, Long hubId,
                                           String businessName, String type, String address, String addressDetail) {
 
         return Business.builder()
-                .userId(userId)
+                .managerId(managerId)
                 .hubId(hubId)
                 .name(businessName)
                 .type(BusinessType.fromLabel(type))
@@ -87,10 +87,10 @@ public class Business {
                 .build();
     }
 
-    public void modifyBusiness(Long userId, String account, Long hubId,
+    public void modifyBusiness(Long managerId, String account, Long hubId,
                                String businessName, String type, String address, String addressDetail) {
 
-        this.userId = userId;
+        this.managerId = managerId;
         this.modifiedBy = account;
         this.hubId = hubId;
         this.name = businessName;
