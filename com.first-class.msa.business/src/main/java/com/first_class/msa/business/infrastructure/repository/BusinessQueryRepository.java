@@ -66,6 +66,9 @@ public class BusinessQueryRepository {
     }
 
     private OrderSpecifier<?> orderSpecifier(String sort) {
+        if (sort == null) {
+            sort = "NEWEST";
+        }
         return switch (sort) {
             case "OLDEST" -> business.createdAt.asc();
             case "NAME_ASC" -> business.name.asc();
