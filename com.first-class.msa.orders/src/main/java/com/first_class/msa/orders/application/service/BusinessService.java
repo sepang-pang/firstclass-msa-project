@@ -4,8 +4,8 @@ import com.first_class.msa.orders.application.dto.ResBusinessDTO;
 
 public interface BusinessService {
 
-	ResBusinessDTO checkBusinessBy(Long businessId);
+	ResBusinessDTO getBusinessBy(Long businessId);
 
-	ResBusinessDTO checkBusinessUserBy(Long userId);
+	ResBusinessDTO getBusinessUserBy(Long userId);
 
 }

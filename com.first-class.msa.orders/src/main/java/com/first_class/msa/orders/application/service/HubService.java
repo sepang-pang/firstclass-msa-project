@@ -4,7 +4,7 @@ import com.first_class.msa.orders.application.dto.ResHubDto;
 
 public interface HubService {
 
-	ResHubDto checkHubBy(Long userId);
+	ResHubDto getHubBy(Long userId);
 
 
 

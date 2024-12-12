@@ -4,11 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7c1308d6-dd0b-4855-b139-b03d6cbc70ca" name="Changes" comment="[ Feat ] Product, Business, Auth Feign Client 구현 및 Order HubId 추가 ( #4 )">
+    <list default="true" id="7c1308d6-dd0b-4855-b139-b03d6cbc70ca" name="Changes" comment="[ FEAT ] Product, Business, Auth Feign Client 구현 및 Order HubId 추가 ( #4 )">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/dto/ReqRoleValidationDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/dto/ResRoleGetByIdDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/BusinessService.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/BusinessService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/HubService.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/HubService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/OrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/OrderServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/client/HubClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/client/HubClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/client/AuthClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/client/AuthClient.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,6 +82,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -111,42 +120,43 @@
     <option name="openDirectoriesWithSingleClick" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Gradle.Build com.first-class.msa.auth.executor": "Run",
-    "Gradle.Build com.first-class.msa.server.executor": "Run",
-    "Gradle.com.first-class.msa.server [build].executor": "Run",
-    "Gradle.com.first-class.msa.server [clean].executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Spring Boot.AuthApplication (1).executor": "Run",
-    "Spring Boot.AuthApplication.executor": "Run",
-    "Spring Boot.ServerApplication.executor": "Run",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "feat/#4/order-seongho",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/osechang/JAVA/firstclass-msa-project",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "run.configurations.included.in.services": "true",
-    "settings.editor.selected.configurable": "editor.preferences.import",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Gradle.Build com.first-class.msa.auth.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build com.first-class.msa.server.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.com.first-class.msa.server [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.com.first-class.msa.server [clean].executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Spring Boot.AuthApplication (1).executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.AuthApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ServerApplication.executor&quot;: &quot;Run&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;android.gradle.sync.needed&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat/#4/order-seongho&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/osechang/JAVA/firstclass-msa-project&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.import&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "postgresql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.first_class.msa.auth.domain.dto" />
@@ -311,8 +321,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Spring Boot.AuthApplication (1)" />
-        <item itemvalue="Gradle.com.first-class.msa.server [build]" />
         <item itemvalue="Gradle.com.first-class.msa.server [clean]" />
+        <item itemvalue="Gradle.com.first-class.msa.server [build]" />
+        <item itemvalue="Spring Boot.AuthApplication (1)" />
+        <item itemvalue="Gradle.com.first-class.msa.server [build]" />
       </list>
     </recent_temporary>
   </component>
@@ -425,6 +437,17 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="[ INIT ] project init commit" />
     <MESSAGE value="[ INIT ] eureka-server init commit" />
@@ -434,10 +457,9 @@
     <MESSAGE value="[ INIT ] business-service init commit" />
     <MESSAGE value="[ INIT ] delivery-service init commit" />
     <MESSAGE value="[ INIT ] hub-service init commit" />
-    <MESSAGE value="[ FIX ] 오더 서치 기능 권한별 동적쿼리 변경  ( #4 )" />
-    <MESSAGE value="[ FIX ] develop merge  ( #4 )" />
-    <MESSAGE value="[ Feat ] Product, Business, Auth Feign Client 구현 및 Order HubId 추가 ( #4 )" />
-    <option name="LAST_COMMIT_MESSAGE" value="[ Feat ] Product, Business, Auth Feign Client 구현 및 Order HubId 추가 ( #4 )" />
+    <MESSAGE value="[ FEAT ] Hub, Business Feign Client 구현( #4 )" />
+    <MESSAGE value="[ FEAT ] Product, Business, Auth Feign Client 구현 및 Order HubId 추가 ( #4 )" />
+    <option name="LAST_COMMIT_MESSAGE" value="[ INIT ] hub-service init commit" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -6,12 +6,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.first_class.msa.orders.application.dto.ReqRoleValidationDTO;
+import com.first_class.msa.orders.application.dto.AuthSearchConditionDTO;
 import com.first_class.msa.orders.application.dto.ResBusinessDTO;
 import com.first_class.msa.orders.application.dto.ResHubDto;
 import com.first_class.msa.orders.application.dto.ResOrderPostDTO;
 import com.first_class.msa.orders.application.dto.ResOrderSearchDTO;
-import com.first_class.msa.orders.application.dto.AuthSearchConditionDTO;
 import com.first_class.msa.orders.domain.model.Order;
 import com.first_class.msa.orders.domain.model.OrderLine;
 import com.first_class.msa.orders.domain.model.valueobject.RequestInfo;
@@ -54,24 +53,22 @@ public class OrderServiceImpl implements OrderService{
 		return orderPostDTO;
 	}
 
-	// TODO: 2024-12-11 권한에 따라서 수정 예정 
 	@Override
 	public ResOrderSearchDTO getAllOrderBy(Long userId, Pageable pageable) {
-		// 메서드 변경 예정
 		return orderRepository.findAll(SearchCondition(userId), pageable);
 	}
 
 	private AuthSearchConditionDTO SearchCondition(Long userId){
 		AuthSearchConditionDTO authSearchConditionDTO;
-		if(authService.checkBy(userId, ReqRoleValidationDTO.from("MASTER"))){
+		if(authService.getRoleBy(userId).getRole().equals("MASTER")){
 			authSearchConditionDTO = AuthSearchConditionDTO.createForMaster();
 
-		} else if(authService.checkBy(userId, ReqRoleValidationDTO.from("HUB_MANAGER"))){
-			ResHubDto resHubDto = hubService.checkHubBy(userId);
+		} else if(authService.getRoleBy(userId).getRole().equals("HUB_MANAGER")){
+			ResHubDto resHubDto = hubService.getHubBy(userId);
 			authSearchConditionDTO = AuthSearchConditionDTO.createForHubManager(resHubDto.getHubId());
 
-		} else if(authService.checkBy(userId, ReqRoleValidationDTO.from("BUSINESS_MANAGER"))) {
-			ResBusinessDTO businessDTO = businessService.checkBusinessUserBy(userId);
+		} else if(authService.getRoleBy(userId).getRole().equals("BUSINESS_MANAGER")) {
+			ResBusinessDTO businessDTO = businessService.getBusinessUserBy(userId);
 			authSearchConditionDTO = AuthSearchConditionDTO.createForBusinessManager(businessDTO.getBusinessId());
 		} else {
 			authSearchConditionDTO = AuthSearchConditionDTO.createForDefault(userId);
