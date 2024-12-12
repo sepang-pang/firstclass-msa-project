@@ -29,8 +29,13 @@ public class BusinessService {
 
         String roleForValidation = authClient.getRoleBy(userId);
 
+        // -- 권한 검증
         validateUserRole(roleForValidation, Set.of(RoleType.MANAGER, RoleType.HUB_MANAGER));
+
+        // -- 허브 관리자 검증 : 담당 허브일 경우에만 업체를 생성할 수 있음
         validateHubForManager(userId, dto.getBusinessDTO().getHubId(), roleForValidation);
+
+        // -- 업체 이름 중복 검증
         validateBusinessNameDuplication(dto.getBusinessDTO().getName());
 
         Business businessForSaving = Business.createBusiness(userId, account, dto);
@@ -46,11 +51,16 @@ public class BusinessService {
 
         String roleForValidation = authClient.getRoleBy(userId);
 
+        // -- 권한 검증
         validateUserRole(roleForValidation, Set.of(RoleType.MANAGER, RoleType.HUB_MANAGER, RoleType.BUSINESS_MANAGER));
 
         Business businessForModification = getBusinessBy(businessId);
 
+        // -- 허브 관리자 : 담당 허브에 속한 업체만 수정 가능합
+        // -- 업체 관리자 : 본인 업체만 수정 가능함
         validateHubOrBusinessManagerAccess(userId, roleForValidation, businessForModification);
+
+        // -- 유효성 검사
         validateHubChangeRequest(businessForModification, dto.getBusinessDTO().getHubId());
 
         businessForModification.modifyBusiness(userId, account, dto);
