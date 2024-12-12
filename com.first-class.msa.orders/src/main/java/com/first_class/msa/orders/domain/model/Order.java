@@ -1,5 +1,6 @@
 package com.first_class.msa.orders.domain.model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,6 +84,15 @@ public class Order extends BaseTime {
 					.mapToInt(orderLine -> orderLine.getCount().getValue() * orderLine.getSupplyPrice().getValue())
 					.sum()
 			);
+	}
+
+	public void deleteOrder(Long userId){
+		this.setDeletedAt(LocalDateTime.now());
+		this.setDeletedBy(userId);
+
+		for (OrderLine orderLine: orderLineList) {
+			orderLine.deleteOrderLine(userId);
+		}
 	}
 
 }

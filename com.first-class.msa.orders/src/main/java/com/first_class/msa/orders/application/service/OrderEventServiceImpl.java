@@ -25,5 +25,18 @@ public class OrderEventServiceImpl implements OrderEventService{
 	{
 		OrderCreateEvent orderCreateEvent = new OrderCreateEvent(orderId, userId, orderLineDTOList);
 		orderEventPublisher.publishEvent(RabbitMQConfig.ORDER_CREATED_KEY ,orderCreateEvent);
+	@Override
+	public void orderDeleteProductEvent(
+		Long orderId,
+		List<ResOrderDTO.OrderDTO.OrderLineDTO> orderLineDTOList) {
+
+		OrderDeleteProductEvent orderDeleteProductEvent = new OrderDeleteProductEvent(orderId, orderLineDTOList);
+		orderEventPublisher.publishEvent(RabbitMQConfig.ORDER_DELETED_PRODUCT_KEY , orderDeleteProductEvent);
+	}
+
+	@Override
+	public void orderDeleteDeliveryEvent(Long orderId, Long userId) {
+		OrderDeleteDeliveryEvent orderDeleteDeliveryEvent = new OrderDeleteDeliveryEvent(orderId, userId);
+		orderEventPublisher.publishEvent(RabbitMQConfig.ORDER_DELETED_DELIVERY_KEY, orderDeleteDeliveryEvent);
 	}
 }

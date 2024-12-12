@@ -119,6 +119,44 @@ public class OrderServiceImpl implements OrderService {
 						new ApiException(ErrorMessage.INVALID_USER_ROLE_DELIVERY_MANAGER));
 			}
 		}
+
+	@Override
+	@Transactional
+	public void deleteBy(Long userId, Long orderId){
+		Order order = findById(orderId);
+		String userRole = authService.getRoleBy(userId).getRole();
+		deleteByAuthCondition(userId, userRole, order);
+		order.deleteOrder(userId);
+		
+		orderEventService.orderDeleteProductEvent(
+			order.getId(), 
+			ResOrderDTO.OrderDTO.OrderLineDTO.from(order.getOrderLineList())
+		);
+		orderEventService.orderDeleteDeliveryEvent(order.getId(), userId);
+		
 	}
+
+	private void deleteByAuthCondition(Long userId, String userRole, Order order) {
+		if(!(userRole.equals("MASTER") || userRole.equals("HUB_MANAGER"))){
+			throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_USER_ROLE));
+		} else if(userRole.equals("HUB_MANAGER")) {
+			ResHubDTO resHubDto = hubService.getHubBy(userId);
+			if (!order.getHubId().equals(resHubDto.getHubId())) {
+				throw new IllegalArgumentException(
+					new ApiException(ErrorMessage.INVALID_USER_ROLE_HUB_MANAGER
+					));
+			}
+		}
+
+	}
+
+
+	private Order findById(Long orderId){
+		return orderRepository.findById(orderId)
+			.orElseThrow(() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOT_FOUND_ORDER)));
+	}
+
+	// TODO: 2024-12-12 배송 주소 변경관련 메세지큐 처리 
+
 
 }

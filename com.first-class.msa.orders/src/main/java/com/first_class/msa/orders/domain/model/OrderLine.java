@@ -1,5 +1,7 @@
 package com.first_class.msa.orders.domain.model;
 
+import java.time.LocalDateTime;
+
 import com.first_class.msa.orders.domain.model.common.BaseTime;
 import com.first_class.msa.orders.domain.model.valueobject.Count;
 import com.first_class.msa.orders.domain.model.valueobject.SupplyPrice;
@@ -53,5 +55,10 @@ public class OrderLine extends BaseTime {
 			.count(count)
 			.supplyPrice(supplyPrice)
 			.build();
+	}
+
+	public void deleteOrderLine(Long userId){
+		this.setDeletedAt(LocalDateTime.now());
+		this.setDeletedBy(userId);
 	}
 }

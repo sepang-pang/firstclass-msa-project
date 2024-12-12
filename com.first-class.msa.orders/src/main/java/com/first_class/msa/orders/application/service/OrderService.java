@@ -14,6 +14,8 @@ public interface OrderService {
 
 	ResOrderDTO getOrderDetailBy(Long userId, Long orderId);
 
+	void deleteBy(Long userId, Long orderId);
+
 
 
 }

@@ -7,4 +7,7 @@ import com.first_class.msa.orders.application.dto.ResOrderDTO;
 public interface OrderEventService {
 
 	void orderCreateEvent(Long orderId, Long userId, List<ResOrderDTO.OrderDTO.OrderLineDTO> orderLineDTOList);
+	void orderDeleteProductEvent(Long orderId, List<ResOrderDTO.OrderDTO.OrderLineDTO> orderLineDTOList);
+
+	void orderDeleteDeliveryEvent(Long orderId, Long userId);
 }

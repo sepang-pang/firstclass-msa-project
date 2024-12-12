@@ -17,9 +17,13 @@ public class RabbitMQConfig {
 	public static final String DELIVERY_QUEUE = "delivery.queue";
 
 	// 라우팅 키
-	public static final String ORDER_CREATED_KEY = "order.created";
-	public static final String ORDER_UPDATED_KEY = "order.updated";
-	public static final String ORDER_DELETED_KEY = "order.deleted";
+	public static final String ORDER_CREATED_PRODUCT_KEY = "order.created.product";
+
+	public static final String ORDER_DELETED_PRODUCT_KEY = "order.deleted.product";
+
+	public static final String ORDER_CREATED_DELIVERY_KEY = "order.created.delivery";
+
+	public static final String ORDER_DELETED_DELIVERY_KEY = "order.deleted.delivery";
 
 	@Bean
 	public TopicExchange exchange() {
@@ -51,33 +55,23 @@ public class RabbitMQConfig {
 	// Binding: product.queue
 	@Bean
 	public Binding productCreatedBinding(Queue productQueue, TopicExchange exchange) {
-		return BindingBuilder.bind(productQueue).to(exchange).with(ORDER_CREATED_KEY);
-	}
-
-	@Bean
-	public Binding productUpdatedBinding(Queue productQueue, TopicExchange exchange) {
-		return BindingBuilder.bind(productQueue).to(exchange).with(ORDER_UPDATED_KEY);
+		return BindingBuilder.bind(productQueue).to(exchange).with(ORDER_CREATED_PRODUCT_KEY);
 	}
 
 	@Bean
 	public Binding productDeletedBinding(Queue productQueue, TopicExchange exchange) {
-		return BindingBuilder.bind(productQueue).to(exchange).with(ORDER_DELETED_KEY);
+		return BindingBuilder.bind(productQueue).to(exchange).with(ORDER_DELETED_PRODUCT_KEY);
 	}
 
 	// Binding: delivery.queue
 	@Bean
 	public Binding deliveryCreatedBinding(Queue deliveryQueue, TopicExchange exchange) {
-		return BindingBuilder.bind(deliveryQueue).to(exchange).with(ORDER_CREATED_KEY);
-	}
-
-	@Bean
-	public Binding deliveryUpdatedBinding(Queue deliveryQueue, TopicExchange exchange) {
-		return BindingBuilder.bind(deliveryQueue).to(exchange).with(ORDER_UPDATED_KEY);
+		return BindingBuilder.bind(deliveryQueue).to(exchange).with(ORDER_CREATED_DELIVERY_KEY);
 	}
 
 	@Bean
 	public Binding deliveryDeletedBinding(Queue deliveryQueue, TopicExchange exchange) {
-		return BindingBuilder.bind(deliveryQueue).to(exchange).with(ORDER_DELETED_KEY);
+		return BindingBuilder.bind(deliveryQueue).to(exchange).with(ORDER_DELETED_DELIVERY_KEY);
 	}
 
 
