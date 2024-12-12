@@ -1,6 +1,7 @@
 package com.first_class.msa.business.application.service;
 
 import com.first_class.msa.business.application.dto.ResBusinessPostDTO;
+import com.first_class.msa.business.application.dto.ResBusinessSearchDTO;
 import com.first_class.msa.business.domain.model.Business;
 import com.first_class.msa.business.domain.model.RoleType;
 import com.first_class.msa.business.domain.repository.BusinessRepository;
@@ -10,6 +11,7 @@ import com.first_class.msa.business.presentation.request.ReqBusinessPostDTO;
 import com.first_class.msa.business.presentation.request.ReqBusinessPutByIdDTO;
 import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,6 +53,11 @@ public class BusinessService {
         businessRepository.save(businessForSaving);
 
         return ResBusinessPostDTO.of(businessForSaving);
+    }
+
+    @Transactional(readOnly = true)
+    public ResBusinessSearchDTO searchBy(Pageable pageable, String name, String address, String type, String sort) {
+        return ResBusinessSearchDTO.of(businessRepository.findBusinessByDeletedAtIsNullWithConditions(pageable, name, address, type, sort));
     }
 
 
