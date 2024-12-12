@@ -34,7 +34,7 @@ public class OrderServiceImpl implements OrderService{
 	public ResOrderPostDTO postBy(Long businessId, Long userId, ReqOrderPostDTO reqOrderPostDTO){
 
 		RequestInfo requestInfo = new RequestInfo(reqOrderPostDTO.getRequestInfo());
-		ResBusinessDTO resbusinessDTO = businessService.checkBusinessBy(businessId);
+		ResBusinessDTO resbusinessDTO = businessService.getBusinessBy(businessId);
 		Order order = Order.createOrder(businessId, resbusinessDTO.getHubId(), userId, requestInfo);
 		order.setCreateByAndUpdateBy(userId);
 
