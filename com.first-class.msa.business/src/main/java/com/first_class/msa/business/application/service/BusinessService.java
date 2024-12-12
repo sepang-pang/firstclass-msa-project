@@ -11,6 +11,7 @@ import com.first_class.msa.business.presentation.request.ReqBusinessPostDTO;
 import com.first_class.msa.business.presentation.request.ReqBusinessPutByIdDTO;
 import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -64,6 +65,7 @@ public class BusinessService {
 
 
     @Transactional
+    @CacheEvict(cacheNames = "businessSearchCache", allEntries = true)
     public void putBy(Long userId, String account, Long businessId, ReqBusinessPutByIdDTO dto) {
 
         String roleForValidation = authClient.getRoleBy(userId);
@@ -92,6 +94,7 @@ public class BusinessService {
     }
 
     @Transactional
+    @CacheEvict(cacheNames = "businessSearchCache", allEntries = true)
     public void deleteBy(Long userId, String account, Long businessId) {
 
         String roleForValidation = authClient.getRoleBy(userId);
