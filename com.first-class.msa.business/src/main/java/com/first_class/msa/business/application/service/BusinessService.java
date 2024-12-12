@@ -38,7 +38,15 @@ public class BusinessService {
         // -- 업체 이름 중복 검증
         validateBusinessNameDuplication(dto.getBusinessDTO().getName());
 
-        Business businessForSaving = Business.createBusiness(userId, account, dto);
+        Business businessForSaving = Business.createBusiness(
+                userId,
+                account,
+                dto.getBusinessDTO().getHubId(),
+                dto.getBusinessDTO().getName(),
+                dto.getBusinessDTO().getType(),
+                dto.getBusinessDTO().getAddress(),
+                dto.getBusinessDTO().getAddressDetail()
+        );
 
         businessRepository.save(businessForSaving);
 
@@ -63,7 +71,15 @@ public class BusinessService {
         // -- 유효성 검사
         validateHubChangeRequest(businessForModification, dto.getBusinessDTO().getHubId());
 
-        businessForModification.modifyBusiness(userId, account, dto);
+        businessForModification.modifyBusiness(
+                userId,
+                account,
+                dto.getBusinessDTO().getHubId(),
+                dto.getBusinessDTO().getName(),
+                dto.getBusinessDTO().getType(),
+                dto.getBusinessDTO().getAddress(),
+                dto.getBusinessDTO().getAddressDetail()
+        );
     }
 
 

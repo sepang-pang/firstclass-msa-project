@@ -1,8 +1,6 @@
 package com.first_class.msa.business.domain.model;
 
 
-import com.first_class.msa.business.presentation.request.ReqBusinessPostDTO;
-import com.first_class.msa.business.presentation.request.ReqBusinessPutByIdDTO;
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -75,25 +73,29 @@ public class Business {
         this.modifiedBy = account;
     }
 
-    public static Business createBusiness(Long userId, String account, ReqBusinessPostDTO dto) {
+    public static Business createBusiness(Long userId, String account, Long hubId,
+                                          String businessName, String type, String address, String addressDetail) {
+
         return Business.builder()
                 .userId(userId)
-                .hubId(dto.getBusinessDTO().getHubId())
-                .name(dto.getBusinessDTO().getName())
-                .type(BusinessType.fromLabel(dto.getBusinessDTO().getType()))
-                .address(dto.getBusinessDTO().getAddress())
-                .addressDetail(dto.getBusinessDTO().getAddressDetail())
+                .hubId(hubId)
+                .name(businessName)
+                .type(BusinessType.fromLabel(type))
+                .address(address)
+                .addressDetail(addressDetail)
                 .account(account)
                 .build();
     }
 
-    public void modifyBusiness(Long userId, String account, ReqBusinessPutByIdDTO dto) {
+    public void modifyBusiness(Long userId, String account, Long hubId,
+                               String businessName, String type, String address, String addressDetail) {
+
         this.userId = userId;
         this.modifiedBy = account;
-        this.hubId = dto.getBusinessDTO().getHubId();
-        this.name = dto.getBusinessDTO().getName();
-        this.type = BusinessType.fromLabel(dto.getBusinessDTO().getType());
-        this.address = dto.getBusinessDTO().getAddress();
-        this.addressDetail = dto.getBusinessDTO().getAddressDetail();
+        this.hubId = hubId;
+        this.name = businessName;
+        this.type = BusinessType.fromLabel(type);
+        this.address = address;
+        this.addressDetail = addressDetail;
     }
 }
