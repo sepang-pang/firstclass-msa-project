@@ -55,8 +55,5 @@ public class UserController {
         return new ResponseEntity<>("로그아웃 성공", HttpStatus.OK);
     }
 
-    @PostMapping("/{userId}")
-    public boolean checkBy(@PathVariable(name = "userId") Long userId, @RequestBody ReqRoleValidationDTO dto) {
-        return userService.checkBy(userId, dto);
-    }
+
 }
