@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResDeliveryDTO {
+public class ResDeliveryOrderSearchDTO {
 	private List<Long> orderIdList;
 
 }

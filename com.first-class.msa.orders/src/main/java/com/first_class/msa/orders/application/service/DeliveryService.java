@@ -1,7 +1,7 @@
 package com.first_class.msa.orders.application.service;
 
-import com.first_class.msa.orders.application.dto.ResDeliveryDTO;
+import com.first_class.msa.orders.application.dto.ResDeliveryOrderSearchDTO;
 
 public interface DeliveryService {
-	ResDeliveryDTO getAllDeliveryBy(Long userId);
+	ResDeliveryOrderSearchDTO getAllDeliveryBy(Long userId);
 }
