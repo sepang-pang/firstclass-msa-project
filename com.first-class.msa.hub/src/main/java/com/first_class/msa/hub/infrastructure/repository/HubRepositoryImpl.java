@@ -38,7 +38,7 @@ public class HubRepositoryImpl implements HubRepository {
 
     @Override
     public Long findByManagerIdAndDeletedAtIsNull(Long userId) {
-        return jpaHubRepository.findByManagerIdAndDeletedAtIsNull(userId);
+        return jpaHubRepository.findIdByManagerIdAndDeletedAtIsNull(userId);
     }
 
     @Override

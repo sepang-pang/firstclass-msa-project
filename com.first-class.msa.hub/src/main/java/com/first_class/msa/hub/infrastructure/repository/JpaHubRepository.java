@@ -2,6 +2,8 @@ package com.first_class.msa.hub.infrastructure.repository;
 
 import com.first_class.msa.hub.domain.model.Hub;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
@@ -13,6 +15,7 @@ public interface JpaHubRepository extends JpaRepository<Hub, Long>, HubQueryBind
 
     boolean existsByIdAndDeletedAtIsNull(Long hubId);
 
-    Long findByManagerIdAndDeletedAtIsNull(Long userId);
+    @Query("select h.id from Hub h where h.managerId = :userId and h.deletedAt is null")
+    Long findIdByManagerIdAndDeletedAtIsNull(@Param("userId") Long userId);
 
 }
