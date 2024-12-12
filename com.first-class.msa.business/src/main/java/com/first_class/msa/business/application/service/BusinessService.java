@@ -38,18 +38,48 @@ public class BusinessService {
     @Transactional
     public void putBy(Long userId, String account, Long businessId, ReqBusinessPutByIdDTO dto) {
 
-        /*
-            TODO
-             1. 본인의 담당 허브 관리를 받는 업체인가
-             2. 본인의 업체인가
-        */
+        // -----
+        // NOTE : 수정 요청한 유저의 권한을 검증함
+        String roleForValidation = authClient.getRoleBy(userId);
 
+        if (!Set.of("MANAGER", "HUB_MANAGER", "BUSINESS_MANAGER").contains(roleForValidation)) {
+            throw new IllegalArgumentException("접근 권한이 없습니다.");
+        }
+        // -----
+
+
+        // -----
+        // NOTE : 수정하고자 하는 업체를 조회함
         Business businessForModification = getBusinessBy(businessId);
+        // -----
+
+        // -----
+        // NOTE : 허브 관리자와 업체 관리자의 권한을 구분하여 검증
+        switch (roleForValidation) {
+            case "HUB_MANAGER"
+                    -> {
+                if (!Objects.equals(hubClient.getHubIdBy(userId), businessForModification.getHubId())) {
+                    throw new IllegalArgumentException("담당 허브의 업체만 수정할 수 있습니다.");
+                }
+            }
+
+            case "BUSINESS_MANAGER"
+                    -> {
+                if (!Objects.equals(userId, businessForModification.getUserId())) {
+                    throw new IllegalArgumentException("본인의 업체만 수정할 수 있습니다.");
+                }
+            }
+        }
+
+        // -----
+        // NOTE: 요청한 허브 ID가 수정하려는 업체의 허브 ID와 다를 경우,
+        //       허브를 변경하려는 요청으로 간주하고 이후 해당 허브 ID의 유효성을 검증함
         Long reqHubId = dto.getBusinessDTO().getHubId();
 
         if (!Objects.equals(businessForModification.getHubId(), reqHubId) && !isExistsHub(reqHubId)) {
-            throw new IllegalArgumentException( "허브 정보를 찾을 수 없습니다. 허브 ID를 확인해주세요.");
+            throw new IllegalArgumentException("허브 정보를 찾을 수 없습니다. 허브 ID를 확인해주세요.");
         }
+        // -----
 
         businessForModification.modifyBusiness(userId, account, dto);
     }
