@@ -4,15 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7c1308d6-dd0b-4855-b139-b03d6cbc70ca" name="Changes" comment="[ FEAT ] Product, Business, Auth Feign Client 구현 및 Order HubId 추가 ( #4 )">
+    <list default="true" id="7c1308d6-dd0b-4855-b139-b03d6cbc70ca" name="Changes" comment="[ FEAT ] Feign Client Delivery 기능 구현 ( #4 )">
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/dto/ReqRoleValidationDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/dto/ResRoleGetByIdDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/AuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/BusinessService.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/BusinessService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/HubService.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/HubService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/dto/AuthSearchConditionDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/dto/AuthSearchConditionDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/OrderLineServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/OrderLineServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/OrderService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/OrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/OrderServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/ProductService.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/application/service/ProductService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/domain/repository/OrderRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/domain/repository/OrderRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/client/AuthClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/client/AuthClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/client/BusinessClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/client/BusinessClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/client/HubClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/client/HubClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/client/ProductClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/client/ProductClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/repository/OrderQueryRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/repository/OrderQueryRepositoryImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/repository/OrderRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/infrastructure/repository/OrderRepositoryImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/presentation/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/com.first-class.msa.orders/src/main/java/com/first_class/msa/orders/presentation/controller/OrderController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,6 +72,9 @@
         <task path="$PROJECT_DIR$/com.first-class.msa.server">
           <activation />
         </task>
+        <task path="$PROJECT_DIR$/com.first-class.msa.orders">
+          <activation />
+        </task>
         <projects_view>
           <tree_state>
             <expand />
@@ -76,8 +88,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
-        <option value="Interface" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -120,43 +132,42 @@
     <option name="openDirectoriesWithSingleClick" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Gradle.Build com.first-class.msa.auth.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build com.first-class.msa.server.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.com.first-class.msa.server [build].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.com.first-class.msa.server [clean].executor&quot;: &quot;Run&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;Spring Boot.AuthApplication (1).executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.AuthApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.ServerApplication.executor&quot;: &quot;Run&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;android.gradle.sync.needed&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feat/#4/order-seongho&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/osechang/JAVA/firstclass-msa-project&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.import&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.Build com.first-class.msa.auth.executor": "Run",
+    "Gradle.Build com.first-class.msa.server.executor": "Run",
+    "Gradle.com.first-class.msa.server [build].executor": "Run",
+    "Gradle.com.first-class.msa.server [clean].executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.AuthApplication (1).executor": "Run",
+    "Spring Boot.AuthApplication.executor": "Run",
+    "Spring Boot.ServerApplication.executor": "Run",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "feat/#4/order-seongho",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/JeongSeongHo/Desktop/Java_Spring_Project/MSA/com.first-class.msa/com.first-class.msa.orders",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "run.configurations.included.in.services": "true",
+    "settings.editor.selected.configurable": "editor.preferences.import",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;postgresql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.first_class.msa.auth.domain.dto" />
@@ -175,7 +186,51 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.AuthApplication (1)">
+  <component name="RunManager" selected="Spring Boot.OrdersApplication">
+    <configuration name="com.first-class.msa.orders [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/com.first-class.msa.orders" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="com.first-class.msa.orders [dependencies]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/com.first-class.msa.orders" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="dependencies" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
     <configuration name="com.first-class.msa.server [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -283,7 +338,12 @@
       </method>
     </configuration>
     <configuration name="OrdersApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <module name="orders.main" />
+      <envs>
+        <env name="DB_URL" value="jdbc:postgresql://localhost:5432/orderdb" />
+        <env name="DB_USER" value="postgres" />
+        <env name="DB_PASSWORD" value="postgres" />
+      </envs>
+      <module name="com.first-class.msa.orders.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.first_class.msa.orders.OrdersApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -304,6 +364,8 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Gradle.com.first-class.msa.orders [build]" />
+      <item itemvalue="Gradle.com.first-class.msa.orders [dependencies]" />
       <item itemvalue="Gradle.com.first-class.msa.server [build]" />
       <item itemvalue="Gradle.com.first-class.msa.server [clean]" />
       <item itemvalue="Spring Boot.AgentApplication" />
@@ -320,10 +382,10 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.com.first-class.msa.orders [dependencies]" />
+        <item itemvalue="Gradle.com.first-class.msa.orders [build]" />
         <item itemvalue="Spring Boot.AuthApplication (1)" />
         <item itemvalue="Gradle.com.first-class.msa.server [clean]" />
-        <item itemvalue="Gradle.com.first-class.msa.server [build]" />
-        <item itemvalue="Spring Boot.AuthApplication (1)" />
         <item itemvalue="Gradle.com.first-class.msa.server [build]" />
       </list>
     </recent_temporary>
@@ -431,7 +493,39 @@
       <option name="project" value="LOCAL" />
       <updated>1733972636261</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="[ FEAT ] Feign Client 요청 추가 및 메서드명 변경 ( #4 )">
+      <option name="closed" value="true" />
+      <created>1733975720986</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1733975720986</updated>
+    </task>
+    <task id="LOCAL-00012" summary="[ Fix ] Feign Client 메서드명 변경 ( #4 )">
+      <option name="closed" value="true" />
+      <created>1733975741275</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1733975741275</updated>
+    </task>
+    <task id="LOCAL-00013" summary="[ Fix ] Feign Client Auth name 변경  ( #4 )">
+      <option name="closed" value="true" />
+      <created>1733976654261</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1733976654261</updated>
+    </task>
+    <task id="LOCAL-00014" summary="[ FEAT ] Feign Client Delivery 기능 구현 ( #4 )">
+      <option name="closed" value="true" />
+      <created>1733987951813</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1733987951813</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -459,7 +553,11 @@
     <MESSAGE value="[ INIT ] hub-service init commit" />
     <MESSAGE value="[ FEAT ] Hub, Business Feign Client 구현( #4 )" />
     <MESSAGE value="[ FEAT ] Product, Business, Auth Feign Client 구현 및 Order HubId 추가 ( #4 )" />
-    <option name="LAST_COMMIT_MESSAGE" value="[ INIT ] hub-service init commit" />
+    <MESSAGE value="[ FEAT ] Feign Client 요청 추가 및 메서드명 변경 ( #4 )" />
+    <MESSAGE value="[ Fix ] Feign Client 메서드명 변경 ( #4 )" />
+    <MESSAGE value="[ Fix ] Feign Client Auth name 변경  ( #4 )" />
+    <MESSAGE value="[ FEAT ] Feign Client Delivery 기능 구현 ( #4 )" />
+    <option name="LAST_COMMIT_MESSAGE" value="[ FEAT ] Feign Client Delivery 기능 구현 ( #4 )" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

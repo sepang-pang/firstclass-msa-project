@@ -8,30 +8,35 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.first_class.msa.orders.application.dto.AuthSearchConditionDTO;
 import com.first_class.msa.orders.application.dto.ResBusinessDTO;
+import com.first_class.msa.orders.application.dto.ResDeliveryDTO;
 import com.first_class.msa.orders.application.dto.ResHubDto;
 import com.first_class.msa.orders.application.dto.ResOrderPostDTO;
 import com.first_class.msa.orders.application.dto.ResOrderSearchDTO;
+import com.first_class.msa.orders.application.dto.ResOrderSearchDetailDTO;
 import com.first_class.msa.orders.domain.model.Order;
 import com.first_class.msa.orders.domain.model.OrderLine;
 import com.first_class.msa.orders.domain.model.valueobject.RequestInfo;
 import com.first_class.msa.orders.domain.repository.OrderRepository;
+import com.first_class.msa.orders.libs.exception.ApiException;
+import com.first_class.msa.orders.libs.message.ErrorMessage;
 import com.first_class.msa.orders.presentation.request.ReqOrderPostDTO;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class OrderServiceImpl implements OrderService{
+public class OrderServiceImpl implements OrderService {
 	private final OrderRepository orderRepository;
 	private final OrderLineService orderLineService;
 	private final OrderEventService orderEventService;
 	private final HubService hubService;
 	private final BusinessService businessService;
 	private final AuthService authService;
-	
+	private final DeliveryService deliveryService;
+
 	@Override
 	@Transactional
-	public ResOrderPostDTO postBy(Long businessId, Long userId, ReqOrderPostDTO reqOrderPostDTO){
+	public ResOrderPostDTO postBy(Long businessId, Long userId, ReqOrderPostDTO reqOrderPostDTO) {
 
 		RequestInfo requestInfo = new RequestInfo(reqOrderPostDTO.getRequestInfo());
 		ResBusinessDTO resbusinessDTO = businessService.getBusinessBy(businessId);
@@ -41,7 +46,6 @@ public class OrderServiceImpl implements OrderService{
 		List<OrderLine> orderLineList
 			= orderLineService.createOrderLineList(reqOrderPostDTO.getReqOrderLinePostDTOList(), order);
 
-
 		order.addOrderLineList(orderLineList);
 		order.updateOrderTotalPrice(orderLineList);
 		order = orderRepository.save(order);
@@ -49,27 +53,32 @@ public class OrderServiceImpl implements OrderService{
 		ResOrderPostDTO orderPostDTO = ResOrderPostDTO.of(order);
 		orderEventService.orderCreateEvent(order.getId(), userId, orderPostDTO.getOrderDTO().getOrderLineList());
 
-
 		return orderPostDTO;
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public ResOrderSearchDTO getAllOrderBy(Long userId, Pageable pageable) {
 		return orderRepository.findAll(SearchCondition(userId), pageable);
 	}
 
-	private AuthSearchConditionDTO SearchCondition(Long userId){
+	private AuthSearchConditionDTO SearchCondition(Long userId) {
 		AuthSearchConditionDTO authSearchConditionDTO;
-		if(authService.getRoleBy(userId).getRole().equals("MASTER")){
+		if (authService.getRoleBy(userId).getRole().equals("MASTER")) {
 			authSearchConditionDTO = AuthSearchConditionDTO.createForMaster();
 
-		} else if(authService.getRoleBy(userId).getRole().equals("HUB_MANAGER")){
+		} else if (authService.getRoleBy(userId).getRole().equals("HUB_MANAGER")) {
 			ResHubDto resHubDto = hubService.getHubBy(userId);
 			authSearchConditionDTO = AuthSearchConditionDTO.createForHubManager(resHubDto.getHubId());
 
-		} else if(authService.getRoleBy(userId).getRole().equals("BUSINESS_MANAGER")) {
+		} else if (authService.getRoleBy(userId).getRole().equals("BUSINESS_MANAGER")) {
 			ResBusinessDTO businessDTO = businessService.getBusinessUserBy(userId);
 			authSearchConditionDTO = AuthSearchConditionDTO.createForBusinessManager(businessDTO.getBusinessId());
+
+		} else if (authService.getRoleBy(userId).getRole().equals("DELIVERY_MANAGER")) {
+			ResDeliveryDTO resDeliveryDTO = deliveryService.getAllDeliveryBy(userId);
+			authSearchConditionDTO = AuthSearchConditionDTO.createForDeliveryManager(resDeliveryDTO.getOrderIdList());
+
 		} else {
 			authSearchConditionDTO = AuthSearchConditionDTO.createForDefault(userId);
 		}

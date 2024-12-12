@@ -68,12 +68,19 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
 			case "BUSINESS_MANAGER":
 				builder.and(businessIdEquals(authSearchConditionDTO.getBusinessId()));
 				break;
+			case "DELIVERY_MANAGER":
+				builder.and(deliveryOrderEquals(authSearchConditionDTO.getOrderIdList()));
+				break;
 			default:
 				builder.and(userIdEquals(authSearchConditionDTO.getUserId()));
 				break;
 		}
 
 		return builder;
+	}
+
+	private BooleanExpression deliveryOrderEquals(List<Long> orderIdList){
+		return orderIdList != null ? qOrder.id.in(orderIdList) : null;
 	}
 
 	private BooleanExpression userIdEquals(Long userId) {
