@@ -26,7 +26,6 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
 
 	QOrder qOrder = QOrder.order;
 
-	// TODO: 2024-12-12 동적 쿼리 추가 처리 구현 필요
 	@Override
 	public ResOrderSearchDTO findAll(AuthSearchConditionDTO authSearchConditionDTO, Pageable pageable) {
 
@@ -34,6 +33,7 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
 			.select(Projections.constructor(
 				ResOrderSearchDTO.OrderPage.class,
 				qOrder.id,
+				qOrder.address,
 				qOrder.requestInfo.value,
 				qOrder.orderTotalPrice.value
 			))

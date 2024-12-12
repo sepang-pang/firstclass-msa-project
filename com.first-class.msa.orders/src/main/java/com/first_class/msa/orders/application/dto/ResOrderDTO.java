@@ -28,6 +28,7 @@ public class ResOrderDTO {
 	public static class OrderDTO {
 
 		private Long orderId;
+		private String address;
 		private String requestInfo;
 		private Integer orderTotalPrice;
 		private List<OrderLineDTO> orderLineList;
@@ -35,6 +36,7 @@ public class ResOrderDTO {
 		public static OrderDTO from(Order order) {
 			return OrderDTO.builder()
 				.orderId(order.getId())
+				.address(order.getAddress().getValue())
 				.requestInfo(order.getRequestInfo().getValue())
 				.orderTotalPrice(order.getOrderTotalPrice().getValue())
 				.orderLineList(OrderLineDTO.from(order.getOrderLineList()))

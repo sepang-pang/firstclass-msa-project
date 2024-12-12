@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.first_class.msa.orders.domain.model.common.BaseTime;
+import com.first_class.msa.orders.domain.model.valueobject.Address;
 import com.first_class.msa.orders.domain.model.valueobject.OrderTotalPrice;
 import com.first_class.msa.orders.domain.model.valueobject.RequestInfo;
 
@@ -48,6 +49,10 @@ public class Order extends BaseTime {
 	private Long hubId;
 
 	@Embedded
+	@Column(name = "address", nullable = false)
+	private Address address;
+
+	@Embedded
 	@Column(name = "request_info", nullable = false)
 	private RequestInfo requestInfo;
 
@@ -58,11 +63,12 @@ public class Order extends BaseTime {
 	@OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<OrderLine> orderLineList = new ArrayList<>();
 
-	public static Order createOrder(Long businessId, Long hubId, Long userId, RequestInfo requestInfo) {
+	public static Order createOrder(Long businessId, Long hubId, Long userId, Address address,RequestInfo requestInfo) {
 		return Order.builder()
 			.businessId(businessId)
 			.hubId(hubId)
 			.userId(userId)
+			.address(address)
 			.requestInfo(requestInfo)
 			.build();
 

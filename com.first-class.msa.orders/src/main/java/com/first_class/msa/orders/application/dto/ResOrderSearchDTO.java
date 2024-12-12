@@ -30,12 +30,14 @@ public class ResOrderSearchDTO {
 	public static class OrderPage {
 
 		private Long orderId;
+		private String address;
 		private String requestInfo;
 		private Integer orderTotalPrice;
 
 		public static OrderPage from(Order order) {
 			return OrderPage.builder()
 				.orderId(order.getId())
+				.address(order.getAddress().getValue())
 				.requestInfo(order.getRequestInfo().getValue())
 				.orderTotalPrice(order.getOrderTotalPrice().getValue())
 				.build();

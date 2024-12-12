@@ -15,6 +15,7 @@ import com.first_class.msa.orders.application.dto.ResOrderDTO;
 import com.first_class.msa.orders.application.dto.ResOrderSearchDTO;
 import com.first_class.msa.orders.domain.model.Order;
 import com.first_class.msa.orders.domain.model.OrderLine;
+import com.first_class.msa.orders.domain.model.valueobject.Address;
 import com.first_class.msa.orders.domain.model.valueobject.RequestInfo;
 import com.first_class.msa.orders.domain.repository.OrderRepository;
 import com.first_class.msa.orders.libs.exception.ApiException;
@@ -38,9 +39,10 @@ public class OrderServiceImpl implements OrderService {
 	@Transactional
 	public ResOrderDTO postBy(Long businessId, Long userId, ReqOrderPostDTO reqOrderPostDTO) {
 
+		Address address = new Address(reqOrderPostDTO.getAddress());
 		RequestInfo requestInfo = new RequestInfo(reqOrderPostDTO.getRequestInfo());
 		ResBusinessDTO resbusinessDTO = businessService.getBusinessBy(businessId);
-		Order order = Order.createOrder(businessId, resbusinessDTO.getHubId(), userId, requestInfo);
+		Order order = Order.createOrder(businessId, resbusinessDTO.getHubId(), userId, address, requestInfo);
 		order.setCreateByAndUpdateBy(userId);
 
 		List<OrderLine> orderLineList
@@ -51,8 +53,8 @@ public class OrderServiceImpl implements OrderService {
 		order = orderRepository.save(order);
 
 		ResOrderDTO orderPostDTO = ResOrderDTO.of(order);
-		orderEventService.orderCreateEvent(order.getId(), userId, orderPostDTO.getOrderDTO().getOrderLineList());
-
+		orderEventService.orderCreateProductEvent(order.getId(), orderPostDTO.getOrderDTO().getOrderLineList());
+		orderEventService.orderCreateDeliveryEvent(order.getId(), order.getAddress().getValue());
 		return orderPostDTO;
 	}
 
@@ -84,29 +86,32 @@ public class OrderServiceImpl implements OrderService {
 		};
 	}
 
+	@Override
 	@Transactional(readOnly = true)
 	public ResOrderDTO getOrderDetailBy(Long userId, Long orderId) {
 		String userRole = authService.getRoleBy(userId).getRole();
-		Order order = orderRepository.findById(orderId)
-			.orElseThrow(() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOT_FOUND_ORDER)));
-		AuthCondition(userId, userRole, order);
+		Order order = findById(orderId);
+		OrderDetailAuthCondition(userId, userRole, order);
 
 		return ResOrderDTO.of(order);
 	}
 
-	private void AuthCondition(Long userId, String userRole, Order order) {
+	private void OrderDetailAuthCondition(Long userId, String userRole, Order order) {
 		switch (userRole) {
 			case "HUB_MANAGER" -> {
 				ResHubDTO resHubDto = hubService.getHubBy(userId);
 				if (!order.getHubId().equals(resHubDto.getHubId())) {
-					throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_USER_ROLE_HUB_MANAGER));
+					throw new IllegalArgumentException(
+						new ApiException(ErrorMessage.INVALID_USER_ROLE_HUB_MANAGER
+					));
 				}
 			}
 			case "BUSINESS_MANAGER" -> {
 				ResBusinessDTO businessDTO = businessService.getBusinessUserBy(userId);
 				if (!order.getBusinessId().equals(businessDTO.getBusinessId())) {
 					throw new IllegalArgumentException(
-						new ApiException(ErrorMessage.INVALID_USER_ROLE_BUSINESS_MANAGER));
+						new ApiException(ErrorMessage.INVALID_USER_ROLE_BUSINESS_MANAGER
+						));
 				}
 			}
 			case "DELIVERY_MANAGER" -> {
@@ -116,9 +121,11 @@ public class OrderServiceImpl implements OrderService {
 					resDeliveryOrderSearchDetailDTO.getDeliveryUserId().equals(userId))
 				)
 					throw new IllegalArgumentException(
-						new ApiException(ErrorMessage.INVALID_USER_ROLE_DELIVERY_MANAGER));
+						new ApiException(ErrorMessage.INVALID_USER_ROLE_DELIVERY_MANAGER
+						));
 			}
 		}
+	}
 
 	@Override
 	@Transactional
