@@ -2,6 +2,7 @@ package com.first_class.msa.business.application.service;
 
 import com.first_class.msa.business.application.dto.ResBusinessPostDTO;
 import com.first_class.msa.business.domain.model.Business;
+import com.first_class.msa.business.domain.model.RoleType;
 import com.first_class.msa.business.domain.repository.BusinessRepository;
 import com.first_class.msa.business.infrastructure.client.AuthClient;
 import com.first_class.msa.business.infrastructure.client.HubClient;
@@ -26,7 +27,11 @@ public class BusinessService {
     @Transactional
     public ResBusinessPostDTO postBy(Long userId, String account, ReqBusinessPostDTO dto) {
 
-        validate(userId, dto, authClient.getRoleBy(userId));
+        String roleForValidation = authClient.getRoleBy(userId);
+
+        validateUserRole(roleForValidation, Set.of(RoleType.MANAGER, RoleType.HUB_MANAGER));
+        validateHubForManager(userId, dto.getBusinessDTO().getHubId(), roleForValidation);
+        validateBusinessNameDuplication(dto.getBusinessDTO().getName());
 
         Business businessForSaving = Business.createBusiness(userId, account, dto);
 
@@ -35,74 +40,31 @@ public class BusinessService {
         return ResBusinessPostDTO.of(businessForSaving);
     }
 
+
     @Transactional
     public void putBy(Long userId, String account, Long businessId, ReqBusinessPutByIdDTO dto) {
 
-        // -----
-        // NOTE : 수정 요청한 유저의 권한을 검증함
         String roleForValidation = authClient.getRoleBy(userId);
 
-        if (!Set.of("MANAGER", "HUB_MANAGER", "BUSINESS_MANAGER").contains(roleForValidation)) {
-            throw new IllegalArgumentException("접근 권한이 없습니다.");
-        }
-        // -----
+        validateUserRole(roleForValidation, Set.of(RoleType.MANAGER, RoleType.HUB_MANAGER, RoleType.BUSINESS_MANAGER));
 
-
-        // -----
-        // NOTE : 수정하고자 하는 업체를 조회함
         Business businessForModification = getBusinessBy(businessId);
-        // -----
 
-        // -----
-        // NOTE : 허브 관리자와 업체 관리자의 권한을 구분하여 검증
-        switch (roleForValidation) {
-            case "HUB_MANAGER"
-                    -> {
-                if (!Objects.equals(hubClient.getHubIdBy(userId), businessForModification.getHubId())) {
-                    throw new IllegalArgumentException("담당 허브의 업체만 수정할 수 있습니다.");
-                }
-            }
-
-            case "BUSINESS_MANAGER"
-                    -> {
-                if (!Objects.equals(userId, businessForModification.getUserId())) {
-                    throw new IllegalArgumentException("본인의 업체만 수정할 수 있습니다.");
-                }
-            }
-        }
-
-        // -----
-        // NOTE: 요청한 허브 ID가 수정하려는 업체의 허브 ID와 다를 경우,
-        //       허브를 변경하려는 요청으로 간주하고 이후 해당 허브 ID의 유효성을 검증함
-        Long reqHubId = dto.getBusinessDTO().getHubId();
-
-        if (!Objects.equals(businessForModification.getHubId(), reqHubId) && !isExistsHub(reqHubId)) {
-            throw new IllegalArgumentException("허브 정보를 찾을 수 없습니다. 허브 ID를 확인해주세요.");
-        }
-        // -----
+        validateHubOrBusinessManagerAccess(userId, roleForValidation, businessForModification);
+        validateHubChangeRequest(businessForModification, dto.getBusinessDTO().getHubId());
 
         businessForModification.modifyBusiness(userId, account, dto);
     }
 
-    private Business getBusinessBy(Long businessId) {
-        return businessRepository.findByIdAndDeletedAtIsNull(businessId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 업체입니다."));
-    }
 
-    private void validate(Long userId, ReqBusinessPostDTO dto, String userRole) {
-        validateRole(userRole);
-        validateHubAccess(userId, dto.getBusinessDTO().getHubId(), userRole);
-        validateBusinessName(dto);
-    }
-
-    private void validateRole(String userRole) {
-        if (!Set.of("MANAGER", "HUB_MANAGER").contains(userRole)) {
+    private void validateUserRole(String roleForValidation, Set<String> validRoles) {
+        if (!validRoles.contains(roleForValidation)) {
             throw new IllegalArgumentException("접근 권한이 없습니다.");
         }
     }
 
-    private void validateHubAccess(Long userId, Long hubId, String userRole) {
-        if ("MANAGER".equals(userRole)) {
+    private void validateHubForManager(Long userId, Long hubId, String roleForValidation) {
+        if ("MANAGER".equals(roleForValidation)) {
             Long hubIdForChecking = hubClient.getHubIdBy(userId);
 
             if (hubIdForChecking == null) {
@@ -115,17 +77,53 @@ public class BusinessService {
         }
     }
 
-    private void validateBusinessName(ReqBusinessPostDTO dto) {
-        if (isDuplicateName(dto.getBusinessDTO().getName())) {
+    private void validateBusinessNameDuplication(String name) {
+        if (isDuplicateName(name)) {
             throw new DuplicateRequestException("이미 등록된 업체명입니다. 다른 이름을 사용하거나 기존 업체 정보를 확인해주세요");
         }
     }
 
-    private boolean isExistsHub(Long hubId) {
-        return hubClient.existsBy(hubId);
-    }
-
     private boolean isDuplicateName(String name) {
         return businessRepository.existsByNameAndDeletedAtIsNull(name);
+    }
+
+    private Business getBusinessBy(Long businessId) {
+        return businessRepository.findByIdAndDeletedAtIsNull(businessId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 업체입니다."));
+    }
+
+    private void validateHubOrBusinessManagerAccess(Long userId, String roleForValidation, Business businessForModification) {
+        switch (roleForValidation) {
+            case RoleType.HUB_MANAGER -> {
+                validateHubManager(userId, businessForModification);
+            }
+
+            case RoleType.BUSINESS_MANAGER -> {
+                validateBusinessManager(userId, businessForModification);
+            }
+        }
+    }
+
+    private void validateHubManager(Long userId, Business businessForModification) {
+        if (!Objects.equals(hubClient.getHubIdBy(userId), businessForModification.getHubId())) {
+            throw new IllegalArgumentException("담당 허브의 업체만 수정할 수 있습니다.");
+        }
+    }
+
+    private static void validateBusinessManager(Long userId, Business businessForModification) {
+        if (!Objects.equals(userId, businessForModification.getUserId())) {
+            throw new IllegalArgumentException("본인의 업체만 수정할 수 있습니다.");
+        }
+    }
+
+    private void validateHubChangeRequest(Business businessForModification, Long reqHubId) {
+
+        // NOTE: 요청한 허브 ID가 기존 업체의 허브 ID와 다를 경우,
+        //       사용자가 허브를 변경하려는 것으로 간주하고 요청한 허브 ID의 유효성을 검증한다.
+        //       요청한 허브 ID가 존재하지 않으면 예외를 발생시킨다.
+
+        if (!Objects.equals(businessForModification.getHubId(), reqHubId) && !hubClient.existsBy(reqHubId)) {
+            throw new IllegalArgumentException("허브 정보를 찾을 수 없습니다. 허브 ID를 확인해주세요.");
+        }
     }
 }
