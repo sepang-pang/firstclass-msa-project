@@ -87,7 +87,6 @@ public class BusinessService {
         validateHubChangeRequest(businessForModification, dto.getBusinessDTO().getHubId());
 
         businessForModification.modifyBusiness(
-                userId,
                 account,
                 dto.getBusinessDTO().getHubId(),
                 dto.getBusinessDTO().getName(),

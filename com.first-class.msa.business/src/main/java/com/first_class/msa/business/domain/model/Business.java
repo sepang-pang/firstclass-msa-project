@@ -87,10 +87,9 @@ public class Business {
                 .build();
     }
 
-    public void modifyBusiness(Long managerId, String account, Long hubId,
+    public void modifyBusiness(String account, Long hubId,
                                String businessName, String type, String address, String addressDetail) {
 
-        this.managerId = managerId;
         this.modifiedBy = account;
         this.hubId = hubId;
         this.name = businessName;

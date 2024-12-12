@@ -18,9 +18,6 @@ public class ReqBusinessPutByIdDTO {
     @NoArgsConstructor
     public static class BusinessDTO {
 
-        @NotNull(message = "업체 관리자 정보를 입력해주세요")
-        private Long userId;
-
         @NotNull(message = "관리 허브 정보를 입력해주세요")
         private Long hubId;
 
