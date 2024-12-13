@@ -1,5 +1,7 @@
 package com.first_class.msa.agent.infratructure.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -28,4 +30,10 @@ public class DeliveryAgentRepositoryImpl implements DeliveryAgentRepository {
 	){
 		return deliveryAgentQueryRepository.findByAllDeliveryAgent(deliveryAgentAuthSearchConditionDTO, pageable);
 	}
+
+	@Override
+	public Optional<DeliveryAgent> findById(Long deliveryAgentId) {
+		return deliveryAgentJpaRepository.findById(deliveryAgentId);
+	}
+
 }

@@ -1,6 +1,7 @@
 package com.first_class.msa.agent.application.service;
 
 import com.first_class.msa.agent.domain.common.UserRole;
+import com.first_class.msa.agent.domain.entity.DeliveryAgent;
 
 public interface AuthConditionService {
 
@@ -8,6 +9,7 @@ public interface AuthConditionService {
 
 	void validateSearchUserRole(UserRole userRole, Long userId, Long hubId);
 
-	void validateExistHubId(Long hubId);
+	void validateSearchDetailUserRole(UserRole userRole, Long userId, DeliveryAgent deliveryAgent);
+
 
 }

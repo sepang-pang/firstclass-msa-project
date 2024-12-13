@@ -13,6 +13,8 @@ import com.first_class.msa.agent.domain.common.Type;
 import com.first_class.msa.agent.domain.common.UserRole;
 import com.first_class.msa.agent.domain.entity.DeliveryAgent;
 import com.first_class.msa.agent.domain.repository.DeliveryAgentRepository;
+import com.first_class.msa.agent.libs.exception.ApiException;
+import com.first_class.msa.agent.libs.message.ErrorMessage;
 import com.first_class.msa.agent.presentation.dto.ReqDeliveryAgentDTO;
 
 import lombok.RequiredArgsConstructor;
@@ -49,10 +51,16 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public ResDeliveryAgentSearchDTO getSearchDeliveryAgentBy(Long userid, Long hubId ,Type type, IsAvailable isAvailable, Pageable pageable){
-		ResRoleGetByIdDTO resRoleGetByIdDTO = authService.getRoleBy(userid);
+	public ResDeliveryAgentSearchDTO getSearchDeliveryAgentBy(
+		Long userId,
+		Long hubId,
+		Type type,
+		IsAvailable isAvailable,
+		Pageable pageable
+	){
+		ResRoleGetByIdDTO resRoleGetByIdDTO = authService.getRoleBy(userId);
 
-		authConditionService.validateSearchUserRole(UserRole.valueOf(resRoleGetByIdDTO.getRole()), userid, hubId);
+		authConditionService.validateSearchUserRole(UserRole.valueOf(resRoleGetByIdDTO.getRole()), userId, hubId);
 		DeliveryAgentAuthSearchConditionDTO deliveryAgentAuthSearchConditionDTO
 			= SearchConditionByUserRole(UserRole.valueOf(resRoleGetByIdDTO.getRole()), hubId, type, isAvailable);
 
@@ -75,6 +83,24 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 		}
 		return deliveryAgentAuthSearchConditionDTO;
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public ResDeliveryAgentSearchDTO.DeliveryAgentDetailDTO getDeliveryAgentById(Long userId, Long deliverAgentId){
+		ResRoleGetByIdDTO resRoleGetByIdDTO = authService.getRoleBy(userId);
+		DeliveryAgent deliveryAgent = deliveryAgentRepository.findById(deliverAgentId).orElseThrow(
+			() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOT_FOUND_DELIVERY_AGENT))
+		);
+		authConditionService.validateSearchDetailUserRole(
+			UserRole.valueOf(resRoleGetByIdDTO.getRole()),
+			userId,
+			deliveryAgent
+		);
+		return ResDeliveryAgentSearchDTO.DeliveryAgentDetailDTO.from(deliveryAgent);
+	}
+
+
+
 
 
 

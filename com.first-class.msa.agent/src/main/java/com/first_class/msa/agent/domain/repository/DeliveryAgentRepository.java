@@ -1,5 +1,7 @@
 package com.first_class.msa.agent.domain.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Pageable;
 
 import com.first_class.msa.agent.application.dto.DeliveryAgentAuthSearchConditionDTO;
@@ -15,4 +17,6 @@ public interface DeliveryAgentRepository {
 		DeliveryAgentAuthSearchConditionDTO deliveryAgentAuthSearchConditionDTO,
 		Pageable pageable
 	);
+
+	Optional<DeliveryAgent> findById(Long deliveryAgentId);
 }

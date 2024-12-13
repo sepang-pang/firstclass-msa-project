@@ -4,6 +4,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -56,6 +57,22 @@ public class AgentController {
 				.code(HttpStatus.OK.value())
 				.message("배송 관리자 조회 성공")
 				.data(deliveryAgentService.getSearchDeliveryAgentBy(userId, hubId, type, isAvailable, pageable))
+				.build(),
+			HttpStatus.OK
+		);
+	}
+
+
+	@GetMapping("/{deliveryAgentId}")
+	public ResponseEntity<ResDTO<ResDeliveryAgentSearchDTO.DeliveryAgentDetailDTO>> getSearchDetailBy(
+		@RequestHeader(name = "X-User-Id") Long userId,
+		@PathVariable(name = "deliveryAgentId") Long deliveryAgentId
+	){
+		return new ResponseEntity<>(
+			ResDTO.<ResDeliveryAgentSearchDTO.DeliveryAgentDetailDTO>builder()
+			.code(HttpStatus.OK.value())
+				.message("배송 관리자 단건 조회 성공")
+				.data(deliveryAgentService.getDeliveryAgentById(userId, deliveryAgentId))
 				.build(),
 			HttpStatus.OK
 		);

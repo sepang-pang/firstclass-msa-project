@@ -20,6 +20,7 @@ public enum ErrorMessage {
 	/**
 	 * AGENT
 	 */
+	NOT_FOUND_DELIVERY_AGENT(HttpStatus.BAD_REQUEST, "배송 관리자 정보가 없습니다."),
 	SEQUENCE_NOT_MINUS(HttpStatus.BAD_REQUEST, "배송 순번은 음수일 수 없습니다."),
 
 	/**

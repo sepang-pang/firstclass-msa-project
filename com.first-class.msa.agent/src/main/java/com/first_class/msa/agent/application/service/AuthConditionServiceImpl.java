@@ -3,6 +3,7 @@ package com.first_class.msa.agent.application.service;
 import org.springframework.stereotype.Component;
 
 import com.first_class.msa.agent.domain.common.UserRole;
+import com.first_class.msa.agent.domain.entity.DeliveryAgent;
 import com.first_class.msa.agent.libs.exception.ApiException;
 import com.first_class.msa.agent.libs.message.ErrorMessage;
 
@@ -50,7 +51,19 @@ public class AuthConditionServiceImpl implements AuthConditionService {
 	}
 
 	@Override
-	public void validateExistHubId(Long hubId){
+	public void validateSearchDetailUserRole(UserRole userRole, Long userId, DeliveryAgent deliveryAgent) {
+
+		switch (userRole) {
+			case MASTER-> {
+			}
+			case HUB_MANAGER -> validateHubManager(userId, deliveryAgent.getHubId());
+			case DELIVERY_MANAGER -> validateMatchDeliveryAgentByUserId(userId, deliveryAgent);
+			case BUSINESS_MANAGER ->
+				throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_USER_ROLE));
+		}
+	}
+
+	private void validateExistHubId(Long hubId){
 		if(!getExistHubId(hubId)){
 			throw new IllegalArgumentException(new ApiException(ErrorMessage.NOT_FOUND_HUB));
 		}
@@ -62,6 +75,11 @@ public class AuthConditionServiceImpl implements AuthConditionService {
 		}
 	}
 
+	private void validateMatchDeliveryAgentByUserId(Long userId, DeliveryAgent deliveryAgent){
+		if(!userId.equals(deliveryAgent.getUserId())){
+			throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_USER_ROLE_DELIVERY_MANAGER));
+		}
+	}
 
 
 	private boolean getExistHubId(Long hubId) {

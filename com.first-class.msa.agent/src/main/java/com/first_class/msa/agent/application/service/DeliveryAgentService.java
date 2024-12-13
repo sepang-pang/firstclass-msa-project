@@ -19,4 +19,6 @@ public interface DeliveryAgentService {
 		IsAvailable isAvailable,
 		Pageable pageable
 	);
+
+	ResDeliveryAgentSearchDTO.DeliveryAgentDetailDTO getDeliveryAgentById(Long userId, Long deliverAgentId);
 }
