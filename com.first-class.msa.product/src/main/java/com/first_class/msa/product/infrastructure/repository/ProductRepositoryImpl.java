@@ -9,4 +9,9 @@ import org.springframework.stereotype.Repository;
 public class ProductRepositoryImpl implements ProductRepository {
 
     private final JpaProductRepository jpaProductRepository;
+
+    @Override
+    public boolean existsByNameAndBusinessIdAndDeletedAtIsNull(String name, Long businessId) {
+        return jpaProductRepository.existsByNameAndBusinessIdAndDeletedAtIsNull(name, businessId);
+    }
 }
