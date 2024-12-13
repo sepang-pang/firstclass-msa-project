@@ -1,15 +1,11 @@
-package com.first_class.msa.agent.domain.repository;
+package com.first_class.msa.agent.infratructure.repository;
 
 import org.springframework.data.domain.Pageable;
 
 import com.first_class.msa.agent.application.dto.DeliveryAgentAuthSearchConditionDTO;
 import com.first_class.msa.agent.application.dto.ResDeliveryAgentSearchDTO;
-import com.first_class.msa.agent.domain.entity.DeliveryAgent;
 
-public interface DeliveryAgentRepository {
-
-	DeliveryAgent save(DeliveryAgent deliveryAgent);
-
+public interface DeliveryAgentQueryRepository {
 
 	ResDeliveryAgentSearchDTO findByAllDeliveryAgent(
 		DeliveryAgentAuthSearchConditionDTO deliveryAgentAuthSearchConditionDTO,

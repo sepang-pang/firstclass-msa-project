@@ -6,5 +6,8 @@ public interface AuthConditionService {
 
 	void validateCreateUserRole(UserRole userRole, Long hubId, Long userId);
 
-	void validateSearchUserRole()
+	void validateSearchUserRole(UserRole userRole, Long userId, Long hubId);
+
+	void validateExistHubId(Long hubId);
+
 }

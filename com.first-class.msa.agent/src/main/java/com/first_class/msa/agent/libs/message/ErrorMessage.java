@@ -25,7 +25,8 @@ public enum ErrorMessage {
 	/**
 	 * HUb
 	 */
-	NOT_FOUND_HUB(HttpStatus.BAD_REQUEST, "허브 정보를 찾을 수 없습니다.");
+	NOT_FOUND_HUB(HttpStatus.BAD_REQUEST, "허브 정보를 찾을 수 없습니다."),
+	HUB_MANAGER_MUST_HUB_ID(HttpStatus.BAD_REQUEST, "허브 매니저는 허브아이디가 필수입니다.");
 
 
 	private final HttpStatus httpStatus;
