@@ -70,6 +70,11 @@ public class HubService {
         hubForDeletion.deleteHub(account);
     }
 
+    @Transactional(readOnly = true)
+    public boolean existsBy(Long hubId) {
+        return hubRepository.existsByIdAndDeletedAtIsNull(hubId);
+    }
+
 
     private Hub getHubBy(Long hubId) {
         return hubRepository.findByIdAndDeletedAtIsNull(hubId)
@@ -81,5 +86,7 @@ public class HubService {
         return hubRepository.existsByLatitudeAndLongitudeAndDeletedIsNull(latitude, longitude);
     }
 
-
+    public Long getHubIdBy(Long userId) {
+        return hubRepository.findByManagerIdAndDeletedAtIsNull(userId);
+    }
 }
