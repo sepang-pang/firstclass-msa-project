@@ -1,6 +1,6 @@
 package com.first_class.msa.auth.domain.controller.external;
 
-import com.first_class.msa.auth.domain.dto.ResRoleGetByIdDTO;
+import com.first_class.msa.auth.domain.dto.external.ExternalResRoleGetByIdDTO;
 import com.first_class.msa.auth.domain.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +14,7 @@ public class ExternalUserController {
     private final UserService userService;
 
     @GetMapping("/external/users/{userId}")
-    public ResRoleGetByIdDTO getRoleBy(@PathVariable Long userId) {
+    public ExternalResRoleGetByIdDTO getRoleBy(@PathVariable Long userId) {
         return userService.getRoleBy(userId);
     }
 }

@@ -1,4 +1,4 @@
-package com.first_class.msa.auth.domain.dto;
+package com.first_class.msa.auth.domain.dto.external;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResRoleGetByIdDTO {
+public class ExternalResRoleGetByIdDTO {
     private String role;
 }

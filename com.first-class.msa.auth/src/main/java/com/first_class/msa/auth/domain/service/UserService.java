@@ -2,7 +2,7 @@ package com.first_class.msa.auth.domain.service;
 
 import com.first_class.msa.auth.config.jwt.JwtUtil;
 import com.first_class.msa.auth.domain.dto.ReqLoginDTO;
-import com.first_class.msa.auth.domain.dto.ResRoleGetByIdDTO;
+import com.first_class.msa.auth.domain.dto.external.ExternalResRoleGetByIdDTO;
 import com.first_class.msa.auth.domain.model.User;
 import com.first_class.msa.auth.domain.dto.ReqUserPostDTO;
 import com.first_class.msa.auth.domain.repository.UserRepository;
@@ -51,10 +51,10 @@ public class UserService {
     }
 
 
-    public ResRoleGetByIdDTO getRoleBy(Long userId) {
+    public ExternalResRoleGetByIdDTO getRoleBy(Long userId) {
         User userForRole = findById(userId);
 
-        return ResRoleGetByIdDTO.builder()
+        return ExternalResRoleGetByIdDTO.builder()
                 .role(userForRole.getRole().name())
                 .build();
     }
