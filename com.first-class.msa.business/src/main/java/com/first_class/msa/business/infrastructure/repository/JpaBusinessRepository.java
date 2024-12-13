@@ -9,5 +9,7 @@ public interface JpaBusinessRepository extends JpaRepository<Business, Long> {
 
     boolean existsByNameAndDeletedAtIsNull(String name);
 
+    boolean existsByIdAndDeletedAtIsNull(Long id);
+
     Optional<Business> findByIdAndDeletedAtIsNull(Long id);
 }
