@@ -3,6 +3,7 @@ package com.first_class.msa.business.application.service;
 import com.first_class.msa.business.application.dto.ResBusinessPostDTO;
 import com.first_class.msa.business.application.dto.ResBusinessSearchDTO;
 import com.first_class.msa.business.application.dto.ResRoleGetByUserIdDTO;
+import com.first_class.msa.business.application.dto.external.ExternalResBusinessGetByIdDTO;
 import com.first_class.msa.business.domain.model.Business;
 import com.first_class.msa.business.domain.model.RoleType;
 import com.first_class.msa.business.domain.repository.BusinessRepository;
@@ -118,6 +119,11 @@ public class BusinessService {
     @Transactional(readOnly = true)
     public boolean existsBy(Long businessId) {
         return businessRepository.existsByIdAndDeletedAtIsNull(businessId);
+    }
+
+    @Transactional(readOnly = true)
+    public ExternalResBusinessGetByIdDTO getBy(Long businessId) {
+        return ExternalResBusinessGetByIdDTO.of(getBusinessBy(businessId));
     }
 
     private void validateUserRole(String roleForValidation, Set<String> validRoles) {
