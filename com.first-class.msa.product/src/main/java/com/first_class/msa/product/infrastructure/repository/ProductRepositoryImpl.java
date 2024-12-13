@@ -1,5 +1,6 @@
 package com.first_class.msa.product.infrastructure.repository;
 
+import com.first_class.msa.product.domain.model.Product;
 import com.first_class.msa.product.domain.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -13,5 +14,10 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public boolean existsByNameAndBusinessIdAndDeletedAtIsNull(String name, Long businessId) {
         return jpaProductRepository.existsByNameAndBusinessIdAndDeletedAtIsNull(name, businessId);
+    }
+
+    @Override
+    public void save(Product product) {
+        jpaProductRepository.save(product);
     }
 }
