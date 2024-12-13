@@ -16,7 +16,7 @@ public class AuthConditionServiceImpl implements AuthConditionService {
 	// private final MessageService messageService;
 
 	@Override
-	public void validateUserRole(UserRole userRole, Long hubId, Long userId) {
+	public void validateCreateUserRole(UserRole userRole, Long hubId, Long userId) {
 		switch (userRole) {
 			case MASTER -> {
 				return;
@@ -29,7 +29,20 @@ public class AuthConditionServiceImpl implements AuthConditionService {
 	}
 
 	@Override
-	public void validateHubManager(Long userId, Long hubId) {
+	public void validateSearchUserRole(UserRole userRole, Long hubId, Long userId) {
+		switch (userRole) {
+			case MASTER -> {
+				return;
+			}
+			case HUB_MANAGER -> validateHubManager(hubId, userId);
+			case BUSINESS_MANAGER, DELIVERY_MANAGER ->
+				throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_USER_ROLE));
+		}
+
+	}
+
+
+	private void validateHubManager(Long userId, Long hubId) {
 		if (!getExistHubId(hubId)) {
 			throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_USER_ROLE_HUB_MANAGER));
 		}

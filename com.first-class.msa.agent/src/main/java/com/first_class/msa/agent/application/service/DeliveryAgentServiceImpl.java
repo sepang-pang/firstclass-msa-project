@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.first_class.msa.agent.application.dto.ResDeliveryAgentDTO;
+import com.first_class.msa.agent.application.dto.ResDeliveryAgentSearchDTO;
 import com.first_class.msa.agent.application.dto.ResRoleGetByIdDTO;
 import com.first_class.msa.agent.domain.common.UserRole;
 import com.first_class.msa.agent.domain.entity.DeliveryAgent;
@@ -24,7 +25,7 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 	public ResDeliveryAgentDTO postBy(Long userId, ReqDeliveryAgentDTO reqDeliveryAgentDTO){
 		ResRoleGetByIdDTO resRoleGetByIdDTO = authService.getRoleBy(userId);
 
-		authConditionService.validateUserRole(
+		authConditionService.validateCreateUserRole(
 			UserRole.valueOf(resRoleGetByIdDTO.getRole()),
 			reqDeliveryAgentDTO.getHubId(),
 			userId
@@ -41,5 +42,14 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 		deliveryAgent = deliveryAgentRepository.save(deliveryAgent);
 		return ResDeliveryAgentDTO.from(deliveryAgent);
 	}
+
+	@Transactional(readOnly = true)
+	public ResDeliveryAgentSearchDTO getSearchDeliveryAgentBy(Long userid){
+		ResRoleGetByIdDTO resRoleGetByIdDTO = authService.getRoleBy(userid);
+
+
+	}
+
+
 
 }
