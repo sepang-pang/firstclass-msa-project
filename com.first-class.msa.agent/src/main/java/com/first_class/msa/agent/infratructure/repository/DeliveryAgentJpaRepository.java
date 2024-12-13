@@ -10,15 +10,15 @@ import com.first_class.msa.agent.domain.entity.DeliveryAgent;
 
 public interface DeliveryAgentJpaRepository extends JpaRepository<DeliveryAgent, Long> {
 
-	@Query("SELECT MAX(d.sequence.value) FROM DeliveryAgent d WHERE d.hubId = :hubId")
+	@Query("SELECT MAX(d.sequence.value) FROM DeliveryAgent d WHERE d.hubId = :hubId AND d.deletedBy IS NOT NULL" )
 	Integer findMaxSequenceByHubId(@Param("hubId") Long hubId);
 
-	@Query("SELECT MAX(d.sequence.value) FROM DeliveryAgent d WHERE d.hubId IS NULL")
+	@Query("SELECT MAX(d.sequence.value) FROM DeliveryAgent d WHERE d.hubId IS NULL AND d.deletedBy IS NOT NULL")
 	Integer findMaxSequenceByHubIdIsNull();
 
-	@Query("SELECT d FROM DeliveryAgent d WHERE d.hubId IS NULL ORDER BY d.sequence.value ASC")
+	@Query("SELECT d FROM DeliveryAgent d WHERE d.hubId IS NULL AND d.deletedBy IS NOT NULL ORDER BY d.sequence.value ASC")
 	List<DeliveryAgent> findByHubIdIsNull();
 
-	@Query("SELECT d FROM DeliveryAgent d WHERE d.hubId = :hubId ORDER BY d.sequence.value ASC")
+	@Query("SELECT d FROM DeliveryAgent d WHERE d.hubId = :hubId AND d.deletedBy IS NOT NULL ORDER BY d.sequence.value ASC")
 	List<DeliveryAgent> findByHubId(@Param("hubId") Long hubId);
 }
