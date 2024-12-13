@@ -115,6 +115,10 @@ public class BusinessService {
         businessForDeletion.deleteBusiness(account);
     }
 
+    @Transactional(readOnly = true)
+    public boolean existsBy(Long businessId) {
+        return businessRepository.existsByIdAndDeletedAtIsNull(businessId);
+    }
 
     private void validateUserRole(String roleForValidation, Set<String> validRoles) {
         if (!validRoles.contains(roleForValidation)) {

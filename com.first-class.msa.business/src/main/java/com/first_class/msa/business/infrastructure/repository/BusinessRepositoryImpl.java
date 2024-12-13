@@ -22,6 +22,11 @@ public class BusinessRepositoryImpl implements BusinessRepository {
     }
 
     @Override
+    public boolean existsByIdAndDeletedAtIsNull(Long id) {
+        return jpaBusinessRepository.existsByIdAndDeletedAtIsNull(id);
+    }
+
+    @Override
     public Optional<Business> findByIdAndDeletedAtIsNull(Long id) {
         return jpaBusinessRepository.findByIdAndDeletedAtIsNull(id);
     }
