@@ -28,22 +28,26 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 
 	@Override
 	@Transactional
-	public ResDeliveryAgentDTO postBy(Long userId, ReqDeliveryAgentDTO reqDeliveryAgentDTO){
+	public ResDeliveryAgentDTO postBy(Long userId, ReqDeliveryAgentDTO reqDeliveryAgentDTO) {
 		ResRoleGetByIdDTO resRoleGetByIdDTO = authService.getRoleBy(userId);
+
+		Long hubId = reqDeliveryAgentDTO.getHubId();
+		DeliveryAgent deliveryAgent;
+		if (reqDeliveryAgentDTO.getType().equals(Type.HUB_AGENT)) {
+			hubId = null;
+		}
 
 		authConditionService.validateCreateUserRole(
 			UserRole.valueOf(resRoleGetByIdDTO.getRole()),
-			reqDeliveryAgentDTO.getHubId(),
+			hubId,
 			userId
 		);
 
-		DeliveryAgent deliveryAgent
-			= DeliveryAgent.createDeliveryAgent(
-				userId,
+		deliveryAgent = DeliveryAgent.createDeliveryAgent(
+			userId,
 			reqDeliveryAgentDTO.getSlackId(),
 			reqDeliveryAgentDTO.getHubId(),
 			reqDeliveryAgentDTO.getType());
-
 
 		deliveryAgent = deliveryAgentRepository.save(deliveryAgent);
 		return ResDeliveryAgentDTO.from(deliveryAgent);
@@ -57,7 +61,7 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 		Type type,
 		IsAvailable isAvailable,
 		Pageable pageable
-	){
+	) {
 		ResRoleGetByIdDTO resRoleGetByIdDTO = authService.getRoleBy(userId);
 
 		authConditionService.validateSearchUserRole(UserRole.valueOf(resRoleGetByIdDTO.getRole()), userId, hubId);
@@ -72,11 +76,11 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 		Long hubId,
 		Type type,
 		IsAvailable isAvailable
-	){
+	) {
 		DeliveryAgentAuthSearchConditionDTO deliveryAgentAuthSearchConditionDTO = null;
-		switch (userRole){
+		switch (userRole) {
 			case MASTER -> deliveryAgentAuthSearchConditionDTO
-					= DeliveryAgentAuthSearchConditionDTO.createForMaster(hubId, type, isAvailable);
+				= DeliveryAgentAuthSearchConditionDTO.createForMaster(hubId, type, isAvailable);
 
 			case HUB_MANAGER -> deliveryAgentAuthSearchConditionDTO
 				= DeliveryAgentAuthSearchConditionDTO.createForHubManager(hubId, type, isAvailable);
@@ -86,7 +90,7 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public ResDeliveryAgentSearchDTO.DeliveryAgentDetailDTO getDeliveryAgentById(Long userId, Long deliverAgentId){
+	public ResDeliveryAgentSearchDTO.DeliveryAgentDetailDTO getDeliveryAgentById(Long userId, Long deliverAgentId) {
 		ResRoleGetByIdDTO resRoleGetByIdDTO = authService.getRoleBy(userId);
 		DeliveryAgent deliveryAgent = deliveryAgentRepository.findById(deliverAgentId).orElseThrow(
 			() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOT_FOUND_DELIVERY_AGENT))
@@ -98,10 +102,6 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 		);
 		return ResDeliveryAgentSearchDTO.DeliveryAgentDetailDTO.from(deliveryAgent);
 	}
-
-
-
-
 
 
 }

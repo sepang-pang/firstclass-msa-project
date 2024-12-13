@@ -22,7 +22,13 @@ public class AuthConditionServiceImpl implements AuthConditionService {
 			case MASTER -> {
 				return;
 			}
-			case HUB_MANAGER -> validateHubManager(hubId, userId);
+			case HUB_MANAGER -> {
+				if(hubId == null){
+					return;
+				} else {
+					validateHubManager(hubId, userId);
+				}
+			}
 			case BUSINESS_MANAGER, DELIVERY_MANAGER ->
 				throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_USER_ROLE));
 		}
