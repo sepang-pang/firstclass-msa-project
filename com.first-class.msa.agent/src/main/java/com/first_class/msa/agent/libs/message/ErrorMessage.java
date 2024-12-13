@@ -20,8 +20,13 @@ public enum ErrorMessage {
 	/**
 	 * AGENT
 	 */
-	SEQUENCE_EMPTY(HttpStatus.BAD_REQUEST, "배송 순번은 필수입니다."),
-	SEQUENCE_NOT_MINUS(HttpStatus.BAD_REQUEST, "배송 순번은 음수일 수 없습니다.");
+	SEQUENCE_NOT_MINUS(HttpStatus.BAD_REQUEST, "배송 순번은 음수일 수 없습니다."),
+
+	/**
+	 * HUb
+	 */
+	NOT_FOUND_HUB(HttpStatus.BAD_REQUEST, "허브 정보를 찾을 수 없습니다.");
+
 
 	private final HttpStatus httpStatus;
 	private final String message;

@@ -16,13 +16,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Sequence {
 
-	@Column(name = "sequence", nullable = false)
-	Integer value;
+	@Column(name = "sequence")
+	int value = 0;
 
 	public Sequence(Integer value){
-		if(value == null){
-			throw new IllegalArgumentException(new ApiException(ErrorMessage.SEQUENCE_EMPTY));
-		}
 		if(value < 0){
 			throw new IllegalArgumentException(new ApiException(ErrorMessage.SEQUENCE_NOT_MINUS));
 		}

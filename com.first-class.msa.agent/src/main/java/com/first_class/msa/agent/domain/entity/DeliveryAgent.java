@@ -48,11 +48,11 @@ public class DeliveryAgent {
 	@Column(name = "user_id", nullable = false)
 	private Long userId;
 
-	@Column(name = "name_id")
+	@Column(name = "hud_id", nullable = false)
 	private Long hubId;
 
 	@Column(name = "slack_id", nullable = false)
-	private Long slackId;
+	private String slackId;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "type", nullable = false)
@@ -91,6 +91,14 @@ public class DeliveryAgent {
 	@Column(name = "deleted_by")
 	private Long deletedBy;
 
-
+	public static DeliveryAgent createDeliveryAgent(Long userId, String slackId, Long hubId, Type type){
+		return DeliveryAgent.builder()
+			.userId(userId)
+			.hubId(hubId)
+			.slackId(slackId)
+			.isAvailable(IsAvailable.DISABLE)
+			.type(type)
+			.build();
+	}
 
 }
