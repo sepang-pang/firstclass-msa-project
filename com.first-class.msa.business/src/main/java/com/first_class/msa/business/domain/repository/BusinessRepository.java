@@ -10,6 +10,8 @@ public interface BusinessRepository {
 
     boolean existsByNameAndDeletedAtIsNull(String name);
 
+    boolean existsByIdAndDeletedAtIsNull(Long id);
+
     Optional<Business> findByIdAndDeletedAtIsNull(Long id);
 
     Page<Business> findBusinessByDeletedAtIsNullWithConditions(Pageable pageable, String name, String address, String type, String sort);
