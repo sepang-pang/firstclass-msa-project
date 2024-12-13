@@ -1,5 +1,6 @@
 package com.first_class.msa.agent.infratructure.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
@@ -34,6 +35,26 @@ public class DeliveryAgentRepositoryImpl implements DeliveryAgentRepository {
 	@Override
 	public Optional<DeliveryAgent> findById(Long deliveryAgentId) {
 		return deliveryAgentJpaRepository.findById(deliveryAgentId);
+	}
+
+	@Override
+	public Integer findMaxSequenceByHubId(Long hubId){
+		return deliveryAgentJpaRepository.findMaxSequenceByHubId(hubId);
+	}
+
+	@Override
+	public Integer findMaxSequenceByHubIdIsNull() {
+		return deliveryAgentJpaRepository.findMaxSequenceByHubIdIsNull();
+	}
+
+	@Override
+	public List<DeliveryAgent> findByHubIdIsNull() {
+		return deliveryAgentJpaRepository.findByHubIdIsNull();
+	}
+
+	@Override
+	public List<DeliveryAgent> findByHubId(Long hubId) {
+		return deliveryAgentJpaRepository.findByHubId(hubId);
 	}
 
 }

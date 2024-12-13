@@ -89,11 +89,18 @@ public class DeliveryAgent {
 	@Column(name = "deleted_by")
 	private Long deletedBy;
 
-	public static DeliveryAgent createDeliveryAgent(Long userId, String slackId, Long hubId, Type type){
+	public static DeliveryAgent createDeliveryAgent(
+		Long userId,
+		String slackId,
+		Long hubId,
+		Type type,
+		Sequence sequence
+	) {
 		return DeliveryAgent.builder()
 			.userId(userId)
 			.hubId(hubId)
 			.slackId(slackId)
+			.sequence(sequence)
 			.isAvailable(IsAvailable.DISABLE)
 			.type(type)
 			.build();

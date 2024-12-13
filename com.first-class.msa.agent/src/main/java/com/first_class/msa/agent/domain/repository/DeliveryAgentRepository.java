@@ -1,5 +1,6 @@
 package com.first_class.msa.agent.domain.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
@@ -19,4 +20,11 @@ public interface DeliveryAgentRepository {
 	);
 
 	Optional<DeliveryAgent> findById(Long deliveryAgentId);
+
+	Integer findMaxSequenceByHubId(Long hubId);
+
+	Integer findMaxSequenceByHubIdIsNull();
+
+	List<DeliveryAgent> findByHubIdIsNull();
+	List<DeliveryAgent> findByHubId(Long hubId);
 }

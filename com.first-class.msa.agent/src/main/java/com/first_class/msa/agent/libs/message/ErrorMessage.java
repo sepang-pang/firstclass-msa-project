@@ -22,12 +22,15 @@ public enum ErrorMessage {
 	 */
 	NOT_FOUND_DELIVERY_AGENT(HttpStatus.BAD_REQUEST, "배송 관리자 정보가 없습니다."),
 	SEQUENCE_NOT_MINUS(HttpStatus.BAD_REQUEST, "배송 순번은 음수일 수 없습니다."),
+	NOT_FOUND_GLOBAL_DELIVERY_AGENT_LIST(HttpStatus.BAD_REQUEST, "허브간 배송 관리자 리스트가 없습니다."),
+	NOT_FOUND_HUB_DELIVERY_AGENT_LIST(HttpStatus.BAD_REQUEST, "허브 업체간 배송 관리자 리스트가 없습니다."),
 
 	/**
 	 * HUb
 	 */
 	NOT_FOUND_HUB(HttpStatus.BAD_REQUEST, "허브 정보를 찾을 수 없습니다."),
 	HUB_MANAGER_MUST_HUB_ID(HttpStatus.BAD_REQUEST, "허브 매니저는 허브아이디가 필수입니다.");
+
 
 
 	private final HttpStatus httpStatus;
