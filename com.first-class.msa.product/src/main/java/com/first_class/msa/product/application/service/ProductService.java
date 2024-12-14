@@ -1,12 +1,14 @@
 package com.first_class.msa.product.application.service;
 
 import com.first_class.msa.product.application.dto.ResProductPostDTO;
+import com.first_class.msa.product.application.dto.ResProductSearchDTO;
 import com.first_class.msa.product.domain.model.Product;
 import com.first_class.msa.product.domain.model.RoleType;
 import com.first_class.msa.product.domain.repository.ProductRepository;
 import com.first_class.msa.product.presentation.request.ReqProductPostDTO;
 import com.first_class.msa.product.presentation.request.ReqProductPutByIdDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +43,15 @@ public class ProductService {
         productRepository.save(productForSaving);
 
         return ResProductPostDTO.of(productForSaving);
+    }
+
+    @Transactional(readOnly = true)
+    public ResProductSearchDTO searchBy(Long userId, Pageable pageable, String name, Integer minPrice, Integer maxPrice, String sort) {
+        String roleForSearch = authService.getRoleBy(userId).getRole();
+
+        Long hubIdForSearch = Objects.equals(RoleType.HUB_MANAGER, roleForSearch) ? hubService.getHubIdBy(userId) : null;
+
+        return ResProductSearchDTO.of(productRepository.findProductByDeletedAtIsNullWithConditions(hubIdForSearch, pageable, name, minPrice, maxPrice, sort));
     }
 
 
