@@ -60,6 +60,17 @@ public class ProductService {
         );
     }
 
+    @Transactional
+    public void deleteBy(Long userId, String account, Long productId) {
+        String roleForValidation = authService.getRoleBy(userId).getRole();
+
+        Product productForDeletion = getProductBy(productId);
+
+        validateProductDeletionProcess(userId, roleForValidation, productForDeletion);
+
+        productForDeletion.deleteProduct(account);
+    }
+
 
     private void validateProductCreationProcess(Long userId, ReqProductPostDTO dto, String roleForValidation) {
         // NOTE : 권한 검증
@@ -99,6 +110,16 @@ public class ProductService {
 
         // NOTE : 이름 중복 검사
         validateProductNameDuplication(dto.getProductDTO().getName(), productForModification.getBusinessId());
+    }
+
+    private void validateProductDeletionProcess(Long userId, String roleForValidation, Product productForDeletion) {
+        // NOTE : 권한 검증
+        validateUserRole(roleForValidation, Set.of(RoleType.MASTER, RoleType.HUB_MANAGER));
+
+        // NOTE : 허브 관리자 검증
+        if (Objects.equals(roleForValidation, RoleType.HUB_MANAGER)) {
+            validateHubManagerHubAssignment(userId, productForDeletion.getHubId());
+        }
     }
 
     private Product getProductBy(Long productId) {

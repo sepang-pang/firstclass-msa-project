@@ -50,4 +50,20 @@ public class ProductController {
                 HttpStatus.OK
         );
     }
+
+    @DeleteMapping("/products/{productId}")
+    public ResponseEntity<SuccessResponseDTO<Objects>> deleteBy(@RequestHeader("X-User-Id") Long userId,
+                                                                @RequestHeader("X-User-Account") String account,
+                                                                @PathVariable(name = "productId") Long productId) {
+
+        productService.deleteBy(userId, account, productId);
+
+        return new ResponseEntity<>(
+                SuccessResponseDTO.<Objects>builder()
+                        .code(HttpStatus.OK.value())
+                        .message("상품 삭제에 성공하였습니다.")
+                        .build(),
+                HttpStatus.OK
+        );
+    }
 }
