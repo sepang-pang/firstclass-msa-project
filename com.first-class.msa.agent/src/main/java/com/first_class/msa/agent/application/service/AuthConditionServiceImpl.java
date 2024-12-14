@@ -69,6 +69,19 @@ public class AuthConditionServiceImpl implements AuthConditionService {
 		}
 	}
 
+
+	@Override
+	public void validateUpdateUserRole(UserRole userRole, Long userId, DeliveryAgent deliveryAgent) {
+
+		switch (userRole) {
+			case MASTER-> {
+			}
+			case HUB_MANAGER -> validateHubManager(userId, deliveryAgent.getHubId());
+			case DELIVERY_MANAGER, BUSINESS_MANAGER ->
+				throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_USER_ROLE));
+		}
+	}
+
 	private void validateExistHubId(Long hubId){
 		if(!getExistHubId(hubId)){
 			throw new IllegalArgumentException(new ApiException(ErrorMessage.NOT_FOUND_HUB));

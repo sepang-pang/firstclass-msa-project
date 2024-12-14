@@ -1,7 +1,6 @@
 package com.first_class.msa.agent.application.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,8 @@ import com.first_class.msa.agent.domain.repository.DeliveryAgentRepository;
 import com.first_class.msa.agent.domain.valueobject.Sequence;
 import com.first_class.msa.agent.libs.exception.ApiException;
 import com.first_class.msa.agent.libs.message.ErrorMessage;
-import com.first_class.msa.agent.presentation.dto.ReqDeliveryAgentDTO;
+import com.first_class.msa.agent.presentation.dto.ReqDeliveryAgentPostDTO;
+import com.first_class.msa.agent.presentation.dto.ReqDeliveryAgentPutDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,16 +35,16 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 
 	@Override
 	@Transactional
-	public ResDeliveryAgentDTO postBy(Long userId, ReqDeliveryAgentDTO reqDeliveryAgentDTO) {
+	public ResDeliveryAgentDTO postBy(Long userId, ReqDeliveryAgentPostDTO reqDeliveryAgentPostDTO) {
 		ResRoleGetByIdDTO resRoleGetByIdDTO = authService.getRoleBy(userId);
 
-		Long hubId = reqDeliveryAgentDTO.getHubId();
+		Long hubId = reqDeliveryAgentPostDTO.getHubId();
 		Integer maxSequence;
 		Sequence sequence;
 
 		DeliveryAgent deliveryAgent;
 
-		if (reqDeliveryAgentDTO.getType().equals(Type.HUB_AGENT)) {
+		if (reqDeliveryAgentPostDTO.getType().equals(Type.HUB_AGENT)) {
 			hubId = null;
 		}
 
@@ -63,9 +63,9 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 
 		deliveryAgent = DeliveryAgent.createDeliveryAgent(
 			userId,
-			reqDeliveryAgentDTO.getSlackId(),
+			reqDeliveryAgentPostDTO.getSlackId(),
 			hubId,
-			reqDeliveryAgentDTO.getType(),
+			reqDeliveryAgentPostDTO.getType(),
 			sequence
 		);
 
@@ -112,9 +112,7 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 	@Transactional(readOnly = true)
 	public ResDeliveryAgentSearchDTO.DeliveryAgentDetailDTO getDeliveryAgentById(Long userId, Long deliverAgentId) {
 		ResRoleGetByIdDTO resRoleGetByIdDTO = authService.getRoleBy(userId);
-		DeliveryAgent deliveryAgent = deliveryAgentRepository.findById(deliverAgentId).orElseThrow(
-			() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOT_FOUND_DELIVERY_AGENT))
-		);
+		DeliveryAgent deliveryAgent = findById(deliverAgentId);
 		authConditionService.validateSearchDetailUserRole(
 			UserRole.valueOf(resRoleGetByIdDTO.getRole()),
 			userId,
@@ -205,7 +203,18 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 
 	@Override
 	@Transactional
-	public void putBy(){
+	public void putBy(Long userId, Long deliveryAgentId, ReqDeliveryAgentPutDTO reqDeliveryAgentPutDTO) {
+		ResRoleGetByIdDTO resRoleGetByIdDTO = authService.getRoleBy(userId);
+		DeliveryAgent deliveryAgent = findById(deliveryAgentId);
+		authConditionService.validateUpdateUserRole(
+			UserRole.valueOf(resRoleGetByIdDTO.getRole()),
+			userId,
+			deliveryAgent);
+
+		deliveryAgent.updateDeliveryAgent(
+			reqDeliveryAgentPutDTO.getIsAvailable(),
+			reqDeliveryAgentPutDTO.getSlackId(),
+			reqDeliveryAgentPutDTO.getType());
 
 	}
 
@@ -222,6 +231,11 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 	// public void updateHubDeliveryAgents(Long hubId, List<DeliveryAgent> updatedAgents) {
 	// 	deliveryAgentCacheService.saveGlobalAgentList(hubId, updatedAgents);
 	// }
+	private DeliveryAgent findById(Long deliveryAgentId) {
+		return deliveryAgentRepository.findById(deliveryAgentId).orElseThrow(
+			() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOT_FOUND_DELIVERY_AGENT))
+		);
 
+	}
 
 }

@@ -106,4 +106,10 @@ public class DeliveryAgent {
 			.build();
 	}
 
+	public void updateDeliveryAgent(IsAvailable isAvailable, String slackId, Type type){
+		this.isAvailable = isAvailable != null ? isAvailable : this.isAvailable;
+		this.slackId = slackId != null ? slackId : this.slackId;
+		this.type = type != null ? type : this.type;
+	}
+
 }

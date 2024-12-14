@@ -5,7 +5,7 @@ import com.first_class.msa.agent.domain.common.Type;
 import lombok.Getter;
 
 @Getter
-public class ReqDeliveryAgentDTO {
+public class ReqDeliveryAgentPostDTO {
 	private Long hubId;
 	private String slackId;
 	private Type type;
