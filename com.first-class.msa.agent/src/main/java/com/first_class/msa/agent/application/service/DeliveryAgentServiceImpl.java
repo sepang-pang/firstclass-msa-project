@@ -1,6 +1,7 @@
 package com.first_class.msa.agent.application.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -143,6 +144,14 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 			deliveryAgentCacheService.saveGlobalAgentList(agentList);
 		}
 
+		List<DeliveryAgent> activeAgentList = agentList.stream()
+			.filter(agent -> agent.getIsAvailable() == IsAvailable.ENABLE)
+			.toList();
+
+		if (activeAgentList.isEmpty()) {
+			throw new IllegalArgumentException(new ApiException(ErrorMessage.NO_ACTIVE_GLOBAL_DELIVERY_AGENT));
+		}
+
 		int currentSequence = deliveryAgentCacheService.getGlobalSequence();
 
 		DeliveryAgent assignedAgent = agentList.get(currentSequence);
@@ -174,6 +183,14 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 			deliveryAgentCacheService.saveHubAgentList(hubId, agentList);
 		}
 
+		List<DeliveryAgent> activeAgentList = agentList.stream()
+			.filter(agent -> agent.getIsAvailable() == IsAvailable.ENABLE)
+			.toList();
+
+		if (activeAgentList.isEmpty()) {
+			throw new IllegalArgumentException(new ApiException(ErrorMessage.NO_ACTIVE_HUB_DELIVERY_AGENT));
+		}
+
 		int currentSequence = deliveryAgentCacheService.getHubSequence(hubId);
 
 		DeliveryAgent assignedAgent = agentList.get(currentSequence);
@@ -184,6 +201,13 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 		return ResHubDeliveryAgentDto.from(assignedAgent.getId());
 	}
 
+	// TODO: 2024-12-14 배송 관리자 삭제 및 수정 추가
+
+	@Override
+	@Transactional
+	public void putBy(){
+
+	}
 
 	// 추후 삭제 추가시 로직
 

@@ -101,7 +101,7 @@ public class DeliveryAgent {
 			.hubId(hubId)
 			.slackId(slackId)
 			.sequence(sequence)
-			.isAvailable(IsAvailable.DISABLE)
+			.isAvailable(IsAvailable.ENABLE)
 			.type(type)
 			.build();
 	}
