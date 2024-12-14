@@ -5,6 +5,7 @@ import com.first_class.msa.product.domain.model.Product;
 import com.first_class.msa.product.domain.model.RoleType;
 import com.first_class.msa.product.domain.repository.ProductRepository;
 import com.first_class.msa.product.presentation.request.ReqProductPostDTO;
+import com.first_class.msa.product.presentation.request.ReqProductPutByIdDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +43,24 @@ public class ProductService {
         return ResProductPostDTO.of(productForSaving);
     }
 
+
+    @Transactional
+    public void putBy(Long userId, String account, Long productId, ReqProductPutByIdDTO dto) {
+        String roleForValidation = authService.getRoleBy(userId).getRole();
+
+        Product productForModification = getProductBy(productId);
+
+        validateProductModificationProcess(userId, dto, roleForValidation, productForModification);
+
+        productForModification.modifyProduct(
+                dto.getProductDTO().getName(),
+                dto.getProductDTO().getPrice(),
+                dto.getProductDTO().getQuantity(),
+                account
+        );
+    }
+
+
     private void validateProductCreationProcess(Long userId, ReqProductPostDTO dto, String roleForValidation) {
         // NOTE : 권한 검증
         validateUserRole(roleForValidation, Set.of(RoleType.MASTER, RoleType.HUB_MANAGER, RoleType.BUSINESS_MANAGER));
@@ -63,6 +82,28 @@ public class ProductService {
 
         // NOTE : 이름 중복 검사
         validateProductNameDuplication(dto.getProductDTO().getName(), dto.getProductDTO().getBusinessId());
+    }
+
+    private void validateProductModificationProcess(Long userId, ReqProductPutByIdDTO dto, String roleForValidation, Product productForModification) {
+        // NOTE : 권한 검증
+        validateUserRole(roleForValidation, Set.of(RoleType.MASTER, RoleType.HUB_MANAGER, RoleType.BUSINESS_MANAGER));
+
+        switch (roleForValidation) {
+            case RoleType.HUB_MANAGER ->
+                // NOTE : 허브 관리자 검증
+                    validateHubManagerHubAssignment(userId, productForModification.getHubId());
+            case RoleType.BUSINESS_MANAGER ->
+                // NOTE : 업체 담당자 검증
+                    validateBusinessManagerBusinessAssignment(userId, productForModification.getBusinessId());
+        }
+
+        // NOTE : 이름 중복 검사
+        validateProductNameDuplication(dto.getProductDTO().getName(), productForModification.getBusinessId());
+    }
+
+    private Product getProductBy(Long productId) {
+        return productRepository.findByIdAndDeletedAtIsNull(productId)
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 상품입니다."));
     }
 
     private void validateUserRole(String roleForValidation, Set<String> validRoles) {

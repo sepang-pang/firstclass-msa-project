@@ -4,13 +4,13 @@ import com.first_class.msa.product.application.dto.ResProductPostDTO;
 import com.first_class.msa.product.application.dto.SuccessResponseDTO;
 import com.first_class.msa.product.application.service.ProductService;
 import com.first_class.msa.product.presentation.request.ReqProductPostDTO;
+import com.first_class.msa.product.presentation.request.ReqProductPutByIdDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,9 +19,9 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/products")
-    public ResponseEntity<SuccessResponseDTO<ResProductPostDTO>> postBy (@RequestHeader("X-User-Id") Long userId,
-                                                                         @RequestHeader("X-User-Account") String account,
-                                                                         @RequestBody ReqProductPostDTO dto) {
+    public ResponseEntity<SuccessResponseDTO<ResProductPostDTO>> postBy(@RequestHeader("X-User-Id") Long userId,
+                                                                        @RequestHeader("X-User-Account") String account,
+                                                                        @RequestBody ReqProductPostDTO dto) {
 
 
         return new ResponseEntity<>(
@@ -29,6 +29,23 @@ public class ProductController {
                         .code(HttpStatus.OK.value())
                         .message("상품 생성에 성공하였습니다.")
                         .data(productService.postBy(userId, account, dto))
+                        .build(),
+                HttpStatus.OK
+        );
+    }
+
+    @PutMapping("/products/{productId}")
+    public ResponseEntity<SuccessResponseDTO<Objects>> putBy(@RequestHeader("X-User-Id") Long userId,
+                                                             @RequestHeader("X-User-Account") String account,
+                                                             @PathVariable(name = "productId") Long productId,
+                                                             @RequestBody ReqProductPutByIdDTO dto) {
+
+        productService.putBy(userId, account, productId, dto);
+
+        return new ResponseEntity<>(
+                SuccessResponseDTO.<Objects>builder()
+                        .code(HttpStatus.OK.value())
+                        .message("상품 수정에 성공하였습니다.")
                         .build(),
                 HttpStatus.OK
         );
