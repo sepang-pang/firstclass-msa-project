@@ -237,22 +237,42 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 
 	private void updateCacheAfterDeletion(DeliveryAgent deliveryAgent) {
 		if (deliveryAgent.getType().equals(Type.HUB_AGENT)) {
-			// 허브 간 담당자
 			List<DeliveryAgent> agentList = deliveryAgentCacheService.getGlobalAgentList();
+			int currentSequence = deliveryAgentCacheService.getGlobalSequence();
+
 			agentList = agentList.stream()
 				.filter(agent -> !agent.getId().equals(deliveryAgent.getId()))
 				.collect(Collectors.toList());
 
+			int adjustedSequence = adjustSequenceAfterDeletion(currentSequence, agentList.size());
+			deliveryAgentCacheService.updateGlobalSequence(adjustedSequence);
+
 			deliveryAgentCacheService.saveGlobalAgentList(agentList);
 		} else {
-			// 허브 단위 담당자
 			Long hubId = deliveryAgent.getHubId();
 			List<DeliveryAgent> agentList = deliveryAgentCacheService.getHubAgentList(hubId);
+			int currentSequence = deliveryAgentCacheService.getHubSequence(hubId);
+
 			agentList = agentList.stream()
 				.filter(agent -> !agent.getId().equals(deliveryAgent.getId()))
 				.collect(Collectors.toList());
+
+			int adjustedSequence = adjustSequenceAfterDeletion(currentSequence, agentList.size());
+			deliveryAgentCacheService.updateHubSequence(hubId, adjustedSequence);
+
 			deliveryAgentCacheService.saveHubAgentList(hubId, agentList);
 		}
+	}
+
+	/**
+	 * 시퀀스 조정
+	 */
+	private int adjustSequenceAfterDeletion(int currentSequence, int listSize) {
+		if (listSize == 0) {
+			return 0;
+		}
+
+		return currentSequence % listSize;
 	}
 
 
