@@ -1,4 +1,4 @@
-package com.first_class.msa.agent.infratructure.config;
+package com.first_class.msa.agent.infrastructure.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

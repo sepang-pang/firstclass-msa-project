@@ -1,4 +1,4 @@
-package com.first_class.msa.agent.infratructure.repository;
+package com.first_class.msa.agent.infrastructure.repository;
 
 import org.springframework.data.domain.Pageable;
 
