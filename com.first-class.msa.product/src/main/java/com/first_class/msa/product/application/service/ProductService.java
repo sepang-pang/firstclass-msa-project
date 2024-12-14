@@ -8,6 +8,8 @@ import com.first_class.msa.product.domain.repository.ProductRepository;
 import com.first_class.msa.product.presentation.request.ReqProductPostDTO;
 import com.first_class.msa.product.presentation.request.ReqProductPutByIdDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +48,7 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "productSearchCache", key = "{#pageable.pageNumber, #pageable.pageSize, #minPrice, #maxPrice, #sort}")
     public ResProductSearchDTO searchBy(Long userId, Pageable pageable, String name, Integer minPrice, Integer maxPrice, String sort) {
         String roleForSearch = authService.getRoleBy(userId).getRole();
 
@@ -56,6 +59,7 @@ public class ProductService {
 
 
     @Transactional
+    @CacheEvict(cacheNames = "productSearchCache", allEntries = true)
     public void putBy(Long userId, String account, Long productId, ReqProductPutByIdDTO dto) {
         String roleForValidation = authService.getRoleBy(userId).getRole();
 
@@ -72,6 +76,7 @@ public class ProductService {
     }
 
     @Transactional
+    @CacheEvict(cacheNames = "productSearchCache", allEntries = true)
     public void deleteBy(Long userId, String account, Long productId) {
         String roleForValidation = authService.getRoleBy(userId).getRole();
 
