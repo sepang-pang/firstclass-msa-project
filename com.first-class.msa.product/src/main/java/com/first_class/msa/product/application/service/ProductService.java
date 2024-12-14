@@ -21,7 +21,6 @@ public class ProductService {
     private final HubService hubService;
     private final BusinessService businessService;
 
-
     @Transactional
     public ResProductPostDTO postBy(Long userId, String account, ReqProductPostDTO dto) {
 
@@ -47,11 +46,14 @@ public class ProductService {
         // NOTE : 권한 검증
         validateUserRole(roleForValidation, Set.of(RoleType.MASTER, RoleType.HUB_MANAGER, RoleType.BUSINESS_MANAGER));
 
-        // NOTE : 허브 관리자 검증
-        validateHubManagerPermissions(userId, dto.getProductDTO().getHubId(), roleForValidation);
-
-        // NOTE : 업체 담당자 검증
-        validateBusinessManagerPermissions(userId, dto.getProductDTO().getBusinessId(), roleForValidation);
+        switch (roleForValidation) {
+            case RoleType.HUB_MANAGER ->
+                // NOTE : 허브 관리자 검증
+                    validateHubManagerHubAssignment(userId, dto.getProductDTO().getHubId());
+            case RoleType.BUSINESS_MANAGER ->
+                // NOTE : 업체 담당자 검증
+                    validateBusinessManagerBusinessAssignment(userId, dto.getProductDTO().getBusinessId());
+        }
 
         // NOTE : 업체 유효성 검증
         validateBusiness(dto.getProductDTO().getBusinessId());
@@ -69,27 +71,8 @@ public class ProductService {
         }
     }
 
-    private void validateHubManagerPermissions(Long userId, Long hubId, String roleForValidation) {
-        if (Objects.equals(RoleType.HUB_MANAGER, roleForValidation)) {
-            Long hubIdForChecking = hubService.getHubIdBy(userId);
-
-            if (hubIdForChecking == null) {
-                throw new IllegalArgumentException("사용자가 담당하는 허브를 찾을 수 없습니다.");
-            }
-
-            validateHubManagerHubAssignment(hubIdForChecking, hubId);
-        }
-    }
-
-    private void validateBusinessManagerPermissions(Long userId, Long businessId, String roleForValidation) {
-        if (Objects.equals(RoleType.BUSINESS_MANAGER, roleForValidation)) {
-            validateBusinessManagerBusinessAssignment(userId, businessId);
-        }
-    }
-
-
-    private static void validateHubManagerHubAssignment(Long hubIdForChecking, Long reqHubId) {
-        if (!Objects.equals(hubIdForChecking, reqHubId)) {
+    private void validateHubManagerHubAssignment(Long userId, Long reqHubId) {
+        if (!Objects.equals(hubService.getHubIdBy(userId), reqHubId)) {
             throw new IllegalArgumentException("본인이 속한 허브가 아닙니다.");
         }
     }
@@ -117,6 +100,4 @@ public class ProductService {
             throw new IllegalArgumentException("이미 존재하는 상품명입니다.");
         }
     }
-
-
 }
