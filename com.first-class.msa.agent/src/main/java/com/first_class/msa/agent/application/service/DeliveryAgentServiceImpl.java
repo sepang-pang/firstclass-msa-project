@@ -256,7 +256,7 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 	}
 
 
-	// 추후 삭제 추가시 로직
+
 	private DeliveryAgent findById(Long deliveryAgentId) {
 		return deliveryAgentRepository.findById(deliveryAgentId).orElseThrow(
 			() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOT_FOUND_DELIVERY_AGENT))
