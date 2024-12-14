@@ -106,10 +106,16 @@ public class DeliveryAgent {
 			.build();
 	}
 
-	public void updateDeliveryAgent(IsAvailable isAvailable, String slackId, Type type){
+	public void updateDeliveryAgent(IsAvailable isAvailable, String slackId, Type type, Long userId){
 		this.isAvailable = isAvailable != null ? isAvailable : this.isAvailable;
 		this.slackId = slackId != null ? slackId : this.slackId;
 		this.type = type != null ? type : this.type;
+		this.setUpdatedBy(userId);
+	}
+
+	public void deleteDeliveryAgent(Long userId){
+		this.setDeletedAt(LocalDateTime.now());
+		this.setDeletedBy(userId);
 	}
 
 }

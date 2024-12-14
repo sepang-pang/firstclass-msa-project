@@ -3,6 +3,7 @@ package com.first_class.msa.agent.presentation.controller;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -114,6 +115,21 @@ public class AgentController {
 		deliveryAgentService.putBy(userId, deliveryAgentId, reqDeliveryAgentPutDTO);
 		return new ResponseEntity<>(ResDTO.<Void>builder()
 			.code(HttpStatus.OK.value())
+			.message("배송 담당자 정보 수정 성공")
+			.build(),
+			HttpStatus.OK
+		);
+	}
+
+	@DeleteMapping("/{deliveryAgentId}")
+	public ResponseEntity<ResDTO<Void>> deleteBy(
+		@PathVariable(name = "deliveryAgentId") Long deliveryAgentId,
+		@RequestHeader(name = "X-User-Id") Long userId
+	) {
+		deliveryAgentService.deleteBy(userId, deliveryAgentId);
+		return new ResponseEntity<>(ResDTO.<Void>builder()
+			.code(HttpStatus.OK.value())
+			.message("배송 담당자 정보 삭제 성공")
 			.build(),
 			HttpStatus.OK
 		);

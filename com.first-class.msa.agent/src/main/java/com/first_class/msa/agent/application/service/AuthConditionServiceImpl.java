@@ -71,7 +71,7 @@ public class AuthConditionServiceImpl implements AuthConditionService {
 
 
 	@Override
-	public void validateUpdateUserRole(UserRole userRole, Long userId, DeliveryAgent deliveryAgent) {
+	public void validateUpdateAndDeleteUserRole(UserRole userRole, Long userId, DeliveryAgent deliveryAgent) {
 
 		switch (userRole) {
 			case MASTER-> {

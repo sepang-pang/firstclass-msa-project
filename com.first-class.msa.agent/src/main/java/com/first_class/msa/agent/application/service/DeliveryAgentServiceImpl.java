@@ -1,6 +1,7 @@
 package com.first_class.msa.agent.application.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -199,14 +200,13 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 		return ResHubDeliveryAgentDto.from(assignedAgent.getId());
 	}
 
-	// TODO: 2024-12-14 배송 관리자 삭제 및 수정 추가
 
 	@Override
 	@Transactional
 	public void putBy(Long userId, Long deliveryAgentId, ReqDeliveryAgentPutDTO reqDeliveryAgentPutDTO) {
 		ResRoleGetByIdDTO resRoleGetByIdDTO = authService.getRoleBy(userId);
 		DeliveryAgent deliveryAgent = findById(deliveryAgentId);
-		authConditionService.validateUpdateUserRole(
+		authConditionService.validateUpdateAndDeleteUserRole(
 			UserRole.valueOf(resRoleGetByIdDTO.getRole()),
 			userId,
 			deliveryAgent);
@@ -214,23 +214,49 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 		deliveryAgent.updateDeliveryAgent(
 			reqDeliveryAgentPutDTO.getIsAvailable(),
 			reqDeliveryAgentPutDTO.getSlackId(),
-			reqDeliveryAgentPutDTO.getType());
+			reqDeliveryAgentPutDTO.getType(),
+			userId
+			);
 
 	}
 
-	// 추후 삭제 추가시 로직
+	@Override
+	@Transactional
+	public void deleteBy(Long userId, Long deliveryAgentId){
+		ResRoleGetByIdDTO resRoleGetByIdDTO = authService.getRoleBy(userId);
+		DeliveryAgent deliveryAgent = findById(deliveryAgentId);
+		authConditionService.validateUpdateAndDeleteUserRole(
+			UserRole.valueOf(resRoleGetByIdDTO.getRole()),
+			userId,
+			deliveryAgent);
 
-	// @Override
-	// @Transactional
-	// public void updateGlobalDeliveryAgents(List<DeliveryAgent> updatedAgents) {
-	// 	deliveryAgentCacheService.saveGlobalAgentList(updatedAgents);
-	// }
-	//
-	// @Override
-	// @Transactional
-	// public void updateHubDeliveryAgents(Long hubId, List<DeliveryAgent> updatedAgents) {
-	// 	deliveryAgentCacheService.saveGlobalAgentList(hubId, updatedAgents);
-	// }
+		deliveryAgent.deleteDeliveryAgent(userId);
+		updateCacheAfterDeletion(deliveryAgent);
+
+	}
+
+	private void updateCacheAfterDeletion(DeliveryAgent deliveryAgent) {
+		if (deliveryAgent.getType().equals(Type.HUB_AGENT)) {
+			// 허브 간 담당자
+			List<DeliveryAgent> agentList = deliveryAgentCacheService.getGlobalAgentList();
+			agentList = agentList.stream()
+				.filter(agent -> !agent.getId().equals(deliveryAgent.getId()))
+				.collect(Collectors.toList());
+
+			deliveryAgentCacheService.saveGlobalAgentList(agentList);
+		} else {
+			// 허브 단위 담당자
+			Long hubId = deliveryAgent.getHubId();
+			List<DeliveryAgent> agentList = deliveryAgentCacheService.getHubAgentList(hubId);
+			agentList = agentList.stream()
+				.filter(agent -> !agent.getId().equals(deliveryAgent.getId()))
+				.collect(Collectors.toList());
+			deliveryAgentCacheService.saveHubAgentList(hubId, agentList);
+		}
+	}
+
+
+	// 추후 삭제 추가시 로직
 	private DeliveryAgent findById(Long deliveryAgentId) {
 		return deliveryAgentRepository.findById(deliveryAgentId).orElseThrow(
 			() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOT_FOUND_DELIVERY_AGENT))

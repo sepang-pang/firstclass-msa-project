@@ -10,7 +10,8 @@ public interface AuthConditionService {
 	void validateSearchUserRole(UserRole userRole, Long userId, Long hubId);
 
 	void validateSearchDetailUserRole(UserRole userRole, Long userId, DeliveryAgent deliveryAgent);
-	void validateUpdateUserRole(UserRole userRole, Long userId, DeliveryAgent deliveryAgent);
+	void validateUpdateAndDeleteUserRole(UserRole userRole, Long userId, DeliveryAgent deliveryAgent);
+
 
 
 

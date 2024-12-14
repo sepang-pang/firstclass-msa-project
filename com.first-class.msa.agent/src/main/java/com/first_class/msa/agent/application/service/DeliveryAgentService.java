@@ -28,4 +28,5 @@ public interface DeliveryAgentService {
 	ResHubDeliveryAgentDto assignHubDeliveryAgent(Long hubId);
 
 	void putBy(Long userId, Long deliveryAgentId, ReqDeliveryAgentPutDTO reqDeliveryAgentPutDTO);
+	void deleteBy(Long userId, Long deliveryAgentId);
 }
