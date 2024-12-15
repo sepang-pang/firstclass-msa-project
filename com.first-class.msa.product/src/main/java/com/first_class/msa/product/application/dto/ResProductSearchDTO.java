@@ -52,7 +52,6 @@ public class ResProductSearchDTO {
             private String name;
             private int price;
             private int quantity;
-            private LocalDateTime createdAt;
 
             public static List<ProductDTO> from(List<Product> productList) {
                 return productList.stream()
@@ -68,7 +67,6 @@ public class ResProductSearchDTO {
                         .name(product.getName())
                         .price(product.getPrice())
                         .quantity(product.getQuantity())
-                        .createdAt(product.getCreatedAt())
                         .build();
             }
 
