@@ -23,12 +23,12 @@ public class HubTransitInfo {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "arrival_hub_id", referencedColumnName = "hub_id")
-    private Hub arrivalHub;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "departure_hub_id", referencedColumnName = "hub_id")
     private Hub departureHub;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "arrival_hub_id", referencedColumnName = "hub_id")
+    private Hub arrivalHub;
 
     @Column(name = "transit_time")
     private Duration transitTime;
@@ -57,28 +57,28 @@ public class HubTransitInfo {
     private String deletedBy;
 
     @Builder
-    public HubTransitInfo(Hub arrivalHub, Hub departureHub, Duration transitTime, double distance, String account) {
-        this.arrivalHub = arrivalHub;
+    public HubTransitInfo(Hub departureHub, Hub arrivalHub, Duration transitTime, double distance, String account) {
         this.departureHub = departureHub;
+        this.arrivalHub = arrivalHub;
         this.transitTime = transitTime;
         this.distance = distance;
         this.createdBy = account;
         this.modifiedBy = account;
     }
 
-    public static HubTransitInfo createHubTransitInfo(Hub arrivalHub, Hub departureHub, Duration transitTime, double distance, String account) {
+    public static HubTransitInfo createHubTransitInfo(Hub departureHub, Hub arrivalHub, Duration transitTime, double distance, String account) {
         return HubTransitInfo.builder()
-                .arrivalHub(arrivalHub)
                 .departureHub(departureHub)
+                .arrivalHub(arrivalHub)
                 .transitTime(transitTime)
                 .distance(distance)
                 .account(account)
                 .build();
     }
 
-    public void updateHubTransitInfo(Hub arrivalHub, Hub departureHub, Duration transitTime, double distance, String account) {
-        this.arrivalHub = arrivalHub;
+    public void updateHubTransitInfo(Hub departureHub, Hub arrivalHub, Duration transitTime, double distance, String account) {
         this.departureHub = departureHub;
+        this.arrivalHub = arrivalHub;
         this.transitTime = transitTime;
         this.distance = distance;
         this.modifiedBy = account;
