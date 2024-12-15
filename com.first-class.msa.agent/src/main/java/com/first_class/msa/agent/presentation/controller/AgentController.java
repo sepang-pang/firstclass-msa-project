@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.first_class.msa.agent.application.dto.ResDTO;
 import com.first_class.msa.agent.application.dto.ResDeliveryAgentDTO;
 import com.first_class.msa.agent.application.dto.ResDeliveryAgentSearchDTO;
-import com.first_class.msa.agent.application.dto.ResGlobalDeliveryAgentDto;
+import com.first_class.msa.agent.application.dto.ResGlobalDeliveryAgentDTO;
 import com.first_class.msa.agent.application.dto.ResHubDeliveryAgentDto;
 import com.first_class.msa.agent.application.service.DeliveryAgentService;
 import com.first_class.msa.agent.domain.common.IsAvailable;
@@ -82,30 +82,6 @@ public class AgentController {
 		);
 	}
 
-	@PostMapping("/external/global")
-	public ResponseEntity<ResDTO<ResGlobalDeliveryAgentDto>> assignGlobalAgent() {
-		return new ResponseEntity<>(ResDTO.<ResGlobalDeliveryAgentDto>builder()
-			.code(HttpStatus.OK.value())
-			.message("허브간 배송 관리자 요청 완료")
-			.data(deliveryAgentService.assignGlobalDeliveryAgent())
-			.build()
-			, HttpStatus.OK
-		);
-	}
-
-	@PostMapping("/external/hub/{hubId}")
-	public ResponseEntity<ResDTO<ResHubDeliveryAgentDto>> assignHubAgent(
-		@PathVariable Long hubId
-	) {
-		return new ResponseEntity<>(ResDTO.<ResHubDeliveryAgentDto>builder()
-			.code(HttpStatus.OK.value())
-			.message("허브간 배송 관리자 요청 완료")
-			.data(deliveryAgentService.assignHubDeliveryAgent(hubId))
-			.build()
-			, HttpStatus.OK
-		);
-	}
-
 	@PutMapping("/{deliveryAgentId}")
 	public ResponseEntity<ResDTO<Void>> putBy(
 		@PathVariable(name = "deliveryAgentId") Long deliveryAgentId,
@@ -132,6 +108,30 @@ public class AgentController {
 			.message("배송 담당자 정보 삭제 성공")
 			.build(),
 			HttpStatus.OK
+		);
+	}
+
+	@PostMapping("/external/global")
+	public ResponseEntity<ResDTO<ResGlobalDeliveryAgentDTO>> assignGlobalAgent() {
+		return new ResponseEntity<>(ResDTO.<ResGlobalDeliveryAgentDTO>builder()
+			.code(HttpStatus.OK.value())
+			.message("허브간 배송 관리자 요청 완료")
+			.data(deliveryAgentService.assignGlobalDeliveryAgent())
+			.build()
+			, HttpStatus.OK
+		);
+	}
+
+	@PostMapping("/external/hub/{hubId}")
+	public ResponseEntity<ResDTO<ResHubDeliveryAgentDto>> assignHubAgent(
+		@PathVariable Long hubId
+	) {
+		return new ResponseEntity<>(ResDTO.<ResHubDeliveryAgentDto>builder()
+			.code(HttpStatus.OK.value())
+			.message("허브간 배송 관리자 요청 완료")
+			.data(deliveryAgentService.assignHubDeliveryAgent(hubId))
+			.build()
+			, HttpStatus.OK
 		);
 	}
 
