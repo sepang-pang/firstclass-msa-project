@@ -3,11 +3,13 @@ package com.first_class.msa.hub.domain.model;
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Entity
@@ -29,7 +31,7 @@ public class HubTransitInfo {
     private Hub departureHub;
 
     @Column(name = "transit_time")
-    private LocalDateTime transitTime;
+    private Duration transitTime;
 
     @Column(name = "distance")
     private double distance;
@@ -53,4 +55,38 @@ public class HubTransitInfo {
 
     @Column(name = "deleted_by")
     private String deletedBy;
+
+    @Builder
+    public HubTransitInfo(Hub arrivalHub, Hub departureHub, Duration transitTime, double distance, String account) {
+        this.arrivalHub = arrivalHub;
+        this.departureHub = departureHub;
+        this.transitTime = transitTime;
+        this.distance = distance;
+        this.createdBy = account;
+        this.modifiedBy = account;
+    }
+
+    public static HubTransitInfo createHubTransitInfo(Hub arrivalHub, Hub departureHub, Duration transitTime, double distance, String account) {
+        return HubTransitInfo.builder()
+                .arrivalHub(arrivalHub)
+                .departureHub(departureHub)
+                .transitTime(transitTime)
+                .distance(distance)
+                .account(account)
+                .build();
+    }
+
+    public void updateHubTransitInfo(Hub arrivalHub, Hub departureHub, Duration transitTime, double distance, String account) {
+        this.arrivalHub = arrivalHub;
+        this.departureHub = departureHub;
+        this.transitTime = transitTime;
+        this.distance = distance;
+        this.modifiedBy = account;
+    }
+
+    public void deleteHubTransitInfo(String account) {
+        this.deletedBy = account;
+        this.modifiedBy = account;
+        this.deletedAt = LocalDateTime.now();
+    }
 }
