@@ -45,14 +45,11 @@ public class Delivery extends BaseTime{
 	@Column(name = "arrival_hu_id", nullable = false)
 	private Long arrivalHubId;
 
-	@Column(name = "userId", nullable = false)
-	private Long userId;
+	@Column(name = "delivery_business_id", nullable = false)
+	private Long deliveryBusinessId;
 
-	@Column(name = "delivery_user_id", nullable = false)
-	private Long deliveryUserId;
-
-	@Column(name = "hub_user_id", nullable = false)
-	private Long hubUserId;
+	@Column(name = "delivery_agent_id")
+	private Long deliveryAgentId;
 
 	@Embedded
 	private Address address;
@@ -66,6 +63,28 @@ public class Delivery extends BaseTime{
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "business_delivery_route_id")
 	private BusinessDeliveryRoute businessDeliveryRoute;
+
+	public static Delivery createDelivery(
+		Long orderId,
+		Long departureHubId,
+		Long arrivalHubId,
+		Long deliveryBusinessId,
+		Address address
+	){
+		return Delivery.builder()
+			.orderId(orderId)
+			.departureHubId(departureHubId)
+			.arrivalHubId(arrivalHubId)
+			.deliveryBusinessId(deliveryBusinessId)
+			.address(address)
+			.deliveryStatus(DeliveryStatus.READY)
+			.build();
+
+	}
+
+	public void updateHubDeliveryRouteList(List<HubDeliveryRoute> hubDeliveryRouteList){
+		this.hubDeliveryRouteList = hubDeliveryRouteList;
+	}
 
 
 

@@ -38,7 +38,7 @@ public class HubDeliveryRoute extends BaseTime{
 	@Column(name = "departure_hub_id", nullable = false)
 	private Long departureHubId;
 
-	@Column(name = "arrival_hu_id", nullable = false)
+	@Column(name = "arrival_hub_id", nullable = false)
 	private Long arrivalHubId;
 
 	@Column(name = "expected_distance", nullable = false)
@@ -58,6 +58,29 @@ public class HubDeliveryRoute extends BaseTime{
 
 	@Embedded
 	private Sequence sequence;
+
+	@Column(name = "Hub_agent_id")
+	private Long hubAgentId;
+
+	public static HubDeliveryRoute createHubDeliveryRoute(
+		Long departureHubId,
+		Long arrivalHubId,
+		Double expectedDistance,
+		LocalDateTime expectedTime,
+		Sequence sequence,
+		Long hubAgentId,
+		Delivery delivery
+	){
+		return HubDeliveryRoute.builder()
+			.departureHubId(departureHubId)
+			.arrivalHubId(arrivalHubId)
+			.expectedDistance(expectedDistance)
+			.expectedTime(expectedTime)
+			.sequence(sequence)
+			.hubAgentId(hubAgentId)
+			.delivery(delivery)
+			.build();
+	}
 
 
 
