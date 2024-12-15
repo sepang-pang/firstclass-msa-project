@@ -30,7 +30,7 @@ public class ResHubTransitInfoPostDTO {
 
         private Long departureHubId;
         private Long arrivalHubId;
-        private Duration transitTime;
+        private Long transitTime;
         private double distance;
 
         public static HubTransitInfoDTO from(HubTransitInfo hubTransitInfo) {
