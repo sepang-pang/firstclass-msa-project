@@ -15,14 +15,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class HubService {
 
     private final HubRepository hubRepository;
+    private final AuthService authService;
 
     @Transactional
-    public ResHubPostDTO postBy(String account, ReqHubPostDTO dto) {
+    public ResHubPostDTO postBy(Long userId, String account, ReqHubPostDTO dto) {
+
+        validateUserRole(userId);
 
         if (isDuplicateHub(dto.getHubDTO().getLatitude(), dto.getHubDTO().getLongitude())) {
             throw new DuplicateRequestException("중복된 좌표의 허브입니다.");
@@ -51,7 +56,9 @@ public class HubService {
     // --
 
     @Transactional
-    public void putBy(String account, Long hubId, ReqHubPutByIdDTO dto) {
+    public void putBy(Long userId, String account, Long hubId, ReqHubPutByIdDTO dto) {
+
+        validateUserRole(userId);
 
         Hub hubForModification = getHubBy(hubId);
 
@@ -59,11 +66,9 @@ public class HubService {
     }
 
     @Transactional
-    public void deleteBy(String account, Long hubId) {
+    public void deleteBy(Long userId, String account, Long hubId) {
 
-        // --
-        // XXX : 삭제 후 해당 허브를 참조하는 테이블 처리 여부 생각하기
-        // --
+        validateUserRole(userId);
 
         Hub hubForDeletion = getHubBy(hubId);
 
@@ -75,6 +80,12 @@ public class HubService {
         return hubRepository.existsByIdAndDeletedAtIsNull(hubId);
     }
 
+
+    private void validateUserRole(Long userId) {
+        if(!Objects.equals("MASTER", authService.getRoleBy(userId).getRole())) {
+            throw new IllegalArgumentException("접근 권한이 없습니다.");
+        }
+    }
 
     private Hub getHubBy(Long hubId) {
         return hubRepository.findByIdAndDeletedAtIsNull(hubId)
