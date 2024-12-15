@@ -1,6 +1,6 @@
 package com.first_class.msa.hub.presentation.controller;
 
-import com.first_class.msa.hub.application.dto.ResDTO;
+import com.first_class.msa.hub.application.dto.SuccessResponseDTO;
 import com.first_class.msa.hub.application.dto.transit.ResHubTransitInfoGetDTO;
 import com.first_class.msa.hub.application.dto.transit.ResHubTransitInfoPostDTO;
 import com.first_class.msa.hub.application.service.HubTransitInfoService;
@@ -22,12 +22,12 @@ public class HubTransitInfoController {
     private final HubTransitInfoService hubTransitInfoService;
 
     @PostMapping("/hub-transit-infos")
-    public ResponseEntity<ResDTO<ResHubTransitInfoPostDTO>> postBy(@RequestHeader("X-User-Id") Long userId,
-                                                                   @RequestHeader("X-User-Account") String account,
-                                                                   @Valid @RequestBody ReqHubTransitInfoPostDTO dto) {
+    public ResponseEntity<SuccessResponseDTO<ResHubTransitInfoPostDTO>> postBy(@RequestHeader("X-User-Id") Long userId,
+                                                                               @RequestHeader("X-User-Account") String account,
+                                                                               @Valid @RequestBody ReqHubTransitInfoPostDTO dto) {
 
         return new ResponseEntity<>(
-                ResDTO.<ResHubTransitInfoPostDTO>builder()
+                SuccessResponseDTO.<ResHubTransitInfoPostDTO>builder()
                         .code(HttpStatus.OK.value())
                         .message("허브 생성에 성공하였습니다.")
                         .data(hubTransitInfoService.postBy(userId, account, dto))
@@ -37,11 +37,11 @@ public class HubTransitInfoController {
     }
 
     @GetMapping("/hub-transit-infos")
-    public ResponseEntity<ResDTO<ResHubTransitInfoGetDTO>> getBy(@RequestParam(name = "departureHubId") Long departureHubId,
-                                                                 @RequestParam(name = "arrivalHubId") Long arrivalHubId) {
+    public ResponseEntity<SuccessResponseDTO<ResHubTransitInfoGetDTO>> getBy(@RequestParam(name = "departureHubId") Long departureHubId,
+                                                                             @RequestParam(name = "arrivalHubId") Long arrivalHubId) {
 
         return new ResponseEntity<>(
-                ResDTO.<ResHubTransitInfoGetDTO>builder()
+                SuccessResponseDTO.<ResHubTransitInfoGetDTO>builder()
                         .code(HttpStatus.OK.value())
                         .message("허브 이동 정보 조회에 성공하였습니다.")
                         .data(hubTransitInfoService.getBy(departureHubId, arrivalHubId))
@@ -51,16 +51,16 @@ public class HubTransitInfoController {
     }
 
     @PutMapping("/hub-transit-infos/{hubTransitInfoId}")
-    public ResponseEntity<ResDTO<Objects>> putBy(@RequestHeader("X-User-Id") Long userId,
-                                                 @RequestHeader("X-User-Account") String account,
-                                                 @Valid @RequestBody ReqHubTransitInfoPutByIdDTO dto,
-                                                 @PathVariable(name = "hubTransitInfoId") Long hubTransitInfoId) {
+    public ResponseEntity<SuccessResponseDTO<Objects>> putBy(@RequestHeader("X-User-Id") Long userId,
+                                                             @RequestHeader("X-User-Account") String account,
+                                                             @Valid @RequestBody ReqHubTransitInfoPutByIdDTO dto,
+                                                             @PathVariable(name = "hubTransitInfoId") Long hubTransitInfoId) {
 
 
         hubTransitInfoService.putBy(userId, account, hubTransitInfoId, dto);
 
         return new ResponseEntity<>(
-                ResDTO.<Objects>builder()
+                SuccessResponseDTO.<Objects>builder()
                         .code(HttpStatus.OK.value())
                         .message("허브 이동 정보 수정에 성공하였습니다.")
                         .build(),
@@ -69,14 +69,14 @@ public class HubTransitInfoController {
     }
 
     @DeleteMapping("/hub-transit-infos/{hubTransitInfoId}")
-    public ResponseEntity<ResDTO<Objects>> deleteBy(@RequestHeader("X-User-Id") Long userId,
-                                                    @RequestHeader("X-User-Account") String account,
-                                                    @PathVariable(name = "hubTransitInfoId") Long hubTransitInfoId) {
+    public ResponseEntity<SuccessResponseDTO<Objects>> deleteBy(@RequestHeader("X-User-Id") Long userId,
+                                                                @RequestHeader("X-User-Account") String account,
+                                                                @PathVariable(name = "hubTransitInfoId") Long hubTransitInfoId) {
 
         hubTransitInfoService.deleteBy(userId, account, hubTransitInfoId);
 
         return new ResponseEntity<>(
-                ResDTO.<Objects>builder()
+                SuccessResponseDTO.<Objects>builder()
                         .code(HttpStatus.OK.value())
                         .message("허브 이동 정보 삭제에 성공하였습니다.")
                         .build(),
