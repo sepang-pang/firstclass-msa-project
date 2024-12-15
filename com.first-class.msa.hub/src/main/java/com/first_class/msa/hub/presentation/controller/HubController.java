@@ -1,13 +1,11 @@
 package com.first_class.msa.hub.presentation.controller;
 
-import com.first_class.msa.hub.application.dto.external.ResRoleGetByUserIdDTO;
 import com.first_class.msa.hub.application.dto.ResDTO;
 import com.first_class.msa.hub.application.dto.ResHubPostDTO;
 import com.first_class.msa.hub.application.dto.ResHubSearchDTO;
 import com.first_class.msa.hub.application.service.AuthService;
 import com.first_class.msa.hub.application.service.HubService;
 import com.first_class.msa.hub.domain.model.Hub;
-import com.first_class.msa.hub.infrastructure.client.AuthClient;
 import com.first_class.msa.hub.presentation.request.ReqHubPostDTO;
 import com.first_class.msa.hub.presentation.request.ReqHubPutByIdDTO;
 import com.querydsl.core.types.Predicate;
