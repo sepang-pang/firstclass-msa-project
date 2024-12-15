@@ -15,28 +15,25 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class HubService {
 
     private final HubRepository hubRepository;
+    private final AuthService authService;
 
     @Transactional
-    public ResHubPostDTO postBy(String account, ReqHubPostDTO dto) {
+    public ResHubPostDTO postBy(Long userId, String account, ReqHubPostDTO dto) {
 
-        if (isDuplicateHub(dto.getHubDTO().getLatitude(), dto.getHubDTO().getLongitude())) {
-            throw new DuplicateRequestException("중복된 좌표의 허브입니다.");
-        }
+        validateHubCreationProcess(userId, dto);
 
         Hub hubForSaving = Hub.createHub(account, dto);
 
         return ResHubPostDTO.of(hubRepository.save(hubForSaving));
     }
 
-
-    // --
-    // XXX : 페이징 검색 기능에 캐싱은 필요할까 ? : 캐시 히트율이 높지 않을 거 같다.
-    // --
     @Transactional(readOnly = true)
     @Cacheable(value = "hubSearchCache", key = "#predicate.hashCode() + '-' + #pageable.pageNumber + '-' + #pageable.pageSize")
     public ResHubSearchDTO searchBy(Predicate predicate, Pageable pageable) {
@@ -51,7 +48,9 @@ public class HubService {
     // --
 
     @Transactional
-    public void putBy(String account, Long hubId, ReqHubPutByIdDTO dto) {
+    public void putBy(Long userId, String account, Long hubId, ReqHubPutByIdDTO dto) {
+
+        validateUserRole(userId);
 
         Hub hubForModification = getHubBy(hubId);
 
@@ -59,11 +58,9 @@ public class HubService {
     }
 
     @Transactional
-    public void deleteBy(String account, Long hubId) {
+    public void deleteBy(Long userId, String account, Long hubId) {
 
-        // --
-        // XXX : 삭제 후 해당 허브를 참조하는 테이블 처리 여부 생각하기
-        // --
+        validateUserRole(userId);
 
         Hub hubForDeletion = getHubBy(hubId);
 
@@ -75,18 +72,39 @@ public class HubService {
         return hubRepository.existsByIdAndDeletedAtIsNull(hubId);
     }
 
-
-    private Hub getHubBy(Long hubId) {
-        return hubRepository.findByIdAndDeletedAtIsNull(hubId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 허브입니다."));
+    @Transactional(readOnly = true)
+    public Long getHubIdBy(Long userId) {
+        return hubRepository.findByManagerIdAndDeletedAtIsNull(userId);
     }
 
+
+
+
+    private void validateHubCreationProcess(Long userId, ReqHubPostDTO dto) {
+        validateUserRole(userId);
+
+        validateDuplicateHub(dto.getHubDTO().getLatitude(), dto.getHubDTO().getLongitude());
+    }
+
+
+    private void validateUserRole(Long userId) {
+        if(!Objects.equals("MASTER", authService.getRoleBy(userId).getRole())) {
+            throw new IllegalArgumentException("접근 권한이 없습니다.");
+        }
+    }
+
+    private void validateDuplicateHub(double latitude, double longitude) {
+        if (isDuplicateHub(latitude, longitude)) {
+            throw new DuplicateRequestException("중복된 좌표의 허브입니다.");
+        }
+    }
 
     private boolean isDuplicateHub(double latitude, double longitude) {
         return hubRepository.existsByLatitudeAndLongitudeAndDeletedIsNull(latitude, longitude);
     }
 
-    public Long getHubIdBy(Long userId) {
-        return hubRepository.findByManagerIdAndDeletedAtIsNull(userId);
+    private Hub getHubBy(Long hubId) {
+        return hubRepository.findByIdAndDeletedAtIsNull(hubId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 허브입니다."));
     }
 }
