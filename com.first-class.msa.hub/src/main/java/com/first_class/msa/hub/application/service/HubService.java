@@ -27,21 +27,13 @@ public class HubService {
     @Transactional
     public ResHubPostDTO postBy(Long userId, String account, ReqHubPostDTO dto) {
 
-        validateUserRole(userId);
-
-        if (isDuplicateHub(dto.getHubDTO().getLatitude(), dto.getHubDTO().getLongitude())) {
-            throw new DuplicateRequestException("중복된 좌표의 허브입니다.");
-        }
+        validateHubCreationProcess(userId, dto);
 
         Hub hubForSaving = Hub.createHub(account, dto);
 
         return ResHubPostDTO.of(hubRepository.save(hubForSaving));
     }
 
-
-    // --
-    // XXX : 페이징 검색 기능에 캐싱은 필요할까 ? : 캐시 히트율이 높지 않을 거 같다.
-    // --
     @Transactional(readOnly = true)
     @Cacheable(value = "hubSearchCache", key = "#predicate.hashCode() + '-' + #pageable.pageNumber + '-' + #pageable.pageSize")
     public ResHubSearchDTO searchBy(Predicate predicate, Pageable pageable) {
@@ -80,6 +72,20 @@ public class HubService {
         return hubRepository.existsByIdAndDeletedAtIsNull(hubId);
     }
 
+    @Transactional(readOnly = true)
+    public Long getHubIdBy(Long userId) {
+        return hubRepository.findByManagerIdAndDeletedAtIsNull(userId);
+    }
+
+
+
+
+    private void validateHubCreationProcess(Long userId, ReqHubPostDTO dto) {
+        validateUserRole(userId);
+
+        validateDuplicateHub(dto.getHubDTO().getLatitude(), dto.getHubDTO().getLongitude());
+    }
+
 
     private void validateUserRole(Long userId) {
         if(!Objects.equals("MASTER", authService.getRoleBy(userId).getRole())) {
@@ -87,17 +93,18 @@ public class HubService {
         }
     }
 
-    private Hub getHubBy(Long hubId) {
-        return hubRepository.findByIdAndDeletedAtIsNull(hubId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 허브입니다."));
+    private void validateDuplicateHub(double latitude, double longitude) {
+        if (isDuplicateHub(latitude, longitude)) {
+            throw new DuplicateRequestException("중복된 좌표의 허브입니다.");
+        }
     }
-
 
     private boolean isDuplicateHub(double latitude, double longitude) {
         return hubRepository.existsByLatitudeAndLongitudeAndDeletedIsNull(latitude, longitude);
     }
 
-    public Long getHubIdBy(Long userId) {
-        return hubRepository.findByManagerIdAndDeletedAtIsNull(userId);
+    private Hub getHubBy(Long hubId) {
+        return hubRepository.findByIdAndDeletedAtIsNull(hubId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 허브입니다."));
     }
 }
