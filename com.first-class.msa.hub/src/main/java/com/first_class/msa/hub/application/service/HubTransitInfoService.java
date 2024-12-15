@@ -11,6 +11,7 @@ import com.first_class.msa.hub.domain.repository.HubTransitInfoRepository;
 import com.first_class.msa.hub.presentation.request.transit.ReqHubTransitInfoPostDTO;
 import com.first_class.msa.hub.presentation.request.transit.ReqHubTransitInfoPutByIdDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,6 +71,7 @@ public class HubTransitInfoService {
     }
 
     @Transactional
+    @CacheEvict(cacheNames = "hubTransitCache", allEntries = true)
     public void putBy(Long userId, String account, Long hubTransitInfoId, ReqHubTransitInfoPutByIdDTO dto) {
         // NOTE : 권한 검증
         validateUserRole(userId);
@@ -110,6 +112,7 @@ public class HubTransitInfoService {
     }
 
     @Transactional
+    @CacheEvict(cacheNames = "hubTransitCache", allEntries = true)
     public void deleteBy(Long userId, String account, Long hubTransitInfoId) {
         // NOTE : 권한 검증
         validateUserRole(userId);
