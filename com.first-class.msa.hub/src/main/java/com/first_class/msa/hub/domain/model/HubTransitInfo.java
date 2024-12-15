@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Entity
@@ -19,7 +18,7 @@ import java.time.LocalDateTime;
 public class HubTransitInfo {
 
     @Id @Tsid
-    @Column(name = "hub_id")
+    @Column(name = "hub_transit_info_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -31,7 +30,7 @@ public class HubTransitInfo {
     private Hub arrivalHub;
 
     @Column(name = "transit_time")
-    private Duration transitTime;
+    private Long transitTime;
 
     @Column(name = "distance")
     private double distance;
@@ -57,7 +56,7 @@ public class HubTransitInfo {
     private String deletedBy;
 
     @Builder
-    public HubTransitInfo(Hub departureHub, Hub arrivalHub, Duration transitTime, double distance, String account) {
+    public HubTransitInfo(Hub departureHub, Hub arrivalHub, Long transitTime, double distance, String account) {
         this.departureHub = departureHub;
         this.arrivalHub = arrivalHub;
         this.transitTime = transitTime;
@@ -66,7 +65,7 @@ public class HubTransitInfo {
         this.modifiedBy = account;
     }
 
-    public static HubTransitInfo createHubTransitInfo(Hub departureHub, Hub arrivalHub, Duration transitTime, double distance, String account) {
+    public static HubTransitInfo createHubTransitInfo(Hub departureHub, Hub arrivalHub, Long transitTime, double distance, String account) {
         return HubTransitInfo.builder()
                 .departureHub(departureHub)
                 .arrivalHub(arrivalHub)
@@ -76,7 +75,7 @@ public class HubTransitInfo {
                 .build();
     }
 
-    public void updateHubTransitInfo(Hub departureHub, Hub arrivalHub, Duration transitTime, double distance, String account) {
+    public void updateHubTransitInfo(Hub departureHub, Hub arrivalHub, Long transitTime, double distance, String account) {
         this.departureHub = departureHub;
         this.arrivalHub = arrivalHub;
         this.transitTime = transitTime;
