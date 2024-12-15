@@ -1,9 +1,10 @@
 package com.first_class.msa.hub.presentation.controller;
 
-import com.first_class.msa.hub.application.dto.ReqRoleValidationDTO;
+import com.first_class.msa.hub.application.dto.external.ResRoleGetByUserIdDTO;
 import com.first_class.msa.hub.application.dto.ResDTO;
 import com.first_class.msa.hub.application.dto.ResHubPostDTO;
 import com.first_class.msa.hub.application.dto.ResHubSearchDTO;
+import com.first_class.msa.hub.application.service.AuthService;
 import com.first_class.msa.hub.application.service.HubService;
 import com.first_class.msa.hub.domain.model.Hub;
 import com.first_class.msa.hub.infrastructure.client.AuthClient;
@@ -20,25 +21,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @RestController
 @RequiredArgsConstructor
 public class HubController {
 
     private final HubService hubService;
-    private final AuthClient authClient;
+    private final AuthService authService;
 
     @PostMapping("/hubs")
     public ResponseEntity<ResDTO<ResHubPostDTO>> postBy(@RequestHeader("X-User-Id") Long userId,
                                                         @RequestHeader("X-User-Account") String account,
                                                         @Valid @RequestBody ReqHubPostDTO req) {
 
-        if (!authClient.checkBy(userId, ReqRoleValidationDTO.from("MANAGER"))) {
-            throw new IllegalArgumentException("관리자가 아닙니다. 접근 권한이 없습니다.");
-        }
+        validateUserRole(userId);
 
-        if (!authClient.checkBy(req.getHubDTO().getManagerId(), ReqRoleValidationDTO.from("HUB_MANAGER"))) {
-            throw new IllegalArgumentException("허브 관리자가 아닙니다.");
-        }
 
         return new ResponseEntity<>(
                 ResDTO.<ResHubPostDTO>builder()
@@ -71,13 +69,10 @@ public class HubController {
                                                 @PathVariable(name = "hubId") Long hubId,
                                                 @Valid @RequestBody ReqHubPutByIdDTO dto) {
 
-        // --
-        // TODO : MASTER 권한 검증
-        // --
+        validateUserRole(userId);
         // --
         // TODO : DataIntegrityViolationException 예외처리
         // --
-
         hubService.putBy(account, hubId, dto);
 
         return new ResponseEntity<>(
@@ -94,9 +89,7 @@ public class HubController {
                                                    @RequestHeader("X-User-Account") String account,
                                                    @PathVariable(name = "hubId") Long hubId) {
 
-        // --
-        // TODO : MASTER 권한 검증
-        // --
+        validateUserRole(userId);
 
         hubService.deleteBy(account, hubId);
 
@@ -107,5 +100,11 @@ public class HubController {
                         .build(),
                 HttpStatus.OK
         );
+    }
+
+    private void validateUserRole(Long userId) {
+        if(!Objects.equals("MASTER", authService.getRoleBy(userId).getRole())) {
+            throw new IllegalArgumentException("접근 권한이 없습니다.");
+        }
     }
 }
