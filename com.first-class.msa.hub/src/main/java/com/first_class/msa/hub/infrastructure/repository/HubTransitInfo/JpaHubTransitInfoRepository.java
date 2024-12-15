@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface JpaHubTransitInfoRepository extends JpaRepository<HubTransitInfo, Long> {
 
@@ -19,4 +20,6 @@ public interface JpaHubTransitInfoRepository extends JpaRepository<HubTransitInf
 
 
     List<HubTransitInfo> findAllByDeletedAtIsNull();
+
+    Optional<HubTransitInfo> findByIdAndDeletedAtIsNull(Long id);
 }
