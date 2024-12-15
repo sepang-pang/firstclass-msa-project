@@ -67,4 +67,20 @@ public class HubTransitInfoController {
                 HttpStatus.OK
         );
     }
+
+    @DeleteMapping("/hub-transit-infos/{hubTransitInfoId}")
+    public ResponseEntity<ResDTO<Objects>> deleteBy(@RequestHeader("X-User-Id") Long userId,
+                                                    @RequestHeader("X-User-Account") String account,
+                                                    @PathVariable(name = "hubTransitInfoId") Long hubTransitInfoId) {
+
+        hubTransitInfoService.deleteBy(userId, account, hubTransitInfoId);
+
+        return new ResponseEntity<>(
+                ResDTO.<Objects>builder()
+                        .code(HttpStatus.OK.value())
+                        .message("허브 이동 정보 삭제에 성공하였습니다.")
+                        .build(),
+                HttpStatus.OK
+        );
+    }
 }

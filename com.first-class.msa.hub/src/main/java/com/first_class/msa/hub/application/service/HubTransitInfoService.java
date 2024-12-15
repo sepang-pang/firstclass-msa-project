@@ -109,6 +109,16 @@ public class HubTransitInfoService {
         }
     }
 
+    @Transactional
+    public void deleteBy(Long userId, String account, Long hubTransitInfoId) {
+        // NOTE : 권한 검증
+        validateUserRole(userId);
+
+        HubTransitInfo hubTransitInfoForDeletion = getHubTransitInfoBy(hubTransitInfoId);
+
+        hubTransitInfoForDeletion.deleteHubTransitInfo(account);
+    }
+
     private void validateUserRole(Long userId) {
         if (!Objects.equals("MASTER", authService.getRoleBy(userId).getRole())) {
             throw new IllegalArgumentException("접근 권한이 없습니다.");
