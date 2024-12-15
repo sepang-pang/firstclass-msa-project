@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.first_class.msa.delivery.application.dto.ResRoleGetByIdDTO;
-import com.first_class.msa.delivery.domain.common.HubStatus;
 import com.first_class.msa.delivery.domain.common.UserRole;
 import com.first_class.msa.delivery.domain.model.BusinessDeliveryRoute;
 import com.first_class.msa.delivery.domain.model.Delivery;
@@ -17,6 +16,8 @@ import com.first_class.msa.delivery.infrastructure.config.RabbitMQConfig;
 import com.first_class.msa.delivery.infrastructure.event.OrderCreateDeliveryEvent;
 import com.first_class.msa.delivery.libs.exception.ApiException;
 import com.first_class.msa.delivery.libs.message.ErrorMessage;
+import com.first_class.msa.delivery.presentation.dto.ReqBusinessDeliveryPutDTO;
+import com.first_class.msa.delivery.presentation.dto.ReqHubDeliveryPutDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -43,30 +44,58 @@ public class DeliveryServiceImpl implements DeliveryService {
 		List<HubDeliveryRoute> hubDeliveryRouteList = hubDeliveryService.CreateHubDeliveryRoute(delivery);
 		BusinessDeliveryRoute businessDeliveryRoute
 			= businessDeliveryService.createBusinessDeliveryRoute(
-				event.getArrivalHubId(),
-				event.getDeliveryBusinessId(),
-				event.getAddress()
+			event.getArrivalHubId(),
+			event.getDeliveryBusinessId(),
+			event.getAddress()
 		);
+
 		delivery.addHubDeliveryRouteList(hubDeliveryRouteList);
 		delivery.addBusinessDeliveryRoute(businessDeliveryRoute);
+		delivery.addCreatedBy(event.getUserId());
+		delivery.addUpdatedBy(event.getUserId());
+
 		deliveryRepository.save(delivery);
 
 	}
 
-
 	@Override
 	@Transactional
-	public void HubStatusRoutePutBy(Long userId, Long deliveryId, Long hubDeliveryRouteId, HubStatus hubStatus) {
+	public void hubRouteStatusPutBy(
+		Long userId, Long deliveryId,
+		Long hubDeliveryRouteId,
+		ReqHubDeliveryPutDTO reqHubDeliveryPutDTO
+	) {
 		ResRoleGetByIdDTO resRoleGetByIdDTO = authService.getRoleBy(userId);
 		Delivery delivery = findById(deliveryId);
-		authConditionService.HubStatusPutByAuthCondition(
+		authConditionService.hubStatusPutByAuthCondition(
 			UserRole.valueOf(resRoleGetByIdDTO.getRole()),
 			userId,
 			delivery);
-		if (delivery.updateHubDeliveryRouteState(hubDeliveryRouteId, hubStatus)) {
+		if (delivery.updateHubDeliveryRouteState(hubDeliveryRouteId, reqHubDeliveryPutDTO.getHubDeliveryStatus())) {
 			businessDeliveryService.assignAgentToBusinessDeliveryRoute(delivery.getBusinessDeliveryRoute());
 			// AI slack 완성되면 message 작성
 		}
+	}
+
+	@Override
+	@Transactional
+	public void businessDeliveryStatusPutBy(
+		Long userId,
+		Long deliveryId,
+		Long businessDeliveryRouteId,
+		ReqBusinessDeliveryPutDTO reqBusinessDeliveryPutDTO
+	) {
+		ResRoleGetByIdDTO resRoleGetByIdDTO = authService.getRoleBy(userId);
+		Delivery delivery = findById(deliveryId);
+		authConditionService.businessStatusPutByAuthCondition(
+			UserRole.valueOf(resRoleGetByIdDTO.getRole()),
+			userId,
+			delivery
+		);
+		delivery.updateBusinessDeliveryRouteStatus(
+			businessDeliveryRouteId,
+			reqBusinessDeliveryPutDTO.getBusinessDeliveryStatus()
+		);
 	}
 
 	private Delivery findById(Long deliveryId) {

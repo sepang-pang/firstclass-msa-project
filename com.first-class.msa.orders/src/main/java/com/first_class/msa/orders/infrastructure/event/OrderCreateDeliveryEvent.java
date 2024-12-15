@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class OrderCreateDeliveryEvent {
+	private Long userId;
 	private Long orderId;
 	private Long departureHubId;
 	private Long deliveryBusinessId;
@@ -21,6 +22,7 @@ public class OrderCreateDeliveryEvent {
 	public static OrderCreateDeliveryEvent from(Order order){
 		return  OrderCreateDeliveryEvent
 			.builder()
+			.userId(order.getUserId())
 			.orderId(order.getId())
 			.departureHubId(order.getHubId())
 			.deliveryBusinessId(order.getDeliveryBusinessId())

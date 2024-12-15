@@ -1,6 +1,6 @@
 package com.first_class.msa.delivery.domain.model;
 
-import com.first_class.msa.delivery.domain.common.HubStatus;
+import com.first_class.msa.delivery.domain.common.HubDeliveryStatus;
 import com.first_class.msa.delivery.domain.valueobject.Sequence;
 import com.first_class.msa.delivery.libs.exception.ApiException;
 import com.first_class.msa.delivery.libs.message.ErrorMessage;
@@ -59,7 +59,7 @@ public class HubDeliveryRoute extends BaseTime{
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "hub_status", nullable = false)
-	private HubStatus hubStatus;
+	private HubDeliveryStatus hubDeliveryStatus;
 
 	@Embedded
 	private Sequence sequence;
@@ -83,21 +83,21 @@ public class HubDeliveryRoute extends BaseTime{
 			.expectedTime(expectedTime)
 			.sequence(sequence)
 			.hubAgentId(hubAgentId)
-			.hubStatus(HubStatus.WAITING_FOR_TRANSIT)
+			.hubDeliveryStatus(HubDeliveryStatus.WAITING_FOR_TRANSIT)
 			.delivery(delivery)
 			.build();
 	}
 
-	public void updateHubStatus(HubStatus newStatus) {
+	public void updateHubDeliveryStatus(HubDeliveryStatus newStatus) {
 		validateStatusTransition(newStatus);
-		this.hubStatus = newStatus;
+		this.hubDeliveryStatus = newStatus;
 	}
 
-	private void validateStatusTransition(HubStatus newStatus) {
-		if (this.hubStatus == HubStatus.WAITING_FOR_TRANSIT && newStatus != HubStatus.IN_TRANSIT) {
+	private void validateStatusTransition(HubDeliveryStatus newStatus) {
+		if (this.hubDeliveryStatus == HubDeliveryStatus.WAITING_FOR_TRANSIT && newStatus != HubDeliveryStatus.IN_TRANSIT) {
 			throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_HUB_STATUS));
 		}
-		if (this.hubStatus == HubStatus.IN_TRANSIT && newStatus != HubStatus.ARRIVED_AT_HUB) {
+		if (this.hubDeliveryStatus == HubDeliveryStatus.IN_TRANSIT && newStatus != HubDeliveryStatus.ARRIVED_AT_HUB) {
 			throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_HUB_STATUS));
 		}
 	}

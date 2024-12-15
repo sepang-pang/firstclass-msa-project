@@ -3,8 +3,9 @@ package com.first_class.msa.delivery.domain.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.first_class.msa.delivery.domain.common.BusinessDeliveryStatus;
 import com.first_class.msa.delivery.domain.common.DeliveryStatus;
-import com.first_class.msa.delivery.domain.common.HubStatus;
+import com.first_class.msa.delivery.domain.common.HubDeliveryStatus;
 import com.first_class.msa.delivery.libs.exception.ApiException;
 import com.first_class.msa.delivery.libs.message.ErrorMessage;
 
@@ -73,7 +74,13 @@ public class Delivery extends BaseTime {
 			.arrivalHubId(arrivalHubId)
 			.deliveryStatus(DeliveryStatus.READY)
 			.build();
+	}
 
+	public void addCreatedBy(Long userId) {
+		this.setCreatedBy(userId);
+	}
+	public void addUpdatedBy(Long userId){
+		this.setUpdatedBy(userId);
 	}
 
 	public void addHubDeliveryRouteList(List<HubDeliveryRoute> hubDeliveryRouteList) {
@@ -84,10 +91,10 @@ public class Delivery extends BaseTime {
 		this.businessDeliveryRoute = businessDeliveryRoute;
 	}
 
-	public boolean updateHubDeliveryRouteState(Long hubDeliveryRouteId, HubStatus newStatus) {
+	public boolean updateHubDeliveryRouteState(Long hubDeliveryRouteId, HubDeliveryStatus newStatus) {
 		HubDeliveryRoute hubRoute = findHubDeliveryRoute(hubDeliveryRouteId);
 
-		hubRoute.updateHubStatus(newStatus);
+		hubRoute.updateHubDeliveryStatus(newStatus);
 
 		if (isLastHub(hubRoute, newStatus)) {
 			updateDeliveryStatus(DeliveryStatus.AT_FINAL_HUB);
@@ -105,13 +112,29 @@ public class Delivery extends BaseTime {
 			);
 	}
 
-	private boolean isLastHub(HubDeliveryRoute hubRoute, HubStatus newStatus) {
-		return hubRoute.getArrivalHubId().equals(this.arrivalHubId) && newStatus == HubStatus.ARRIVED_AT_HUB;
+	private boolean isLastHub(HubDeliveryRoute hubRoute, HubDeliveryStatus newStatus) {
+		return hubRoute.getArrivalHubId().equals(this.arrivalHubId) && newStatus == HubDeliveryStatus.ARRIVED_AT_HUB;
 	}
-
 
 	private void updateDeliveryStatus(DeliveryStatus newStatus) {
 		this.deliveryStatus = newStatus;
+	}
+
+	public void updateBusinessDeliveryRouteStatus(
+		Long businessDeliveryRouteId,
+		BusinessDeliveryStatus businessDeliveryStatus
+	) {
+		if (!this.businessDeliveryRoute.getId().equals(businessDeliveryRouteId)) {
+			throw new IllegalArgumentException(new ApiException(ErrorMessage.NOT_FOUND_HUB_DELIVERY_ROUTE));
+		}
+		this.businessDeliveryRoute.updateBusinessDeliveryStatus(businessDeliveryStatus);
+		if(isDelivery(this.businessDeliveryRoute, BusinessDeliveryStatus.DELIVERED)){
+			updateDeliveryStatus(DeliveryStatus.DELIVERED);
+		}
+	}
+
+	private boolean isDelivery(BusinessDeliveryRoute businessDeliveryRoute, BusinessDeliveryStatus newStatus){
+		return businessDeliveryRoute.getBusinessDeliveryStatus().equals(newStatus);
 	}
 
 }

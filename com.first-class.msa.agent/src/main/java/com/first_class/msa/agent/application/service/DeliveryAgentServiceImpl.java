@@ -71,6 +71,7 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 			sequence
 		);
 
+		deliveryAgent.setCreatedByAndUpdateBy(userId);
 		deliveryAgent = deliveryAgentRepository.save(deliveryAgent);
 		return ResDeliveryAgentDTO.from(deliveryAgent);
 	}

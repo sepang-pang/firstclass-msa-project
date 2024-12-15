@@ -5,8 +5,9 @@ import com.first_class.msa.delivery.domain.model.Delivery;
 
 public interface AuthConditionService {
 
-	void HubStatusPutByAuthCondition(UserRole userRole, Long userId, Delivery delivery);
+	void hubStatusPutByAuthCondition(UserRole userRole, Long userId, Delivery delivery);
 
+	void businessStatusPutByAuthCondition(UserRole userRole, Long userId, Delivery delivery);
 
 
 

@@ -2,6 +2,8 @@ package com.first_class.msa.delivery.domain.model;
 
 import com.first_class.msa.delivery.domain.common.BusinessDeliveryStatus;
 import com.first_class.msa.delivery.domain.valueobject.Address;
+import com.first_class.msa.delivery.libs.exception.ApiException;
+import com.first_class.msa.delivery.libs.message.ErrorMessage;
 
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.Column;
@@ -70,16 +72,32 @@ public class BusinessDeliveryRoute extends BaseTime {
 			.build();
 	}
 
-	public void assignDeliveryAgentId(Long deliveryAgentId){
+	public void assignDeliveryAgentId(Long deliveryAgentId) {
 		this.deliveryAgentId = deliveryAgentId;
 	}
 
-	public void updateExpectedTimeAndDistance(Long expectedTime, Long expectedDistance){
+	public void updateExpectedTimeAndDistance(Long expectedTime, Long expectedDistance) {
 		this.expectedTime = expectedTime;
 		this.expectedDistance = expectedDistance;
 
 	}
 
+	public void updateBusinessDeliveryStatus(BusinessDeliveryStatus deliveryStatus) {
+		validateStatusTransition(deliveryStatus);
+		this.businessDeliveryStatus = deliveryStatus;
+	}
 
+	private void validateStatusTransition(BusinessDeliveryStatus newStatus) {
+		if (this.businessDeliveryStatus == BusinessDeliveryStatus.READY
+			&& newStatus != BusinessDeliveryStatus.OUT_FOR_DELIVERY
+		) {
+			throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_BUSINESS_STATUS));
+		}
+		if (this.businessDeliveryStatus == BusinessDeliveryStatus.OUT_FOR_DELIVERY
+			&& newStatus != BusinessDeliveryStatus.DELIVERED
+		) {
+			throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_BUSINESS_STATUS));
+		}
+	}
 
 }

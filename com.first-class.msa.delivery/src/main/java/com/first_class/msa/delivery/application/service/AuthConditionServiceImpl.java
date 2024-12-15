@@ -18,7 +18,7 @@ public class AuthConditionServiceImpl implements AuthConditionService {
 	private final AgentService agentService;
 
 	@Override
-	public void HubStatusPutByAuthCondition(
+	public void hubStatusPutByAuthCondition(
 		UserRole userRole,
 		Long userId,
 		Delivery delivery
@@ -33,18 +33,47 @@ public class AuthConditionServiceImpl implements AuthConditionService {
 					.filter(route -> route.getArrivalHubId().equals(hubId))
 					.findFirst()
 					.orElseThrow(
-						() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOT_FOUND_HUB_DELIVERY_ROUTE))
+						() -> new IllegalArgumentException(
+							new ApiException(ErrorMessage.INVALID_USER_ROLE_HUB_MANAGER)
+						)
 					);
 			}
 			case DELIVERY_MANAGER -> {
 				Long deliveryAgentId = getDeliveryAgentId(userId);
-					agentService.getDeliveryAgentByUserId(userId);
+				agentService.getDeliveryAgentByUserId(userId);
 				delivery.getHubDeliveryRouteList().stream()
 					.filter(route -> route.getHubAgentId().equals(deliveryAgentId))
 					.findFirst()
 					.orElseThrow(
-						() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOT_FOUND_HUB_DELIVERY_ROUTE))
+						() -> new IllegalArgumentException(
+							new ApiException(ErrorMessage.INVALID_USER_ROLE_DELIVERY_MANAGER))
 					);
+			}
+			case BUSINESS_MANAGER ->
+				throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_USER_ROLE));
+		}
+	}
+
+	@Override
+	public void businessStatusPutByAuthCondition(UserRole userRole, Long userId, Delivery delivery) {
+		switch (userRole) {
+			case MASTER -> {
+				return;
+			}
+			case HUB_MANAGER -> {
+				Long hubId = getHubIdBy(userId);
+				if (!delivery.getBusinessDeliveryRoute().getDepartureHubId().equals(hubId)) {
+					throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_USER_ROLE_HUB_MANAGER));
+				}
+			}
+			case DELIVERY_MANAGER -> {
+				Long deliveryAgentId = getDeliveryAgentId(userId);
+				if (!delivery.getBusinessDeliveryRoute().getDeliveryAgentId().equals(deliveryAgentId)) {
+					throw new IllegalArgumentException(
+						new ApiException(ErrorMessage.INVALID_USER_ROLE_DELIVERY_MANAGER)
+					);
+				}
+
 			}
 			case BUSINESS_MANAGER ->
 				throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_USER_ROLE));
@@ -58,6 +87,7 @@ public class AuthConditionServiceImpl implements AuthConditionService {
 	public Long getHubIdBy(Long userId) {
 		return hubService.getHubIdBy(userId);
 	}
+
 	private Long getDeliveryAgentId(Long userId) {
 		ResDeliveryAgentGetByUserIdDTO resDeliveryAgentGetByUserIdDTO = agentService.getDeliveryAgentByUserId(userId);
 		return resDeliveryAgentGetByUserIdDTO.getDeliveryAgentId();

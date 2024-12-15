@@ -106,6 +106,11 @@ public class DeliveryAgent {
 			.build();
 	}
 
+	public void setCreatedByAndUpdateBy(Long userId){
+		this.setCreatedBy(userId);
+		this.setUpdatedBy(userId);
+	}
+
 	public void updateDeliveryAgent(IsAvailable isAvailable, String slackId, Type type, Long userId){
 		this.isAvailable = isAvailable != null ? isAvailable : this.isAvailable;
 		this.slackId = slackId != null ? slackId : this.slackId;

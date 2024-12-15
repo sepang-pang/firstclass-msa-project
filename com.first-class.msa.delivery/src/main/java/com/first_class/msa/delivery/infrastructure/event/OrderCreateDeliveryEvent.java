@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderCreateDeliveryEvent {
+	private Long userId;
 	private Long orderId;
 	private Long departureHubId;
 	private Long deliveryBusinessId;
