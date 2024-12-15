@@ -1,6 +1,7 @@
 package com.first_class.msa.hub.presentation.controller;
 
 import com.first_class.msa.hub.application.dto.ResDTO;
+import com.first_class.msa.hub.application.dto.transit.ResHubTransitInfoGetDTO;
 import com.first_class.msa.hub.application.dto.transit.ResHubTransitInfoPostDTO;
 import com.first_class.msa.hub.application.service.HubTransitInfoService;
 import com.first_class.msa.hub.presentation.request.transit.ReqHubTransitInfoPostDTO;
@@ -26,6 +27,20 @@ public class HubTransitInfoController {
                         .code(HttpStatus.OK.value())
                         .message("허브 생성에 성공하였습니다.")
                         .data(hubTransitInfoService.postBy(userId, account, dto))
+                        .build(),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/hub-transit-infos")
+    public ResponseEntity<ResDTO<ResHubTransitInfoGetDTO>> getBy(@RequestParam(name = "departureHubId") Long departureHubId,
+                                                                 @RequestParam(name = "arrivalHubId") Long arrivalHubId) {
+
+        return new ResponseEntity<>(
+                ResDTO.<ResHubTransitInfoGetDTO>builder()
+                        .code(HttpStatus.OK.value())
+                        .message("허브 이동 정보 조회에 성공하였습니다.")
+                        .data(hubTransitInfoService.getBy(departureHubId, arrivalHubId))
                         .build(),
                 HttpStatus.OK
         );
