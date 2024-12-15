@@ -9,7 +9,7 @@ public interface HubService {
 
 	Long getHubIdBy(Long userId);
 
-	ResHubTransitInfoGetDTO postHubTransitInfo(Long departureHubId, Long arrivalHubId);
+	ResHubTransitInfoGetDTO getBy(Long departureHubId, Long arrivalHubId);
 
 	ResHubInfoGetDTO getHubInfoBy(Long hubId);
 

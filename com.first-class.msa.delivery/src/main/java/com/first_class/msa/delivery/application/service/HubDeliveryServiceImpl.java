@@ -23,9 +23,8 @@ public class HubDeliveryServiceImpl implements HubDeliveryService {
 	@Override
 	@Transactional
 	public List<HubDeliveryRoute> CreateHubDeliveryRoute(Delivery delivery) {
-		// TODO: 2024-12-15 시작 허브 ID 최종 도착 허브 ID 요청 -> 경로 허브 ID 반환하는 feign client 필요
 		ResHubTransitInfoGetDTO resHubTransitInfoGetDTO
-			= hubService.postHubTransitInfo(delivery.getDepartureHubId(), delivery.getArrivalHubId());
+			= hubService.getBy(delivery.getDepartureHubId(), delivery.getArrivalHubId());
 		ResGlobalDeliveryAgentDTO resGlobalDeliveryAgentDTO = agentService.assignGlobalAgent();
 		int sequenceNum = 0;
 		List<HubDeliveryRoute> hubDeliveryRouteList = new ArrayList<>();

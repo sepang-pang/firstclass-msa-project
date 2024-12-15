@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.first_class.msa.delivery.application.dto.ResHubInfoGetDTO;
 import com.first_class.msa.delivery.application.dto.ResHubTransitInfoGetDTO;
 import com.first_class.msa.delivery.application.service.HubService;
 
@@ -20,4 +21,6 @@ public interface HubClient extends HubService {
 	@GetMapping("/external/hubs/hub-transit-infos")
 	ResHubTransitInfoGetDTO getBy(@RequestParam Long departureHubId, @RequestParam Long arrivalHubId);
 
+	@GetMapping("/external/hubs/{hubId}")
+	ResHubInfoGetDTO getHubInfoBy(@PathVariable Long hubId);
 }
