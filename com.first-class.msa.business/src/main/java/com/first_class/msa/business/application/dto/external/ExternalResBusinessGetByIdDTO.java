@@ -14,11 +14,13 @@ public class ExternalResBusinessGetByIdDTO {
 
     private Long businessId;
     private Long managerId;
+    private Long hubId;
 
     public static ExternalResBusinessGetByIdDTO of(Business business) {
         return ExternalResBusinessGetByIdDTO.builder()
                 .businessId(business.getId())
                 .managerId(business.getManagerId())
+                .hubId(business.getHubId())
                 .build();
     }
 }
