@@ -13,7 +13,7 @@ public class ExternalHubTransitInfoController {
 
     private final HubTransitInfoService hubTransitInfoService;
 
-    @GetMapping("/external/hubs/hub-transit-infos/hub-transit-infos")
+    @GetMapping("/external/hubs/hub-transit-infos")
     public ResHubTransitInfoGetDTO getBy(@RequestParam(name = "departureHubId") Long departureHubId,
                                          @RequestParam(name = "arrivalHubId") Long arrivalHubId) {
 
