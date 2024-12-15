@@ -117,7 +117,7 @@ public class AgentController {
 		return deliveryAgentService.assignGlobalDeliveryAgent();
 	}
 
-	@PostMapping("/external/hub/{hubId}")
+	@PostMapping("/external/hubs/{hubId}")
 	public ResHubDeliveryAgentDto assignHubAgent(
 		@PathVariable Long hubId
 	) {

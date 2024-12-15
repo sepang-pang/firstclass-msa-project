@@ -17,7 +17,7 @@ public interface AgentClient extends AgentService {
 	@PostMapping("/external/global")
 	ResGlobalDeliveryAgentDTO assignGlobalAgent();
 
-	@PostMapping("/external/hub/{hubId}")
+	@PostMapping("/external/hubs/{hubId}")
 	ResHubDeliveryAgentDTO assignHubAgent(@PathVariable Long hubId);
 
 	@GetMapping("/external/agents")
