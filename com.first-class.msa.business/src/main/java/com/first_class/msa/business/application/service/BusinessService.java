@@ -27,19 +27,19 @@ import java.util.Set;
 public class BusinessService {
 
     private final BusinessRepository businessRepository;
-    private final HubClient hubClient;
-    private final AuthClient authClient;
+    private final AuthService authService;
+    private final HubService hubService;
 
     @Transactional
     public ResBusinessPostDTO postBy(Long userId, String account, ReqBusinessPostDTO dto) {
 
-        ResRoleGetByUserIdDTO dtoForValidation = authClient.getRoleBy(userId);
+        String roleForValidation = authService.getRoleBy(userId).getRole();
 
         // -- 권한 검증
-        validateUserRole(dtoForValidation.getRole(), Set.of(RoleType.MANAGER, RoleType.HUB_MANAGER));
+        validateUserRole(roleForValidation, Set.of(RoleType.MANAGER, RoleType.HUB_MANAGER));
 
         // -- 허브 관리자 검증 : 담당 허브일 경우에만 업체를 생성할 수 있음
-        validateHubForManager(userId, dto.getBusinessDTO().getHubId(), dtoForValidation.getRole());
+        validateHubForManager(userId, dto.getBusinessDTO().getHubId(), roleForValidation);
 
         // -- 업체 관리자 권한 검증 : 요청한 업체 관리자가 업체 관리자 권한 소유자인지 검증
         validateBusinessManagerRole(dto.getBusinessDTO().getManagerId());
@@ -73,16 +73,16 @@ public class BusinessService {
     @CacheEvict(cacheNames = "businessSearchCache", allEntries = true)
     public void putBy(Long userId, String account, Long businessId, ReqBusinessPutByIdDTO dto) {
 
-        ResRoleGetByUserIdDTO roleForValidation = authClient.getRoleBy(userId);
+        String roleForValidation = authService.getRoleBy(userId).getRole();
 
         // -- 권한 검증
-        validateUserRole(roleForValidation.getRole(), Set.of(RoleType.MANAGER, RoleType.HUB_MANAGER, RoleType.BUSINESS_MANAGER));
+        validateUserRole(roleForValidation, Set.of(RoleType.MANAGER, RoleType.HUB_MANAGER, RoleType.BUSINESS_MANAGER));
 
         Business businessForModification = getBusinessBy(businessId);
 
         // -- 허브 관리자 : 담당 허브에 속한 업체만 수정 가능합
         // -- 업체 관리자 : 본인 업체만 수정 가능함
-        validateHubOrBusinessManagerAccess(userId, roleForValidation.getRole(), businessForModification);
+        validateHubOrBusinessManagerAccess(userId, roleForValidation, businessForModification);
 
         // -- 유효성 검사
         validateHubChangeRequest(businessForModification, dto.getBusinessDTO().getHubId());
@@ -101,15 +101,15 @@ public class BusinessService {
     @CacheEvict(cacheNames = "businessSearchCache", allEntries = true)
     public void deleteBy(Long userId, String account, Long businessId) {
 
-        ResRoleGetByUserIdDTO dtoForValidation = authClient.getRoleBy(userId);
+        String roleForValidation = authService.getRoleBy(userId).getRole();
 
         // -- 권한 검증
-        validateUserRole(dtoForValidation.getRole(), Set.of(RoleType.MANAGER, RoleType.HUB_MANAGER));
+        validateUserRole(roleForValidation, Set.of(RoleType.MANAGER, RoleType.HUB_MANAGER));
 
         Business businessForDeletion = getBusinessBy(businessId);
 
         // -- 허브 관리자 검증 : 담당 허브에 속한 업체만 삭제 가능
-        if (Objects.equals(dtoForValidation.getRole(), RoleType.HUB_MANAGER)) {
+        if (Objects.equals(roleForValidation, RoleType.HUB_MANAGER)) {
             validateHubManager(userId, businessForDeletion);
         }
 
@@ -134,7 +134,7 @@ public class BusinessService {
 
     private void validateHubForManager(Long userId, Long hubId, String roleForValidation) {
         if (RoleType.HUB_MANAGER.equals(roleForValidation)) {
-            Long hubIdForChecking = hubClient.getHubIdBy(userId);
+            Long hubIdForChecking = hubService.getHubIdBy(userId);
 
             if (hubIdForChecking == null) {
                 throw new IllegalArgumentException("사용자가 담당하는 허브를 찾을 수 없습니다.");
@@ -162,7 +162,7 @@ public class BusinessService {
     }
 
     private void validateBusinessManagerRole(Long managerId) {
-        if (!Objects.equals(RoleType.BUSINESS_MANAGER, authClient.getRoleBy(managerId).getRole())) {
+        if (!Objects.equals(RoleType.BUSINESS_MANAGER, authService.getRoleBy(managerId).getRole())) {
             throw new IllegalArgumentException("업체 관리자가 아닙니다. 다시 확인해주세요.");
         }
     }
@@ -180,7 +180,7 @@ public class BusinessService {
     }
 
     private void validateHubManager(Long userId, Business businessForModification) {
-        if (!Objects.equals(hubClient.getHubIdBy(userId), businessForModification.getHubId())) {
+        if (!Objects.equals(hubService.getHubIdBy(userId), businessForModification.getHubId())) {
             throw new IllegalArgumentException("담당 허브의 업체만 수정할 수 있습니다.");
         }
     }
@@ -197,7 +197,7 @@ public class BusinessService {
         //       사용자가 허브를 변경하려는 것으로 간주하고 요청한 허브 ID의 유효성을 검증한다.
         //       요청한 허브 ID가 존재하지 않으면 예외를 발생시킨다.
 
-        if (!Objects.equals(businessForModification.getHubId(), reqHubId) && !hubClient.existsBy(reqHubId)) {
+        if (!Objects.equals(businessForModification.getHubId(), reqHubId) && !hubService.existsBy(reqHubId)) {
             throw new IllegalArgumentException("허브 정보를 찾을 수 없습니다. 허브 ID를 확인해주세요.");
         }
     }
