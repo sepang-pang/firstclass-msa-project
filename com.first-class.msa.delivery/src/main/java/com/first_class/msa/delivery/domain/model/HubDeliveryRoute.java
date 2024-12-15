@@ -1,19 +1,22 @@
 package com.first_class.msa.delivery.domain.model;
 
-import java.time.LocalDateTime;
-
 import com.first_class.msa.delivery.domain.common.HubStatus;
 import com.first_class.msa.delivery.domain.valueobject.Sequence;
+import com.first_class.msa.delivery.libs.exception.ApiException;
+import com.first_class.msa.delivery.libs.message.ErrorMessage;
 
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +28,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "p_hub_delivery_route")
 public class HubDeliveryRoute extends BaseTime{
 	@Id
 	@Tsid
@@ -45,14 +49,15 @@ public class HubDeliveryRoute extends BaseTime{
 	private Double expectedDistance;
 
 	@Column(name = "expected_time", nullable = false)
-	private LocalDateTime expectedTime;
+	private Long expectedTime;
 
 	@Column(name = "actual_distance")
 	private Double actualDistance;
 
 	@Column(name = "actual_time")
-	private LocalDateTime actualTime;
+	private Long actualTime;
 
+	@Enumerated(EnumType.STRING)
 	@Column(name = "hub_status", nullable = false)
 	private HubStatus hubStatus;
 
@@ -66,7 +71,7 @@ public class HubDeliveryRoute extends BaseTime{
 		Long departureHubId,
 		Long arrivalHubId,
 		Double expectedDistance,
-		LocalDateTime expectedTime,
+		Long expectedTime,
 		Sequence sequence,
 		Long hubAgentId,
 		Delivery delivery
@@ -78,10 +83,23 @@ public class HubDeliveryRoute extends BaseTime{
 			.expectedTime(expectedTime)
 			.sequence(sequence)
 			.hubAgentId(hubAgentId)
+			.hubStatus(HubStatus.WAITING_FOR_TRANSIT)
 			.delivery(delivery)
 			.build();
 	}
 
+	public void updateHubStatus(HubStatus newStatus) {
+		validateStatusTransition(newStatus);
+		this.hubStatus = newStatus;
+	}
 
+	private void validateStatusTransition(HubStatus newStatus) {
+		if (this.hubStatus == HubStatus.WAITING_FOR_TRANSIT && newStatus != HubStatus.IN_TRANSIT) {
+			throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_HUB_STATUS));
+		}
+		if (this.hubStatus == HubStatus.IN_TRANSIT && newStatus != HubStatus.ARRIVED_AT_HUB) {
+			throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_HUB_STATUS));
+		}
+	}
 
 }

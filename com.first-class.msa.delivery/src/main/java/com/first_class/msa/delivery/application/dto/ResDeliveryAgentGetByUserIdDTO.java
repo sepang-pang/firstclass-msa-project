@@ -3,7 +3,6 @@ package com.first_class.msa.delivery.application.dto;
 import lombok.Getter;
 
 @Getter
-public class ResGlobalDeliveryAgentDTO {
+public class ResDeliveryAgentGetByUserIdDTO {
 	private Long deliveryAgentId;
-
 }

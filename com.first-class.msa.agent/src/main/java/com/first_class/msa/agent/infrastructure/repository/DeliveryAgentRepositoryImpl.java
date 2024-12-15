@@ -34,7 +34,7 @@ public class DeliveryAgentRepositoryImpl implements DeliveryAgentRepository {
 
 	@Override
 	public Optional<DeliveryAgent> findById(Long deliveryAgentId) {
-		return deliveryAgentJpaRepository.findById(deliveryAgentId);
+		return deliveryAgentJpaRepository.findByIdAndDeletedByIsNull(deliveryAgentId);
 	}
 
 	@Override
@@ -55,6 +55,11 @@ public class DeliveryAgentRepositoryImpl implements DeliveryAgentRepository {
 	@Override
 	public List<DeliveryAgent> findByHubId(Long hubId) {
 		return deliveryAgentJpaRepository.findByHubId(hubId);
+	}
+
+	@Override
+	public Optional<DeliveryAgent> findByUserId(Long userId) {
+		return deliveryAgentJpaRepository.findByUserIdAndDeletedByIsNull(userId);
 	}
 
 }

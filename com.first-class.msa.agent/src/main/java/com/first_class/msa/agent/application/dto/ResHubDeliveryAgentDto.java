@@ -8,11 +8,11 @@ import lombok.Getter;
 @AllArgsConstructor
 @Builder
 public class ResHubDeliveryAgentDto {
-	private Long deliveryAgent;
+	private Long deliveryAgentId;
 
 	public static ResHubDeliveryAgentDto from(Long deliveryAgent) {
 		return ResHubDeliveryAgentDto.builder()
-			.deliveryAgent(deliveryAgent)
+			.deliveryAgentId(deliveryAgent)
 			.build();
 	}
 }

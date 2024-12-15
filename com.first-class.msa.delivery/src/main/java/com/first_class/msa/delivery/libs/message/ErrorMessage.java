@@ -20,8 +20,12 @@ public enum ErrorMessage {
 	/**
 	 * Delivery
 	 */
+	NOF_FOUND_DELIVERY(HttpStatus.NOT_FOUND, "배송 정보가 없습니다"),
 	ADDRESS_EMPTY(HttpStatus.BAD_REQUEST, "총 가격이 비어있습니다."),
-	SEQUENCE_NOT_MINUS(HttpStatus.BAD_REQUEST, "시퀀수는 음수일 수 없습니다.");
+	INVALID_ADDRESS(HttpStatus.BAD_REQUEST,"올바르지 않은 주소입니다."),
+	SEQUENCE_NOT_MINUS(HttpStatus.BAD_REQUEST, "시퀀수는 음수일 수 없습니다."),
+	INVALID_HUB_STATUS(HttpStatus.BAD_REQUEST,"잘못된 상태 접근 입니다."),
+	NOT_FOUND_HUB_DELIVERY_ROUTE(HttpStatus.NOT_FOUND, "허브 배송 경로 정보가 없습니다.");
 
 
 

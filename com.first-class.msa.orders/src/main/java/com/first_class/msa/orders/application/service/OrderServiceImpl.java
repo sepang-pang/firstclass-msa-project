@@ -39,7 +39,6 @@ public class OrderServiceImpl implements OrderService {
 		RequestInfo requestInfo = new RequestInfo(reqOrderPostDTO.getRequestInfo());
 		ResBusinessDTO resBusinessDTO = businessService.getBusinessBy(businessId);
 		ResBusinessDTO resDeliveryBusinessDTO = businessService.getBusinessBy(reqOrderPostDTO.getArrivalBusinessId());
-		// TODO: 2024-12-15 businessId 요청시 bussinessid, hubId가 필요함
 
 
 		Order order = Order.createOrder(
@@ -108,6 +107,5 @@ public class OrderServiceImpl implements OrderService {
 			.orElseThrow(() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOT_FOUND_ORDER)));
 	}
 
-	// TODO: 2024-12-12 배송 주소 변경관련 메세지큐 처리 
 
 }

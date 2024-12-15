@@ -27,4 +27,6 @@ public interface DeliveryAgentRepository {
 
 	List<DeliveryAgent> findByHubIdIsNull();
 	List<DeliveryAgent> findByHubId(Long hubId);
+
+	Optional<DeliveryAgent> findByUserId(Long userId);
 }

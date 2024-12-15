@@ -9,10 +9,10 @@ import com.first_class.msa.agent.application.service.HubService;
 @FeignClient(name = "hub-service")
 public interface HubClient extends HubService {
 
-	@GetMapping("/hubs/{hubId}/exists")
+	@GetMapping("/external/hubs/{hubId}/exists")
 	boolean existsBy(@PathVariable(name = "hubId") Long hubId);
 
-	@GetMapping("/hub/by-user/{userId}")
+	@GetMapping("/external/hubs/user/{userId}/id")
 	Long getHubIdBy(@PathVariable Long userId);
 
 }

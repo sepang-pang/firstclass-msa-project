@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.first_class.msa.delivery.domain.common.DeliveryStatus;
-import com.first_class.msa.delivery.domain.valueobject.Address;
+import com.first_class.msa.delivery.domain.common.HubStatus;
+import com.first_class.msa.delivery.libs.exception.ApiException;
+import com.first_class.msa.delivery.libs.message.ErrorMessage;
 
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -29,8 +32,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "p_delivers")
-public class Delivery extends BaseTime{
+@Table(name = "p_delivery")
+public class Delivery extends BaseTime {
 	@Id
 	@Tsid
 	@GeneratedValue
@@ -45,48 +48,75 @@ public class Delivery extends BaseTime{
 	@Column(name = "arrival_hu_id", nullable = false)
 	private Long arrivalHubId;
 
-	@Column(name = "delivery_business_id", nullable = false)
-	private Long deliveryBusinessId;
-
 	@Column(name = "delivery_agent_id")
 	private Long deliveryAgentId;
 
-	@Embedded
-	private Address address;
-
+	@Enumerated(EnumType.STRING)
 	@Column(name = "delivery_status", nullable = false)
 	private DeliveryStatus deliveryStatus;
 
 	@OneToMany(mappedBy = "delivery", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<HubDeliveryRoute> hubDeliveryRouteList = new ArrayList<>();
 
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "business_delivery_route_id")
 	private BusinessDeliveryRoute businessDeliveryRoute;
 
 	public static Delivery createDelivery(
 		Long orderId,
 		Long departureHubId,
-		Long arrivalHubId,
-		Long deliveryBusinessId,
-		Address address
-	){
+		Long arrivalHubId
+	) {
 		return Delivery.builder()
 			.orderId(orderId)
 			.departureHubId(departureHubId)
 			.arrivalHubId(arrivalHubId)
-			.deliveryBusinessId(deliveryBusinessId)
-			.address(address)
 			.deliveryStatus(DeliveryStatus.READY)
 			.build();
 
 	}
 
-	public void updateHubDeliveryRouteList(List<HubDeliveryRoute> hubDeliveryRouteList){
+	public void addHubDeliveryRouteList(List<HubDeliveryRoute> hubDeliveryRouteList) {
 		this.hubDeliveryRouteList = hubDeliveryRouteList;
 	}
 
+	public void addBusinessDeliveryRoute(BusinessDeliveryRoute businessDeliveryRoute) {
+		this.businessDeliveryRoute = businessDeliveryRoute;
+	}
+
+	public boolean updateHubDeliveryRouteState(Long hubDeliveryRouteId, HubStatus newStatus) {
+		HubDeliveryRoute hubRoute = findHubDeliveryRoute(hubDeliveryRouteId);
+
+		hubRoute.updateHubStatus(newStatus);
+
+		if (isLastHub(hubRoute, newStatus)) {
+			updateDeliveryStatus(DeliveryStatus.AT_FINAL_HUB);
+			return true;
+		}
+		return false;
+	}
+
+	private HubDeliveryRoute findHubDeliveryRoute(Long hubDeliveryRouteId) {
+		return hubDeliveryRouteList.stream()
+			.filter(route -> route.getId().equals(hubDeliveryRouteId))
+			.findFirst()
+			.orElseThrow(
+				() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOT_FOUND_HUB_DELIVERY_ROUTE))
+			);
+	}
+
+	private boolean isLastHub(HubDeliveryRoute hubRoute, HubStatus newStatus) {
+		return hubRoute.getArrivalHubId().equals(this.arrivalHubId) && newStatus == HubStatus.ARRIVED_AT_HUB;
+	}
 
 
+	private void updateDeliveryStatus(DeliveryStatus newStatus) {
+		this.deliveryStatus = newStatus;
+	}
 
 }
+
+
+
+
+

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.first_class.msa.agent.application.dto.DeliveryAgentAuthSearchConditionDTO;
 import com.first_class.msa.agent.application.dto.ResDeliveryAgentDTO;
+import com.first_class.msa.agent.application.dto.ResDeliveryAgentGetByUserIdDTO;
 import com.first_class.msa.agent.application.dto.ResDeliveryAgentSearchDTO;
 import com.first_class.msa.agent.application.dto.ResGlobalDeliveryAgentDTO;
 import com.first_class.msa.agent.application.dto.ResHubDeliveryAgentDto;
@@ -120,6 +121,14 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 			deliveryAgent
 		);
 		return ResDeliveryAgentSearchDTO.DeliveryAgentDetailDTO.from(deliveryAgent);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public ResDeliveryAgentGetByUserIdDTO getDeliveryAgentByUserId(Long userId) {
+		DeliveryAgent deliveryAgent = deliveryAgentRepository.findByUserId(userId).orElseThrow(
+			() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOT_FOUND_DELIVERY_AGENT)));
+		return ResDeliveryAgentGetByUserIdDTO.from(deliveryAgent);
 	}
 
 	/**

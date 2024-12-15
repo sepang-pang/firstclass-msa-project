@@ -7,4 +7,6 @@ import com.first_class.msa.delivery.domain.model.HubDeliveryRoute;
 
 public interface HubDeliveryService {
 	List<HubDeliveryRoute> CreateHubDeliveryRoute(Delivery delivery);
+
+
 }

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.first_class.msa.delivery.application.dto.ResGlobalDeliveryAgentDTO;
-import com.first_class.msa.delivery.application.dto.ResHubTransitInfoDTO;
+import com.first_class.msa.delivery.application.dto.ResHubTransitInfoGetDTO;
 import com.first_class.msa.delivery.domain.model.Delivery;
 import com.first_class.msa.delivery.domain.model.HubDeliveryRoute;
 import com.first_class.msa.delivery.domain.valueobject.Sequence;
@@ -18,20 +18,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class HubDeliveryServiceImpl implements HubDeliveryService {
 	private final HubService hubService;
-	private final DeliveryAgentService deliveryAgentService;
+	private final AgentService agentService;
 
 	@Override
 	@Transactional
 	public List<HubDeliveryRoute> CreateHubDeliveryRoute(Delivery delivery) {
 		// TODO: 2024-12-15 시작 허브 ID 최종 도착 허브 ID 요청 -> 경로 허브 ID 반환하는 feign client 필요
-		ResHubTransitInfoDTO resHubTransitInfoDTO
+		ResHubTransitInfoGetDTO resHubTransitInfoGetDTO
 			= hubService.postHubTransitInfo(delivery.getDepartureHubId(), delivery.getArrivalHubId());
-		ResGlobalDeliveryAgentDTO resGlobalDeliveryAgentDTO = deliveryAgentService.assignGlobalAgent();
+		ResGlobalDeliveryAgentDTO resGlobalDeliveryAgentDTO = agentService.assignGlobalAgent();
 		int sequenceNum = 0;
 		List<HubDeliveryRoute> hubDeliveryRouteList = new ArrayList<>();
 
-		for (ResHubTransitInfoDTO.HubTransitInfoList.HubTransitInfo hubTransitInfo
-			: resHubTransitInfoDTO.getHubTransitInfo().getHubTransitInfoLIst()){
+		for (ResHubTransitInfoGetDTO.HubTransitInfoDTO hubTransitInfo
+			: resHubTransitInfoGetDTO.getHubTransitInfoDTOList()){
 
 			Sequence sequence = new Sequence(++sequenceNum);
 			hubDeliveryRouteList.add(
@@ -41,7 +41,7 @@ public class HubDeliveryServiceImpl implements HubDeliveryService {
 				hubTransitInfo.getDistance(),
 				hubTransitInfo.getTransitTime(),
 				sequence,
-				resGlobalDeliveryAgentDTO.getDeliveryAgent(),
+				resGlobalDeliveryAgentDTO.getDeliveryAgentId(),
 				delivery
 				)
 			);
@@ -49,5 +49,7 @@ public class HubDeliveryServiceImpl implements HubDeliveryService {
 
 		return hubDeliveryRouteList;
 	}
+
+
 
 }

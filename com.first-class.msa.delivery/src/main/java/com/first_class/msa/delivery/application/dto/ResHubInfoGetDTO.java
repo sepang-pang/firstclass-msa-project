@@ -3,7 +3,7 @@ package com.first_class.msa.delivery.application.dto;
 import lombok.Getter;
 
 @Getter
-public class ResGlobalDeliveryAgentDTO {
-	private Long deliveryAgentId;
-
+public class ResHubInfoGetDTO {
+	private double latitude;
+	private double longitude;
 }

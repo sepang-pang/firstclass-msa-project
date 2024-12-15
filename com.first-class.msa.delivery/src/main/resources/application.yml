@@ -34,3 +34,10 @@ eureka:
 
 server:
   port: 19072
+
+naver:
+  api:
+    client-id: ${CLIENT_ID}
+    client-secret: ${CLIENT_SECRET}
+    directions-url: ${DIRECTIONS_URL}
+    geocoding-url: ${GEOCODING_URL}
