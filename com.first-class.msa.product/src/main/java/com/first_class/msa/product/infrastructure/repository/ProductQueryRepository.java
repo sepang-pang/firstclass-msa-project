@@ -81,6 +81,10 @@ public class ProductQueryRepository {
     );
 
     private OrderSpecifier<?> orderSpecifier(String sort) {
+        if (sort == null) {
+            return product.createdAt.desc();
+        }
+
         return SORT_OPTIONS.getOrDefault(sort, product.createdAt.desc());
     }
 }
