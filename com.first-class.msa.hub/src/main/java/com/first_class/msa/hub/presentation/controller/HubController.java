@@ -1,6 +1,6 @@
 package com.first_class.msa.hub.presentation.controller;
 
-import com.first_class.msa.hub.application.dto.ResDTO;
+import com.first_class.msa.hub.application.dto.SuccessResponseDTO;
 import com.first_class.msa.hub.application.dto.ResHubPostDTO;
 import com.first_class.msa.hub.application.dto.ResHubSearchDTO;
 import com.first_class.msa.hub.application.service.HubService;
@@ -25,13 +25,13 @@ public class HubController {
     private final HubService hubService;
 
     @PostMapping("/hubs")
-    public ResponseEntity<ResDTO<ResHubPostDTO>> postBy(@RequestHeader("X-User-Id") Long userId,
-                                                        @RequestHeader("X-User-Account") String account,
-                                                        @Valid @RequestBody ReqHubPostDTO req) {
+    public ResponseEntity<SuccessResponseDTO<ResHubPostDTO>> postBy(@RequestHeader("X-User-Id") Long userId,
+                                                                    @RequestHeader("X-User-Account") String account,
+                                                                    @Valid @RequestBody ReqHubPostDTO req) {
 
 
         return new ResponseEntity<>(
-                ResDTO.<ResHubPostDTO>builder()
+                SuccessResponseDTO.<ResHubPostDTO>builder()
                         .code(HttpStatus.OK.value())
                         .message("허브 생성에 성공하였습니다.")
                         .data(hubService.postBy(userId, account, req))
@@ -41,12 +41,12 @@ public class HubController {
     }
 
     @GetMapping("/hubs")
-    public ResponseEntity<ResDTO<ResHubSearchDTO>> searchBy(@QuerydslPredicate(root = Hub.class) Predicate predicate,
-                                                            @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<SuccessResponseDTO<ResHubSearchDTO>> searchBy(@QuerydslPredicate(root = Hub.class) Predicate predicate,
+                                                                        @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
 
 
         return new ResponseEntity<>(
-                ResDTO.<ResHubSearchDTO>builder()
+                SuccessResponseDTO.<ResHubSearchDTO>builder()
                         .code(HttpStatus.OK.value())
                         .message("허브 검색에 성공하였습니다.")
                         .data(hubService.searchBy(predicate, pageable))
@@ -56,10 +56,10 @@ public class HubController {
     }
 
     @PutMapping("/hubs/{hubId}")
-    public ResponseEntity<ResDTO<Object>> putBy(@RequestHeader("X-User-Id") Long userId,
-                                                @RequestHeader("X-User-Account") String account,
-                                                @PathVariable(name = "hubId") Long hubId,
-                                                @Valid @RequestBody ReqHubPutByIdDTO dto) {
+    public ResponseEntity<SuccessResponseDTO<Object>> putBy(@RequestHeader("X-User-Id") Long userId,
+                                                            @RequestHeader("X-User-Account") String account,
+                                                            @PathVariable(name = "hubId") Long hubId,
+                                                            @Valid @RequestBody ReqHubPutByIdDTO dto) {
 
         // --
         // TODO : DataIntegrityViolationException 예외처리
@@ -67,7 +67,7 @@ public class HubController {
         hubService.putBy(userId, account, hubId, dto);
 
         return new ResponseEntity<>(
-                ResDTO.builder()
+                SuccessResponseDTO.builder()
                         .code(HttpStatus.OK.value())
                         .message("허브 수정에 성공했습니다.")
                         .build(),
@@ -76,14 +76,14 @@ public class HubController {
     }
 
     @DeleteMapping("/hubs/{hubId}")
-    public ResponseEntity<ResDTO<Object>> deleteBy(@RequestHeader("X-User-Id") Long userId,
-                                                   @RequestHeader("X-User-Account") String account,
-                                                   @PathVariable(name = "hubId") Long hubId) {
+    public ResponseEntity<SuccessResponseDTO<Object>> deleteBy(@RequestHeader("X-User-Id") Long userId,
+                                                               @RequestHeader("X-User-Account") String account,
+                                                               @PathVariable(name = "hubId") Long hubId) {
 
         hubService.deleteBy(userId, account, hubId);
 
         return new ResponseEntity<>(
-                ResDTO.builder()
+                SuccessResponseDTO.builder()
                         .code(HttpStatus.OK.value())
                         .message("허브 삭제에 성공했습니다.")
                         .build(),
