@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.first_class.msa.delivery.application.dto.ResRoleGetByIdDTO;
+import com.first_class.msa.delivery.domain.common.BusinessDeliveryStatus;
 import com.first_class.msa.delivery.domain.common.UserRole;
 import com.first_class.msa.delivery.domain.model.BusinessDeliveryRoute;
 import com.first_class.msa.delivery.domain.model.Delivery;
@@ -73,6 +74,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 			delivery);
 		if (delivery.updateHubDeliveryRouteState(hubDeliveryRouteId, reqHubDeliveryPutDTO.getHubDeliveryStatus())) {
 			businessDeliveryService.assignAgentToBusinessDeliveryRoute(delivery.getBusinessDeliveryRoute());
+			delivery.getBusinessDeliveryRoute().updateBusinessDeliveryStatus(BusinessDeliveryStatus.READY);
 			// AI slack 완성되면 message 작성
 		}
 	}
