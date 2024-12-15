@@ -10,6 +10,7 @@ import com.first_class.msa.hub.domain.repository.HubRepository;
 import com.first_class.msa.hub.domain.repository.HubTransitInfoRepository;
 import com.first_class.msa.hub.presentation.request.transit.ReqHubTransitInfoPostDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,8 +53,8 @@ public class HubTransitInfoService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "hubTransitCache", key = "#departureHubId + '-' + #arrivalHubId")
     public ResHubTransitInfoGetDTO getBy(Long departureHubId, Long arrivalHubId) {
-
         // NOTE : 전체 조회
         List<HubTransitInfo> hubTransitInfos = hubTransitInfoRepository.findAllByDeletedAtIsNull();
 
