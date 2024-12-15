@@ -13,7 +13,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Table(name = "p_hub_transit_infos")
+@Table(name = "p_hub_transit_infos",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"departure_hub_id", "arrival_hub_id"}))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HubTransitInfo {
 
