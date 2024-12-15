@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.first_class.msa.orders.application.dto.ResOrderDTO;
+import com.first_class.msa.orders.domain.model.Order;
 import com.first_class.msa.orders.infrastructure.config.RabbitMQConfig;
 import com.first_class.msa.orders.infrastructure.event.OrderCreateDeliveryEvent;
 import com.first_class.msa.orders.infrastructure.event.OrderCreateProductEvent;
@@ -21,21 +22,15 @@ public class OrderEventServiceImpl implements OrderEventService{
 	private final OrderEventPublisher orderEventPublisher;
 
 	@Override
-	public void orderCreateProductEvent(
-		Long orderId,
-		List<ResOrderDTO.OrderDTO.OrderLineDTO> orderLineDTOList
-	) {
-		OrderCreateProductEvent orderCreateProductEvent = new OrderCreateProductEvent(orderId, orderLineDTOList);
+	public void orderCreateProductEvent(Order order) {
+		OrderCreateProductEvent orderCreateProductEvent = OrderCreateProductEvent.from(order);
 		orderEventPublisher.publishEvent(RabbitMQConfig.ORDER_CREATED_PRODUCT_KEY , orderCreateProductEvent);
 	}
 
 	@Override
-	public void orderCreateDeliveryEvent(
-		Long orderId,
-		String address
-	) {
-		OrderCreateDeliveryEvent orderCreateProductEvent = new OrderCreateDeliveryEvent(orderId, address);
-		orderEventPublisher.publishEvent(RabbitMQConfig.ORDER_CREATED_PRODUCT_KEY , orderCreateProductEvent);
+	public void orderCreateDeliveryEvent(Order order) {
+		OrderCreateDeliveryEvent orderCreateDeliveryEvent = OrderCreateDeliveryEvent.from(order);
+		orderEventPublisher.publishEvent(RabbitMQConfig.ORDER_CREATED_DELIVERY_KEY , orderCreateDeliveryEvent);
 	}
 
 	@Override

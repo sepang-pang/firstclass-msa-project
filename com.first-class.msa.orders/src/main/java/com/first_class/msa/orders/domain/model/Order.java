@@ -42,11 +42,17 @@ public class Order extends BaseTime {
 	@Column(name = "business_id", nullable = false)
 	private Long businessId;
 
+	@Column(name = "delivery_business_id", nullable = false)
+	private Long deliveryBusinessId;
+
 	@Column(name = "user_id", nullable = false)
 	private Long userId;
 
 	@Column(name = "hub_id", nullable = false)
 	private Long hubId;
+
+	@Column(name = "arrival_hub_id", nullable = false)
+	private Long arrivalHubId;
 
 	@Embedded
 	@Column(name = "address", nullable = false)
@@ -63,10 +69,20 @@ public class Order extends BaseTime {
 	@OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<OrderLine> orderLineList = new ArrayList<>();
 
-	public static Order createOrder(Long businessId, Long hubId, Long userId, Address address,RequestInfo requestInfo) {
+	public static Order createOrder(
+		Long businessId,
+		Long deliveryBusinessId,
+		Long hubId,
+		Long arrivalHubId,
+		Long userId,
+		Address address,
+		RequestInfo requestInfo) {
+
 		return Order.builder()
 			.businessId(businessId)
+			.deliveryBusinessId(deliveryBusinessId)
 			.hubId(hubId)
+			.arrivalHubId(arrivalHubId)
 			.userId(userId)
 			.address(address)
 			.requestInfo(requestInfo)
