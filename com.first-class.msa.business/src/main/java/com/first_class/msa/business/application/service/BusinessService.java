@@ -3,6 +3,9 @@ package com.first_class.msa.business.application.service;
 import com.first_class.msa.business.application.dto.ResBusinessPostDTO;
 import com.first_class.msa.business.application.dto.ResBusinessSearchDTO;
 import com.first_class.msa.business.application.dto.external.ExternalResBusinessGetByIdDTO;
+import com.first_class.msa.business.application.global.exception.custom.AuthorityException;
+import com.first_class.msa.business.application.global.exception.custom.BadRequestException;
+import com.first_class.msa.business.application.global.exception.custom.EntityAlreadyExistException;
 import com.first_class.msa.business.domain.model.Business;
 import com.first_class.msa.business.domain.model.RoleType;
 import com.first_class.msa.business.domain.repository.BusinessRepository;
@@ -145,36 +148,36 @@ public class BusinessService {
 
     private void validateUserRole(String roleForValidation, Set<String> validRoles) {
         if (!validRoles.contains(roleForValidation)) {
-            throw new IllegalArgumentException("접근 권한이 없습니다 : " + roleForValidation);
+            throw new AuthorityException("접근 권한이 없습니다");
         }
     }
 
     private void validateHubManagerHubAssignment(Long userId, Long reqHubId) {
         if (!Objects.equals(hubService.getHubIdBy(userId), reqHubId)) {
-            throw new IllegalArgumentException("본인이 속한 허브가 아닙니다.");
+            throw new AuthorityException("본인이 속한 허브가 아닙니다.");
         }
     }
 
     private void validateBusinessManagerBusinessAssignment(Long userId, Long managerId) {
         if (!Objects.equals(userId, managerId)) {
-            throw new IllegalArgumentException("본인 업체가 아닙니다.");
+            throw new AuthorityException("본인 업체가 아닙니다.");
         }
     }
 
     private void validateBusinessNameDuplication(String name) {
         if (businessRepository.existsByNameAndDeletedAtIsNull(name)) {
-            throw new DuplicateRequestException("이미 등록된 업체명입니다. 다른 이름을 사용하거나 기존 업체 정보를 확인해주세요");
+            throw new EntityAlreadyExistException("이미 등록된 업체명입니다. 다른 이름을 사용하거나 기존 업체 정보를 확인해주세요");
         }
     }
 
     private Business getBusinessBy(Long businessId) {
         return businessRepository.findByIdAndDeletedAtIsNull(businessId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 업체입니다."));
+                .orElseThrow(() -> new BadRequestException("존재하지 않는 업체입니다."));
     }
 
     private void validateBusinessManagerRole(Long managerId) {
         if (!Objects.equals(RoleType.BUSINESS_MANAGER, authService.getRoleBy(managerId).getRole())) {
-            throw new IllegalArgumentException("업체 관리자가 아닙니다. 다시 확인해주세요.");
+            throw new AuthorityException("업체 관리자가 아닙니다. 다시 확인해주세요.");
         }
     }
 
@@ -185,7 +188,7 @@ public class BusinessService {
         //       요청한 허브 ID가 존재하지 않으면 예외를 발생시킨다.
 
         if (!Objects.equals(businessForModification.getHubId(), reqHubId) && !hubService.existsBy(reqHubId)) {
-            throw new IllegalArgumentException("허브 정보를 찾을 수 없습니다. 허브 ID를 확인해주세요.");
+            throw new BadRequestException("허브 정보를 찾을 수 없습니다. 허브 ID를 확인해주세요.");
         }
     }
 }
