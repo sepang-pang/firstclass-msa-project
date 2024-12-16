@@ -2,6 +2,9 @@ package com.first_class.msa.product.application.service;
 
 import com.first_class.msa.product.application.dto.ResProductPostDTO;
 import com.first_class.msa.product.application.dto.ResProductSearchDTO;
+import com.first_class.msa.product.application.global.exception.custom.AuthorityException;
+import com.first_class.msa.product.application.global.exception.custom.BadRequestException;
+import com.first_class.msa.product.application.global.exception.custom.EntityAlreadyExistException;
 import com.first_class.msa.product.domain.model.Product;
 import com.first_class.msa.product.domain.model.RoleType;
 import com.first_class.msa.product.domain.repository.ProductRepository;
@@ -140,42 +143,42 @@ public class ProductService {
 
     private Product getProductBy(Long productId) {
         return productRepository.findByIdAndDeletedAtIsNull(productId)
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 상품입니다."));
+                .orElseThrow(() -> new BadRequestException("유효하지 않은 상품입니다."));
     }
 
     private void validateUserRole(String roleForValidation, Set<String> validRoles) {
         if (!validRoles.contains(roleForValidation)) {
-            throw new IllegalArgumentException("접근 권한이 없습니다 : " + roleForValidation);
+            throw new AuthorityException("접근 권한이 없습니다 : " + roleForValidation);
         }
     }
 
     private void validateHubManagerHubAssignment(Long userId, Long reqHubId) {
         if (!Objects.equals(hubService.getHubIdBy(userId), reqHubId)) {
-            throw new IllegalArgumentException("본인이 속한 허브가 아닙니다.");
+            throw new AuthorityException("본인이 속한 허브가 아닙니다.");
         }
     }
 
     private void validateBusinessManagerBusinessAssignment(Long userId, Long reqBusinessId) {
         if (!Objects.equals(userId, businessService.getBy(reqBusinessId).getManagerId())) {
-            throw new IllegalArgumentException("본인 업체가 아닙니다.");
+            throw new AuthorityException("본인 업체가 아닙니다.");
         }
     }
 
     private void validateBusiness(Long businessId) {
         if (!businessService.existsBy(businessId)) {
-            throw new IllegalArgumentException("유효하지 않은 업체입니다.");
+            throw new BadRequestException("유효하지 않은 업체입니다.");
         }
     }
 
     private void validateHub(Long hubId) {
         if (!hubService.existsBy(hubId)) {
-            throw new IllegalArgumentException("유효하지 않은 허브입니다.");
+            throw new BadRequestException("유효하지 않은 허브입니다.");
         }
     }
 
     private void validateProductNameDuplication(String name, Long businessId) {
         if (productRepository.existsByNameAndBusinessIdAndDeletedAtIsNull(name, businessId)) {
-            throw new IllegalArgumentException("이미 존재하는 상품명입니다.");
+            throw new EntityAlreadyExistException("이미 존재하는 상품명입니다.");
         }
     }
 }
