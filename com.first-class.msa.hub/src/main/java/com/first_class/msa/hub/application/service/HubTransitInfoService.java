@@ -4,6 +4,8 @@ package com.first_class.msa.hub.application.service;
 import com.first_class.msa.hub.application.dto.transit.HubNode;
 import com.first_class.msa.hub.application.dto.transit.ResHubTransitInfoGetDTO;
 import com.first_class.msa.hub.application.dto.transit.ResHubTransitInfoPostDTO;
+import com.first_class.msa.hub.application.global.exception.custom.AuthorityException;
+import com.first_class.msa.hub.application.global.exception.custom.BadRequestException;
 import com.first_class.msa.hub.domain.model.Hub;
 import com.first_class.msa.hub.domain.model.HubTransitInfo;
 import com.first_class.msa.hub.domain.repository.HubRepository;
@@ -124,13 +126,13 @@ public class HubTransitInfoService {
 
     private void validateUserRole(Long userId) {
         if (!Objects.equals("MASTER", authService.getRoleBy(userId).getRole())) {
-            throw new IllegalArgumentException("접근 권한이 없습니다.");
+            throw new AuthorityException("접근 권한이 없습니다.");
         }
     }
 
     private Hub getHubBy(Long hubId) {
         return hubRepository.findByIdAndDeletedAtIsNull(hubId)
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 허브입니다."));
+                .orElseThrow(() -> new BadRequestException("유효하지 않은 허브입니다."));
     }
 
     private double getDistanceBy(double departureHubLatitude, double departureHubLongitude, double arrivalHubLatitude, double arrivalHubLongitude) {
@@ -205,7 +207,7 @@ public class HubTransitInfoService {
 
         // 경로가 존재하지 않을 경우
         if (shortestPath.isEmpty()) {
-            throw new IllegalArgumentException("경로가 존재하지 않습니다.");
+            throw new BadRequestException("경로가 존재하지 않습니다.");
         }
 
         // 경로 순서를 뒤집음 (출발 -> 도착 순으로)
@@ -215,7 +217,7 @@ public class HubTransitInfoService {
 
     private HubTransitInfo getHubTransitInfoBy(Long hubTransitInfoId) {
         return hubTransitInfoRepository.findByIdAndDeletedAtIsNull(hubTransitInfoId)
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 허브 간 이동 정보입니다."));
+                .orElseThrow(() -> new BadRequestException("유효하지 않은 허브 간 이동 정보입니다."));
     }
 
     private boolean isHubInfoChanged(HubTransitInfo existingInfo, Long departureHubId, Long arrivalHubId) {

@@ -1,14 +1,16 @@
 package com.first_class.msa.hub.application.service;
 
-import com.first_class.msa.hub.application.dto.ResHubSearchDTO;
 import com.first_class.msa.hub.application.dto.ResHubPostDTO;
+import com.first_class.msa.hub.application.dto.ResHubSearchDTO;
 import com.first_class.msa.hub.application.dto.external.ExternalResHubGetByIdDTO;
+import com.first_class.msa.hub.application.global.exception.custom.AuthorityException;
+import com.first_class.msa.hub.application.global.exception.custom.BadRequestException;
+import com.first_class.msa.hub.application.global.exception.custom.EntityAlreadyExistException;
 import com.first_class.msa.hub.domain.model.Hub;
 import com.first_class.msa.hub.domain.repository.HubRepository;
 import com.first_class.msa.hub.presentation.request.ReqHubPostDTO;
 import com.first_class.msa.hub.presentation.request.ReqHubPutByIdDTO;
 import com.querydsl.core.types.Predicate;
-import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -95,13 +97,13 @@ public class HubService {
 
     private void validateUserRole(Long userId) {
         if(!Objects.equals("MASTER", authService.getRoleBy(userId).getRole())) {
-            throw new IllegalArgumentException("접근 권한이 없습니다.");
+            throw new AuthorityException("접근 권한이 없습니다.");
         }
     }
 
     private void validateDuplicateHub(double latitude, double longitude) {
         if (isDuplicateHub(latitude, longitude)) {
-            throw new DuplicateRequestException("중복된 좌표의 허브입니다.");
+            throw new EntityAlreadyExistException("중복된 좌표의 허브입니다.");
         }
     }
 
@@ -111,6 +113,6 @@ public class HubService {
 
     private Hub getHubBy(Long hubId) {
         return hubRepository.findByIdAndDeletedAtIsNull(hubId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 허브입니다."));
+                .orElseThrow(() -> new BadRequestException("존재하지 않는 허브입니다."));
     }
 }

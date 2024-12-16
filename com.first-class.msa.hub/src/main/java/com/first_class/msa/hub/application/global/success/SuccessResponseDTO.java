@@ -1,4 +1,4 @@
-package com.first_class.msa.product.application.dto;
+package com.first_class.msa.hub.application.global.success;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,3 +14,4 @@ public class SuccessResponseDTO<T> {
     private String message;
     private T data;
 }
+
