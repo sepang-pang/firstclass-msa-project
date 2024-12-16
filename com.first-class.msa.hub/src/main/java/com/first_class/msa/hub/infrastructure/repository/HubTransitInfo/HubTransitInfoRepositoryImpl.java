@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -27,6 +28,11 @@ public class HubTransitInfoRepositoryImpl implements HubTransitInfoRepository {
     @Override
     public void save(HubTransitInfo hubTransitInfo) {
         jpaHubTransitInfoRepository.save(hubTransitInfo);
+    }
+
+    @Override
+    public Optional<HubTransitInfo> findByIdAndDeletedAtIsNull(Long hubTransitInfoId) {
+        return jpaHubTransitInfoRepository.findByIdAndDeletedAtIsNull(hubTransitInfoId);
     }
 
 }

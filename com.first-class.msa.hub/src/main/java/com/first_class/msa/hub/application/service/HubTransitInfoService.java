@@ -9,7 +9,9 @@ import com.first_class.msa.hub.domain.model.HubTransitInfo;
 import com.first_class.msa.hub.domain.repository.HubRepository;
 import com.first_class.msa.hub.domain.repository.HubTransitInfoRepository;
 import com.first_class.msa.hub.presentation.request.transit.ReqHubTransitInfoPostDTO;
+import com.first_class.msa.hub.presentation.request.transit.ReqHubTransitInfoPutByIdDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,8 +70,60 @@ public class HubTransitInfoService {
         return ResHubTransitInfoGetDTO.of(shortestPath);
     }
 
+    @Transactional
+    @CacheEvict(cacheNames = "hubTransitCache", allEntries = true)
+    public void putBy(Long userId, String account, Long hubTransitInfoId, ReqHubTransitInfoPutByIdDTO dto) {
+        // NOTE : 권한 검증
+        validateUserRole(userId);
+
+        // NOTE : 수정할 허브 간 이동 정보 조회
+        HubTransitInfo hubTransitInfoForModification = getHubTransitInfoBy(hubTransitInfoId);
+
+        Long departureHubId = dto.getHubTransitInfoDTO().getDepartureHubId();
+        Long arrivalHubId = dto.getHubTransitInfoDTO().getArrivalHubId();
+
+        // NOTE : 출발/도착 허브가 변경된 경우에만 거리 계산 및 소요 시간 계산
+        if (isHubInfoChanged(hubTransitInfoForModification, departureHubId, arrivalHubId)) {
+
+            // NOTE : 출발 허브 및 도착 허브 정보 가져오기
+            Hub departureHub = getHubBy(departureHubId);
+            Hub arrivalHub = getHubBy(arrivalHubId);
+
+            // NOTE : 거리 계산
+            double calculateDistance = getDistanceBy(
+                    departureHub.getLatitude(),
+                    departureHub.getLongitude(),
+                    arrivalHub.getLatitude(),
+                    arrivalHub.getLongitude()
+            );
+
+            // NOTE : 소요 시간 계산
+            Long transitTime = calculateTransitTime(calculateDistance);
+
+            // NOTE : 변경된 값으로 허브 간 이동 정보 수정
+            hubTransitInfoForModification.updateHubTransitInfo(
+                    departureHub,
+                    arrivalHub,
+                    transitTime,
+                    calculateDistance,
+                    account
+            );
+        }
+    }
+
+    @Transactional
+    @CacheEvict(cacheNames = "hubTransitCache", allEntries = true)
+    public void deleteBy(Long userId, String account, Long hubTransitInfoId) {
+        // NOTE : 권한 검증
+        validateUserRole(userId);
+
+        HubTransitInfo hubTransitInfoForDeletion = getHubTransitInfoBy(hubTransitInfoId);
+
+        hubTransitInfoForDeletion.deleteHubTransitInfo(account);
+    }
+
     private void validateUserRole(Long userId) {
-        if (Objects.equals("MASTER", authService.getRoleBy(userId).getRole())) {
+        if (!Objects.equals("MASTER", authService.getRoleBy(userId).getRole())) {
             throw new IllegalArgumentException("접근 권한이 없습니다.");
         }
     }
@@ -131,9 +185,9 @@ public class HubTransitInfoService {
                         previous.put(neighborId, neighbor);
                         pq.add(
                                 HubNode.builder()
-                                .hubId(neighborId)
-                                .distance(newDist)
-                                .build()
+                                        .hubId(neighborId)
+                                        .distance(newDist)
+                                        .build()
                         );
                     }
                 }
@@ -157,5 +211,16 @@ public class HubTransitInfoService {
         // 경로 순서를 뒤집음 (출발 -> 도착 순으로)
         Collections.reverse(shortestPath);
         return shortestPath;
+    }
+
+    private HubTransitInfo getHubTransitInfoBy(Long hubTransitInfoId) {
+        return hubTransitInfoRepository.findByIdAndDeletedAtIsNull(hubTransitInfoId)
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 허브 간 이동 정보입니다."));
+    }
+
+    private boolean isHubInfoChanged(HubTransitInfo existingInfo, Long departureHubId, Long arrivalHubId) {
+        boolean isDepartureHubChanged = !Objects.equals(existingInfo.getDepartureHub().getId(), departureHubId);
+        boolean isArrivalHubChanged = !Objects.equals(existingInfo.getArrivalHub().getId(),arrivalHubId);
+        return isDepartureHubChanged || isArrivalHubChanged;
     }
 }
