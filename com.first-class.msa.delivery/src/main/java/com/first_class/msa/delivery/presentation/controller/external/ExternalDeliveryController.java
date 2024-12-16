@@ -18,8 +18,8 @@ public class ExternalDeliveryController {
 	private final DeliveryService deliveryService;
 
 	@GetMapping("/external/orders/deliveries")
-	ResDeliveryOrderSearchDTO getAllDeliveryBy(@RequestParam List<Long> orderIdList){
-		return deliveryService.getAllDeliveryBy(orderIdList);
+	ResDeliveryOrderSearchDTO getAllDeliveryBy(@RequestParam Long userId){
+		return deliveryService.getAllDeliveryBy(userId);
 	}
 
 	@GetMapping("/external/orders/{orderId}/deliveries")

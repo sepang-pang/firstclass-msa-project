@@ -81,7 +81,8 @@ public class DeliveryServiceImpl implements DeliveryService {
 		if (delivery.updateHubDeliveryRouteState(
 			userId,
 			hubDeliveryRouteId,
-			reqHubDeliveryPutDTO.getHubDeliveryStatus())
+			reqHubDeliveryPutDTO.getHubDeliveryStatus()
+		)
 		) {
 			businessDeliveryService.assignAgentToBusinessDeliveryRoute(delivery.getBusinessDeliveryRoute());
 			delivery.getBusinessDeliveryRoute().updateBusinessDeliveryStatus(BusinessDeliveryStatus.READY);
@@ -163,10 +164,11 @@ public class DeliveryServiceImpl implements DeliveryService {
 		List<Long> deliveryList = deliveryRepository.findOrderIdsByAgentId(deliveryAgentId);
 
 		return ResDeliveryOrderSearchDTO.from(deliveryList);
+
 	}
 
 	@Override
-	public boolean existDeliveryBy(Long orderId, Long userId){
+	public boolean existDeliveryBy(Long orderId, Long userId) {
 		Long deliveryId = agentService.getDeliveryAgentByUserId(userId).getDeliveryAgentId();
 		return deliveryRepository.existsByIdAndOrderId(deliveryId, orderId);
 	}
