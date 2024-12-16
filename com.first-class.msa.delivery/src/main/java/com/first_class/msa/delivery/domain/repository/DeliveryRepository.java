@@ -8,5 +8,7 @@ public interface DeliveryRepository {
 
 	Delivery save(Delivery delivery);
 
+	Optional<Delivery> findByIdAndIsNotNULL(Long deliveryId);
+
 	Optional<Delivery> findById(Long deliveryId);
 }

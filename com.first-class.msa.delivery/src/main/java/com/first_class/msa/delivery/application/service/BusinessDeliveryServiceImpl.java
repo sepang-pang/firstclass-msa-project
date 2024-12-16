@@ -3,7 +3,7 @@ package com.first_class.msa.delivery.application.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.first_class.msa.delivery.application.dto.NaverRouteInfoDTO;
+import com.first_class.msa.delivery.application.dto.ResNaverRouteInfoDTO;
 import com.first_class.msa.delivery.application.dto.ResHubDeliveryAgentDTO;
 import com.first_class.msa.delivery.application.dto.ResHubInfoGetDTO;
 import com.first_class.msa.delivery.domain.model.BusinessDeliveryRoute;
@@ -32,7 +32,7 @@ public class BusinessDeliveryServiceImpl implements BusinessDeliveryService {
 		// 네이버 API 를통해 주소 반환
 		// 허브 위도 경도 요청 임시로 작성
 		ResHubInfoGetDTO resHubInfoGetDTO = hubService.getHubInfoBy(businessDeliveryRoute.getDepartureHubId());
-		NaverRouteInfoDTO naverRouteInfoDTO
+		ResNaverRouteInfoDTO resNaverRouteInfoDTO
 			= naverDirectionsService.getRouteInfo(
 			resHubInfoGetDTO.getLongitude(),
 			resHubInfoGetDTO.getLatitude(),
@@ -45,8 +45,8 @@ public class BusinessDeliveryServiceImpl implements BusinessDeliveryService {
 		businessDeliveryRoute.assignDeliveryAgentId(resHubDeliveryAgentDTO.getDeliveryAgentId());
 
 		businessDeliveryRoute.updateExpectedTimeAndDistance(
-			naverRouteInfoDTO.getDuration(),
-			naverRouteInfoDTO.getDistance()
+			resNaverRouteInfoDTO.getDuration(),
+			resNaverRouteInfoDTO.getDistance()
 		);
 
 	}

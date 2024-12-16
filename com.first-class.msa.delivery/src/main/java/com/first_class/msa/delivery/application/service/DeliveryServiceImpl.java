@@ -6,6 +6,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.first_class.msa.delivery.application.dto.ResDeliverySearchDTO;
 import com.first_class.msa.delivery.application.dto.ResRoleGetByIdDTO;
 import com.first_class.msa.delivery.domain.common.BusinessDeliveryStatus;
 import com.first_class.msa.delivery.domain.common.UserRole;
@@ -67,8 +68,8 @@ public class DeliveryServiceImpl implements DeliveryService {
 		ReqHubDeliveryPutDTO reqHubDeliveryPutDTO
 	) {
 		ResRoleGetByIdDTO resRoleGetByIdDTO = authService.getRoleBy(userId);
-		Delivery delivery = findById(deliveryId);
-		authConditionService.hubStatusPutByAuthCondition(
+		Delivery delivery = findByIdANDIsNotNull(deliveryId);
+		authConditionService.validateHubStatusPutByAuthCondition(
 			UserRole.valueOf(resRoleGetByIdDTO.getRole()),
 			userId,
 			delivery);
@@ -92,8 +93,8 @@ public class DeliveryServiceImpl implements DeliveryService {
 		ReqBusinessDeliveryPutDTO reqBusinessDeliveryPutDTO
 	) {
 		ResRoleGetByIdDTO resRoleGetByIdDTO = authService.getRoleBy(userId);
-		Delivery delivery = findById(deliveryId);
-		authConditionService.businessStatusPutByAuthCondition(
+		Delivery delivery = findByIdANDIsNotNull(deliveryId);
+		authConditionService.validateBusinessStatusPutByAuthCondition(
 			UserRole.valueOf(resRoleGetByIdDTO.getRole()),
 			userId,
 			delivery
@@ -105,9 +106,19 @@ public class DeliveryServiceImpl implements DeliveryService {
 		);
 	}
 
+	@Override
+	@Transactional
+	public ResDeliverySearchDTO getSearchById(Long userId, Long deliveryId){
+		ResRoleGetByIdDTO resRoleGetByIdDTO = authService.getRoleBy(userId);
+		Delivery delivery = deliveryRepository.findById(deliveryId).orElseThrow(
+			() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOF_FOUND_DELIVERY))
+		);
+		authConditionService.validateSearchByAuthCondition(UserRole.valueOf(resRoleGetByIdDTO.getRole()), userId, delivery);
+		return ResDeliverySearchDTO.from(delivery);
+	}
 
-	private Delivery findById(Long deliveryId) {
-		return deliveryRepository.findById(deliveryId).orElseThrow(
+	private Delivery findByIdANDIsNotNull(Long deliveryId) {
+		return deliveryRepository.findByIdAndIsNotNULL(deliveryId).orElseThrow(
 			() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOF_FOUND_DELIVERY)));
 	}
 

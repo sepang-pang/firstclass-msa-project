@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class NaverRouteInfoDTO {
+public class ResNaverRouteInfoDTO {
 	private long distance; // 거리 (미터)
 	private long duration; // 시간 (초)
 }

@@ -10,7 +10,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.first_class.msa.delivery.application.dto.NaverRouteInfoDTO;
+import com.first_class.msa.delivery.application.dto.ResNaverRouteInfoDTO;
 import com.first_class.msa.delivery.libs.exception.ApiException;
 import com.first_class.msa.delivery.libs.message.ErrorMessage;
 
@@ -32,7 +32,7 @@ public class NaverDirectionsService {
 	private final RestTemplate restTemplate = new RestTemplate();
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
-	public NaverRouteInfoDTO getRouteInfo(double startLat, double startLng, String destinationAddress) {
+	public ResNaverRouteInfoDTO getRouteInfo(double startLat, double startLng, String destinationAddress) {
 		// 1. 도착지 주소 -> 좌표 변환
 		String goalCoordinates = getCoordinatesFromAddress(destinationAddress);
 		if (goalCoordinates == null) {
@@ -92,13 +92,13 @@ public class NaverDirectionsService {
 		return null;
 	}
 
-	private NaverRouteInfoDTO parseRouteInfo(String response) {
+	private ResNaverRouteInfoDTO parseRouteInfo(String response) {
 		try {
 			JsonNode root = objectMapper.readTree(response);
 			JsonNode route = root.path("route").path("trafast").get(0);
 			long distance = route.path("summary").path("distance").asLong(); // 거리
 			long duration = route.path("summary").path("duration").asLong(); // 시간
-			return new NaverRouteInfoDTO(distance, duration);
+			return new ResNaverRouteInfoDTO(distance, duration);
 		} catch (Exception e) {
 			throw new RuntimeException("Failed to parse route response", e);
 		}

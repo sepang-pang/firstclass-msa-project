@@ -50,9 +50,6 @@ public class Delivery extends BaseTime {
 	@Column(name = "arrival_hu_id", nullable = false)
 	private Long arrivalHubId;
 
-	@Column(name = "delivery_agent_id")
-	private Long deliveryAgentId;
-
 	@Enumerated(EnumType.STRING)
 	@Column(name = "delivery_status", nullable = false)
 	private DeliveryStatus deliveryStatus;
