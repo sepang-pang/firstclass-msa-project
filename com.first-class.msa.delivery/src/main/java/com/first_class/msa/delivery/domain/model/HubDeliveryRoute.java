@@ -1,5 +1,7 @@
 package com.first_class.msa.delivery.domain.model;
 
+import java.time.LocalDateTime;
+
 import com.first_class.msa.delivery.domain.common.HubDeliveryStatus;
 import com.first_class.msa.delivery.domain.valueobject.Sequence;
 import com.first_class.msa.delivery.libs.exception.ApiException;
@@ -100,6 +102,11 @@ public class HubDeliveryRoute extends BaseTime{
 		if (this.hubDeliveryStatus == HubDeliveryStatus.IN_TRANSIT && newStatus != HubDeliveryStatus.ARRIVED_AT_HUB) {
 			throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_HUB_STATUS));
 		}
+	}
+
+	public void setDeleteHubDeliveryRoute(Long userId){
+		this.setDeletedAt(LocalDateTime.now());
+		this.setDeletedBy(userId);
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.first_class.msa.delivery.domain.model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,13 +92,14 @@ public class Delivery extends BaseTime {
 		this.businessDeliveryRoute = businessDeliveryRoute;
 	}
 
-	public boolean updateHubDeliveryRouteState(Long hubDeliveryRouteId, HubDeliveryStatus newStatus) {
+	public boolean updateHubDeliveryRouteState(Long userId, Long hubDeliveryRouteId, HubDeliveryStatus newStatus) {
 		HubDeliveryRoute hubRoute = findHubDeliveryRoute(hubDeliveryRouteId);
 
 		hubRoute.updateHubDeliveryStatus(newStatus);
 
 		if (isLastHub(hubRoute, newStatus)) {
 			updateDeliveryStatus(DeliveryStatus.AT_FINAL_HUB);
+			setDeleteAllHubDeliveryRoute(userId);
 			return true;
 		}
 		return false;
@@ -120,7 +122,12 @@ public class Delivery extends BaseTime {
 		this.deliveryStatus = newStatus;
 	}
 
+	private void setDeleteAllHubDeliveryRoute(Long userId){
+		this.hubDeliveryRouteList.forEach(hubDeliveryRoute -> hubDeliveryRoute.setDeleteHubDeliveryRoute(userId));
+	}
+
 	public void updateBusinessDeliveryRouteStatus(
+		Long userId,
 		Long businessDeliveryRouteId,
 		BusinessDeliveryStatus businessDeliveryStatus
 	) {
@@ -130,11 +137,18 @@ public class Delivery extends BaseTime {
 		this.businessDeliveryRoute.updateBusinessDeliveryStatus(businessDeliveryStatus);
 		if(isDelivery(this.businessDeliveryRoute, BusinessDeliveryStatus.DELIVERED)){
 			updateDeliveryStatus(DeliveryStatus.DELIVERED);
+			this.businessDeliveryRoute.setBusinessDeliveryRoute(userId);
+			setDeleteDelivery(userId);
 		}
 	}
 
 	private boolean isDelivery(BusinessDeliveryRoute businessDeliveryRoute, BusinessDeliveryStatus newStatus){
 		return businessDeliveryRoute.getBusinessDeliveryStatus().equals(newStatus);
+	}
+
+	public void setDeleteDelivery(Long userId){
+		this.setDeletedAt(LocalDateTime.now());
+		this.setDeletedBy(userId);
 	}
 
 }

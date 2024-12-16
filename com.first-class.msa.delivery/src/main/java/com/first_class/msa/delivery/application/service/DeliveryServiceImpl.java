@@ -72,7 +72,11 @@ public class DeliveryServiceImpl implements DeliveryService {
 			UserRole.valueOf(resRoleGetByIdDTO.getRole()),
 			userId,
 			delivery);
-		if (delivery.updateHubDeliveryRouteState(hubDeliveryRouteId, reqHubDeliveryPutDTO.getHubDeliveryStatus())) {
+		if (delivery.updateHubDeliveryRouteState(
+			userId,
+			hubDeliveryRouteId,
+			reqHubDeliveryPutDTO.getHubDeliveryStatus())
+		) {
 			businessDeliveryService.assignAgentToBusinessDeliveryRoute(delivery.getBusinessDeliveryRoute());
 			delivery.getBusinessDeliveryRoute().updateBusinessDeliveryStatus(BusinessDeliveryStatus.READY);
 			// AI slack 완성되면 message 작성
@@ -95,13 +99,16 @@ public class DeliveryServiceImpl implements DeliveryService {
 			delivery
 		);
 		delivery.updateBusinessDeliveryRouteStatus(
+			userId,
 			businessDeliveryRouteId,
 			reqBusinessDeliveryPutDTO.getBusinessDeliveryStatus()
 		);
 	}
 
+
 	private Delivery findById(Long deliveryId) {
 		return deliveryRepository.findById(deliveryId).orElseThrow(
 			() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOF_FOUND_DELIVERY)));
 	}
+
 }

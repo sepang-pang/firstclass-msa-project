@@ -1,5 +1,7 @@
 package com.first_class.msa.delivery.domain.model;
 
+import java.time.LocalDateTime;
+
 import com.first_class.msa.delivery.domain.common.BusinessDeliveryStatus;
 import com.first_class.msa.delivery.domain.valueobject.Address;
 import com.first_class.msa.delivery.libs.exception.ApiException;
@@ -98,6 +100,11 @@ public class BusinessDeliveryRoute extends BaseTime {
 		) {
 			throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_BUSINESS_STATUS));
 		}
+	}
+
+	public void setBusinessDeliveryRoute(Long userId){
+		this.setDeletedAt(LocalDateTime.now());
+		this.setDeletedBy(userId);
 	}
 
 }
