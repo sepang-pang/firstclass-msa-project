@@ -8,6 +8,6 @@ import com.first_class.msa.orders.application.dto.ResRoleGetByIdDTO;
 import com.first_class.msa.orders.application.service.AuthService;
 @FeignClient(name = "auth-service")
 public interface AuthClient extends AuthService {
-	@GetMapping("/auth/{userId}")
+	@GetMapping("/external/users/{userId}")
 	ResRoleGetByIdDTO getRoleBy(@PathVariable(name = "userId") Long userId);
 }
