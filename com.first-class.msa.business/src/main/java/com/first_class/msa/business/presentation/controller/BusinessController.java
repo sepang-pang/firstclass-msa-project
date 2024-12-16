@@ -2,7 +2,7 @@ package com.first_class.msa.business.presentation.controller;
 
 import com.first_class.msa.business.application.dto.ResBusinessPostDTO;
 import com.first_class.msa.business.application.dto.ResBusinessSearchDTO;
-import com.first_class.msa.business.application.dto.SuccessResponseDTO;
+import com.first_class.msa.business.application.global.success.SuccessResponseDTO;
 import com.first_class.msa.business.application.service.BusinessService;
 import com.first_class.msa.business.presentation.request.ReqBusinessPostDTO;
 import com.first_class.msa.business.presentation.request.ReqBusinessPutByIdDTO;

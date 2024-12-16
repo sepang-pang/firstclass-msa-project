@@ -14,4 +14,3 @@ public class SuccessResponseDTO<T> {
     private String message;
     private T data;
 }
-
