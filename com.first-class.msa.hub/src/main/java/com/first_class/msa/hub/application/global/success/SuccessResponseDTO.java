@@ -1,4 +1,4 @@
-package com.first_class.msa.hub.application.dto;
+package com.first_class.msa.hub.application.global.success;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,6 +1,6 @@
 package com.first_class.msa.hub.presentation.controller;
 
-import com.first_class.msa.hub.application.dto.SuccessResponseDTO;
+import com.first_class.msa.hub.application.global.success.SuccessResponseDTO;
 import com.first_class.msa.hub.application.dto.transit.ResHubTransitInfoGetDTO;
 import com.first_class.msa.hub.application.dto.transit.ResHubTransitInfoPostDTO;
 import com.first_class.msa.hub.application.service.HubTransitInfoService;
