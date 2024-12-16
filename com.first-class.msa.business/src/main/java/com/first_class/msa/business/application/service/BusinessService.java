@@ -3,6 +3,7 @@ package com.first_class.msa.business.application.service;
 import com.first_class.msa.business.application.dto.ResBusinessPostDTO;
 import com.first_class.msa.business.application.dto.ResBusinessSearchDTO;
 import com.first_class.msa.business.application.dto.external.ExternalResBusinessGetByIdDTO;
+import com.first_class.msa.business.application.dto.external.ExternalResBusinessGetByUserIdDTO;
 import com.first_class.msa.business.application.global.exception.custom.AuthorityException;
 import com.first_class.msa.business.application.global.exception.custom.BadRequestException;
 import com.first_class.msa.business.application.global.exception.custom.EntityAlreadyExistException;
@@ -11,7 +12,7 @@ import com.first_class.msa.business.domain.model.RoleType;
 import com.first_class.msa.business.domain.repository.BusinessRepository;
 import com.first_class.msa.business.presentation.request.ReqBusinessPostDTO;
 import com.first_class.msa.business.presentation.request.ReqBusinessPutByIdDTO;
-import com.sun.jdi.request.DuplicateRequestException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -100,8 +101,11 @@ public class BusinessService {
     public ExternalResBusinessGetByIdDTO getBy(Long businessId) {
         return ExternalResBusinessGetByIdDTO.of(getBusinessBy(businessId));
     }
-
-
+    
+    @Transactional(readOnly = true)
+    public ExternalResBusinessGetByUserIdDTO getByUserId(Long userId) {
+        return ExternalResBusinessGetByUserIdDTO.of(getBusinessByUserId(userId));
+    }
 
 
     private void validateBusinessCreationProcess(Long userId, ReqBusinessPostDTO dto, String roleForValidation) {
@@ -173,6 +177,11 @@ public class BusinessService {
     private Business getBusinessBy(Long businessId) {
         return businessRepository.findByIdAndDeletedAtIsNull(businessId)
                 .orElseThrow(() -> new BadRequestException("존재하지 않는 업체입니다."));
+    }
+
+    private Business getBusinessByUserId(Long userId) {
+        return businessRepository.findByManagerIdAndDeletedAtIsNull(userId)
+                .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 업체입니다."));
     }
 
     private void validateBusinessManagerRole(Long managerId) {

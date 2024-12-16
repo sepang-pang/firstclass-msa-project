@@ -14,6 +14,8 @@ public interface BusinessRepository {
 
     Optional<Business> findByIdAndDeletedAtIsNull(Long id);
 
+    Optional<Business> findByManagerIdAndDeletedAtIsNull(Long managerId);
+
     Page<Business> findBusinessByDeletedAtIsNullWithConditions(Pageable pageable, String name, String address, String type, String sort);
 
     void save(Business business);
