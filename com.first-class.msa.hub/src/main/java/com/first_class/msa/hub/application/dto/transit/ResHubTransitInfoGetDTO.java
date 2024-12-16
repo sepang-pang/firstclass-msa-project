@@ -29,7 +29,9 @@ public class ResHubTransitInfoGetDTO {
     public static class HubTransitInfoDTO {
 
         private Long departureHubId;
+        private String departureHubName;
         private Long arrivalHubId;
+        private String arrivalHubName;
         private Long transitTime;
         private double distance;
 
@@ -42,7 +44,9 @@ public class ResHubTransitInfoGetDTO {
         public static HubTransitInfoDTO from(HubTransitInfo hubTransitInfo) {
             return HubTransitInfoDTO.builder()
                     .departureHubId(hubTransitInfo.getDepartureHub().getId())
+                    .departureHubName(hubTransitInfo.getDepartureHub().getName())
                     .arrivalHubId(hubTransitInfo.getArrivalHub().getId())
+                    .arrivalHubName(hubTransitInfo.getArrivalHub().getName())
                     .transitTime(hubTransitInfo.getTransitTime())
                     .distance(hubTransitInfo.getDistance())
                     .build();
