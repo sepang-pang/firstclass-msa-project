@@ -6,6 +6,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.first_class.msa.delivery.application.dto.ResDeliveryOrderSearchDTO;
 import com.first_class.msa.delivery.application.dto.ResDeliverySearchDTO;
 import com.first_class.msa.delivery.application.dto.ResRoleGetByIdDTO;
 import com.first_class.msa.delivery.domain.common.BusinessDeliveryStatus;
@@ -34,6 +35,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 	private final BusinessDeliveryService businessDeliveryService;
 	private final AuthConditionService authConditionService;
 	private final AuthService authService;
+	private final AgentService agentService;
 
 	@Override
 	@RabbitListener(queues = RabbitMQConfig.DELIVERY_QUEUE)
@@ -151,6 +153,23 @@ public class DeliveryServiceImpl implements DeliveryService {
 		delivery.setDeleteAllHubDeliveryRoute(userId);
 		delivery.getBusinessDeliveryRoute().setBusinessDeliveryRoute(userId);
 		delivery.setDeleteDelivery(userId);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public ResDeliveryOrderSearchDTO getAllDeliveryBy(List<Long> orderIdList){
+		List<Delivery> deliveryList = deliveryRepository.findAllByOrderIdInAndDeletedByIsNull(orderIdList);
+		if(deliveryList.size() != orderIdList.size()){
+			throw new IllegalArgumentException(new ApiException(ErrorMessage.NOF_FOUND_DELIVERY_LIST));
+		}
+
+		return ResDeliveryOrderSearchDTO.from(deliveryList);
+	}
+
+	@Override
+	public boolean existDeliveryBy(Long orderId, Long userId){
+		Long deliveryId = agentService.getDeliveryAgentByUserId(userId).getDeliveryAgentId();
+		return deliveryRepository.existsByIdAndOrderId(deliveryId, orderId);
 	}
 
 }

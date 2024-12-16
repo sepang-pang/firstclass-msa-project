@@ -8,17 +8,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.first_class.msa.orders.application.dto.ResDeliveryOrderSearchDTO;
-import com.first_class.msa.orders.application.dto.ResDeliveryOrderSearchDetailDTO;
 import com.first_class.msa.orders.application.service.DeliveryService;
 
 @FeignClient(name = "delivery-service")
 public interface DeliveryClient extends DeliveryService {
 
-	@GetMapping("/orders/deliveries")
+	@GetMapping("/external/orders/deliveries")
 	ResDeliveryOrderSearchDTO getAllDeliveryBy(@RequestParam List<Long> orderIdList);
 
-	@GetMapping("/orders/{orderId}/deliveries/}")
-	ResDeliveryOrderSearchDetailDTO getDeliveryBy(@PathVariable Long orderId, @RequestParam Long userId);
+	@GetMapping("/external/orders/{orderId}/deliveries")
+	boolean existDeliveryBy(@PathVariable Long orderId, @RequestParam Long userId);
 
 
 

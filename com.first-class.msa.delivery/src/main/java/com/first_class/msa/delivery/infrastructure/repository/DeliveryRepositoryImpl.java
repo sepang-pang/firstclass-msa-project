@@ -1,5 +1,6 @@
 package com.first_class.msa.delivery.infrastructure.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -27,6 +28,16 @@ public class DeliveryRepositoryImpl implements DeliveryRepository {
 	@Override
 	public Optional<Delivery> findById(Long deliveryId) {
 		return deliveryJpaRepository.findById(deliveryId);
+	}
+
+	@Override
+	public List<Delivery> findAllByOrderIdInAndDeletedByIsNull(List<Long> orderIdList) {
+		return deliveryJpaRepository.findAllByOrderIdInAndDeletedByIsNull(orderIdList);
+	}
+
+	@Override
+	public boolean existsByIdAndOrderId(Long deliveryId, Long orderId) {
+		return deliveryJpaRepository.existsByIdAndOrderId(deliveryId, orderId);
 	}
 
 }

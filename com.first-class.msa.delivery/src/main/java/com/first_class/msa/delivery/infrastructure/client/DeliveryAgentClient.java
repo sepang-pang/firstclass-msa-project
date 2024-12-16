@@ -8,7 +8,7 @@ import com.first_class.msa.delivery.application.dto.ResGlobalDeliveryAgentDTO;
 @FeignClient(name = "agent-service")
 public interface DeliveryAgentClient {
 
-	@PostMapping("/external/global")
+	@PostMapping("/external/agents/global")
 	ResGlobalDeliveryAgentDTO assignGlobalAgent();
 
 }
