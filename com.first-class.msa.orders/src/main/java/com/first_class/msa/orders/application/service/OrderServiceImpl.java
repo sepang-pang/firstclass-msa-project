@@ -2,6 +2,7 @@ package com.first_class.msa.orders.application.service;
 
 import java.util.List;
 
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ import com.first_class.msa.orders.domain.model.UserRole;
 import com.first_class.msa.orders.domain.model.valueobject.Address;
 import com.first_class.msa.orders.domain.model.valueobject.RequestInfo;
 import com.first_class.msa.orders.domain.repository.OrderRepository;
+import com.first_class.msa.orders.infrastructure.config.RabbitMQConfig;
 import com.first_class.msa.orders.libs.exception.ApiException;
 import com.first_class.msa.orders.libs.message.ErrorMessage;
 import com.first_class.msa.orders.presentation.request.ReqOrderPostDTO;
@@ -102,10 +104,20 @@ public class OrderServiceImpl implements OrderService {
 		orderEventService.orderDeleteDeliveryEvent(order.getId(), userId);
 	}
 
+	@Transactional
+	@RabbitListener(queues = RabbitMQConfig.ORDER_FAILED_KEY)
+	public void handleFailedOrder(Long orderId) {
+		Order order = findById(orderId);
+		order.deleteOrder(order.getUserId());
+		orderEventService.orderCancelEvent(order.getUserId(), order.getId());
+	}
+
 	private Order findById(Long orderId) {
 		return orderRepository.findById(orderId)
 			.orElseThrow(() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOT_FOUND_ORDER)));
 	}
+
+
 
 
 }

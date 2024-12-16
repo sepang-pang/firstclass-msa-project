@@ -1,15 +1,19 @@
 package com.first_class.msa.product.domain.model;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import io.hypersistence.utils.hibernate.id.Tsid;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -90,5 +94,9 @@ public class Product {
         this.modifiedBy = account;
         this.deletedBy = account;
         this.deletedAt = LocalDateTime.now();
+    }
+
+    public void updateQuantity(int quantity){
+        this.quantity -= quantity;
     }
 }

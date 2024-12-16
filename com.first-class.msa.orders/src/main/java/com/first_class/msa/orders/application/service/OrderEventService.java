@@ -14,4 +14,6 @@ public interface OrderEventService {
 	void orderDeleteProductEvent(Long orderId, List<ResOrderDTO.OrderDTO.OrderLineDTO> orderLineDTOList);
 
 	void orderDeleteDeliveryEvent(Long orderId, Long userId);
+
+	void orderCancelEvent(Long userId, Long orderId);
 }

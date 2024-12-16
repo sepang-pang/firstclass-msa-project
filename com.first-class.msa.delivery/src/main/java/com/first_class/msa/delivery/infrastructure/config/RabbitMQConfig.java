@@ -12,6 +12,7 @@ public class RabbitMQConfig {
 	public static final String DELIVERY_QUEUE = "delivery.queue";
 	public static final String EXCHANGE_NAME = "order.exchange";
 	public static final String ORDER_CREATED_DELIVERY_KEY = "order.created.delivery";
+	public static final String ORDER_FAILED_KEY = "order.failed";
 
 	@Bean
 	public Queue deliveryQueue() {
@@ -26,5 +27,10 @@ public class RabbitMQConfig {
 	@Bean
 	public Binding deliveryBinding(Queue deliveryQueue, TopicExchange exchange) {
 		return BindingBuilder.bind(deliveryQueue).to(exchange).with(ORDER_CREATED_DELIVERY_KEY);
+	}
+
+	@Bean
+	public Binding failedBinding(Queue deliveryQueue, TopicExchange exchange) {
+		return BindingBuilder.bind(deliveryQueue).to(exchange).with(ORDER_FAILED_KEY);
 	}
 }

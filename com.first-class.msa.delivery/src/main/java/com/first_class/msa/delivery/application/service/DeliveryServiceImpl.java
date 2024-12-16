@@ -18,6 +18,7 @@ import com.first_class.msa.delivery.domain.model.Delivery;
 import com.first_class.msa.delivery.domain.model.HubDeliveryRoute;
 import com.first_class.msa.delivery.domain.repository.DeliveryRepository;
 import com.first_class.msa.delivery.infrastructure.config.RabbitMQConfig;
+import com.first_class.msa.delivery.infrastructure.event.OrderCancelDeliveryEvent;
 import com.first_class.msa.delivery.infrastructure.event.OrderCreateDeliveryEvent;
 import com.first_class.msa.delivery.libs.exception.ApiException;
 import com.first_class.msa.delivery.libs.message.ErrorMessage;
@@ -170,6 +171,18 @@ public class DeliveryServiceImpl implements DeliveryService {
 	public boolean existDeliveryBy(Long orderId, Long userId){
 		Long deliveryId = agentService.getDeliveryAgentByUserId(userId).getDeliveryAgentId();
 		return deliveryRepository.existsByIdAndOrderId(deliveryId, orderId);
+	}
+
+	@Transactional
+	@RabbitListener(queues = RabbitMQConfig.ORDER_FAILED_KEY)
+	public void cancelOrder(OrderCancelDeliveryEvent event) {
+		Delivery delivery = deliveryRepository.findByOrderId(event.getOrderId()).orElseThrow(
+			() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOF_FOUND_DELIVERY))
+		);
+		delivery.setDeleteAllHubDeliveryRoute(event.getUserId());
+		delivery.getBusinessDeliveryRoute().setBusinessDeliveryRoute(event.getUserId());
+		delivery.setDeleteDelivery(event.getUserId());
+
 	}
 
 }

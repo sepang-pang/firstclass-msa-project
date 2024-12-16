@@ -25,6 +25,8 @@ public class RabbitMQConfig {
 
 	public static final String ORDER_DELETED_DELIVERY_KEY = "order.deleted.delivery";
 
+	public static final String ORDER_FAILED_KEY = "order.failed";
+
 	@Bean
 	public TopicExchange exchange() {
 		return new TopicExchange(EXCHANGE_NAME);
@@ -72,6 +74,11 @@ public class RabbitMQConfig {
 	@Bean
 	public Binding deliveryDeletedBinding(Queue deliveryQueue, TopicExchange exchange) {
 		return BindingBuilder.bind(deliveryQueue).to(exchange).with(ORDER_DELETED_DELIVERY_KEY);
+	}
+
+	@Bean
+	public Binding failedBinding(Queue productQueue, TopicExchange exchange) {
+		return BindingBuilder.bind(productQueue).to(exchange).with(ORDER_FAILED_KEY);
 	}
 
 

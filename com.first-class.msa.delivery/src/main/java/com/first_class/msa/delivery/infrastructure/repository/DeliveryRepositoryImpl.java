@@ -40,4 +40,14 @@ public class DeliveryRepositoryImpl implements DeliveryRepository {
 		return deliveryJpaRepository.existsByIdAndOrderId(deliveryId, orderId);
 	}
 
+	@Override
+	public List<Long> findOrderIdsByAgentId(Long agentId){
+		return deliveryQueryRepository.findOrderIdsByAgentId(agentId);
+	}
+
+	@Override
+	public Optional<Delivery> findByOrderId(Long orderId) {
+		return deliveryJpaRepository.findByOrderIdAndDeletedByIsNotNull(orderId);
+	}
+
 }

@@ -1,6 +1,5 @@
 package com.first_class.msa.delivery.infrastructure.repository;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +13,6 @@ public interface DeliveryJpaRepository extends JpaRepository<Delivery, Long> {
 	List<Delivery> findAllByOrderIdInAndDeletedByIsNull(List<Long> orderIdList);
 
 	boolean existsByIdAndOrderId(Long deliveryId, Long orderId);
+
+	Optional<Delivery> findByOrderIdAndDeletedByIsNotNull(Long orderId);
 }
