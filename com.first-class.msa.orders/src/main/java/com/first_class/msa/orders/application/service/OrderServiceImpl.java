@@ -38,8 +38,17 @@ public class OrderServiceImpl implements OrderService {
 		Address address = new Address(reqOrderPostDTO.getAddress());
 		RequestInfo requestInfo = new RequestInfo(reqOrderPostDTO.getRequestInfo());
 		ResBusinessDTO resBusinessDTO = businessService.getBusinessBy(businessId);
+		ResBusinessDTO resDeliveryBusinessDTO = businessService.getBusinessBy(reqOrderPostDTO.getArrivalBusinessId());
 
-		Order order = Order.createOrder(businessId, resBusinessDTO.getHubId(), userId, address, requestInfo);
+
+		Order order = Order.createOrder(
+			resBusinessDTO.getBusinessId(),
+			resDeliveryBusinessDTO.getBusinessId(),
+			resBusinessDTO.getHubId(),
+			resDeliveryBusinessDTO.getHubId(),
+			userId,
+			address,
+			requestInfo);
 		order.setCreateByAndUpdateBy(userId);
 
 		List<OrderLine> orderLineList = orderLineService.createOrderLineList(
@@ -50,8 +59,8 @@ public class OrderServiceImpl implements OrderService {
 		order = orderRepository.save(order);
 
 		ResOrderDTO orderPostDTO = ResOrderDTO.of(order);
-		orderEventService.orderCreateProductEvent(order.getId(), orderPostDTO.getOrderDTO().getOrderLineList());
-		orderEventService.orderCreateDeliveryEvent(order.getId(), order.getAddress().getValue());
+		orderEventService.orderCreateProductEvent(order);
+		orderEventService.orderCreateDeliveryEvent(order);
 
 		return orderPostDTO;
 	}
@@ -98,6 +107,5 @@ public class OrderServiceImpl implements OrderService {
 			.orElseThrow(() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOT_FOUND_ORDER)));
 	}
 
-	// TODO: 2024-12-12 배송 주소 변경관련 메세지큐 처리 
 
 }

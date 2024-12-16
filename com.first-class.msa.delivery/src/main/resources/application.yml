@@ -1,6 +1,6 @@
 spring:
   application:
-    name: product-service
+    name: delivery-service
 
   datasource:
     url: ${DB_URL}
@@ -18,10 +18,26 @@ spring:
         format_sql: true
     open-in-view: false
 
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    listener:
+      simple:
+        auto-startup: false
+
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:19090/eureka/
 
-#server:
-#  port: 19093
+server:
+  port: 19072
+
+naver:
+  api:
+    client-id: ${CLIENT_ID}
+    client-secret: ${CLIENT_SECRET}
+    directions-url: ${DIRECTIONS_URL}
+    geocoding-url: ${GEOCODING_URL}

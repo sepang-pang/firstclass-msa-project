@@ -1,6 +1,6 @@
 spring:
   application:
-    name: product-service
+    name: agent-service
 
   datasource:
     url: ${DB_URL}

@@ -6,6 +6,7 @@ import lombok.Getter;
 
 @Getter
 public class ReqOrderPostDTO {
+	private Long arrivalBusinessId;
 	private String requestInfo;
 	private String address;
 	private List<ReqOrderLinePostDTO> reqOrderLinePostDTOList;

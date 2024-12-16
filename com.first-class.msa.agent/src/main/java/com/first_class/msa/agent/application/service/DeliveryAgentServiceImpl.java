@@ -9,8 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.first_class.msa.agent.application.dto.DeliveryAgentAuthSearchConditionDTO;
 import com.first_class.msa.agent.application.dto.ResDeliveryAgentDTO;
+import com.first_class.msa.agent.application.dto.ResDeliveryAgentGetByUserIdDTO;
 import com.first_class.msa.agent.application.dto.ResDeliveryAgentSearchDTO;
-import com.first_class.msa.agent.application.dto.ResGlobalDeliveryAgentDto;
+import com.first_class.msa.agent.application.dto.ResGlobalDeliveryAgentDTO;
 import com.first_class.msa.agent.application.dto.ResHubDeliveryAgentDto;
 import com.first_class.msa.agent.application.dto.ResRoleGetByIdDTO;
 import com.first_class.msa.agent.domain.common.IsAvailable;
@@ -70,6 +71,7 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 			sequence
 		);
 
+		deliveryAgent.setCreatedByAndUpdateBy(userId);
 		deliveryAgent = deliveryAgentRepository.save(deliveryAgent);
 		return ResDeliveryAgentDTO.from(deliveryAgent);
 	}
@@ -122,6 +124,14 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 		return ResDeliveryAgentSearchDTO.DeliveryAgentDetailDTO.from(deliveryAgent);
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public ResDeliveryAgentGetByUserIdDTO getDeliveryAgentByUserId(Long userId) {
+		DeliveryAgent deliveryAgent = deliveryAgentRepository.findByUserId(userId).orElseThrow(
+			() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOT_FOUND_DELIVERY_AGENT)));
+		return ResDeliveryAgentGetByUserIdDTO.from(deliveryAgent);
+	}
+
 	/**
 	 * 허브간 배송 허브에 국한되지 않고 사용하기 때문에 global로 표시
 	 * 1. Redis에서 허브 간 배송 담당자 목록 가져오기
@@ -132,7 +142,7 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 	 */
 	@Override
 	@Transactional
-	public ResGlobalDeliveryAgentDto assignGlobalDeliveryAgent() {
+	public ResGlobalDeliveryAgentDTO assignGlobalDeliveryAgent() {
 		List<DeliveryAgent> agentList = deliveryAgentCacheService.getGlobalAgentList();
 		if (agentList == null || agentList.isEmpty()) {
 
@@ -158,7 +168,7 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 		int nextSequence = (currentSequence + 1) % agentList.size();
 		deliveryAgentCacheService.updateGlobalSequence(nextSequence);
 
-		return ResGlobalDeliveryAgentDto.from(assignedAgent.getId());
+		return ResGlobalDeliveryAgentDTO.from(assignedAgent.getId());
 	}
 
 	/**
