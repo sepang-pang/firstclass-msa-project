@@ -38,7 +38,12 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
 				qOrder.orderTotalPrice.value
 			))
 			.from(qOrder)
-			.where(buildDynamicConditions(authSearchConditionDTO))
+			.where(
+				deliveryOrderEquals(authSearchConditionDTO.getOrderIdList()),
+				userIdEquals(authSearchConditionDTO.getUserId()),
+				businessIdEquals(authSearchConditionDTO.getBusinessId()),
+				hubIdEquals(authSearchConditionDTO.getHubId())
+			)
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();
@@ -47,7 +52,12 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
 			jpaQueryFactory
 				.select(qOrder.count())
 				.from(qOrder)
-				.where(buildDynamicConditions(authSearchConditionDTO))
+				.where(
+					deliveryOrderEquals(authSearchConditionDTO.getOrderIdList()),
+					userIdEquals(authSearchConditionDTO.getUserId()),
+					businessIdEquals(authSearchConditionDTO.getBusinessId()),
+					hubIdEquals(authSearchConditionDTO.getHubId())
+				)
 				.fetchOne()
 		).orElse(0L);
 
@@ -55,29 +65,6 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
 		return ResOrderSearchDTO.of(page);
 	}
 
-	private BooleanBuilder buildDynamicConditions(AuthSearchConditionDTO authSearchConditionDTO) {
-		BooleanBuilder builder = new BooleanBuilder();
-
-		// 권한에 따른 조건 추가
-		switch (authSearchConditionDTO.getUserRole()) {
-			case "MASTER":
-				break;
-			case "HUB_MANAGER":
-				builder.and(hubIdEquals(authSearchConditionDTO.getHubId()));
-				break;
-			case "BUSINESS_MANAGER":
-				builder.and(businessIdEquals(authSearchConditionDTO.getBusinessId()));
-				break;
-			case "DELIVERY_MANAGER":
-				builder.and(deliveryOrderEquals(authSearchConditionDTO.getOrderIdList()));
-				break;
-			default:
-				Object o = null;
-				break;
-		}
-
-		return builder;
-	}
 
 	private BooleanExpression deliveryOrderEquals(List<Long> orderIdList){
 		return orderIdList != null ? qOrder.id.in(orderIdList) : null;

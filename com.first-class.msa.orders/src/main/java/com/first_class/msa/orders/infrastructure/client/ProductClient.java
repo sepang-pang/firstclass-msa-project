@@ -12,6 +12,6 @@ import com.first_class.msa.orders.application.service.ProductService;
 @FeignClient(name = "product-service")
 public interface ProductClient extends ProductService {
 
-	@GetMapping("/products")
+	@GetMapping("/external/products")
 	List<ResProductGetDTO> getAllProductBy(@RequestParam List<Long> productIdList);
 }
