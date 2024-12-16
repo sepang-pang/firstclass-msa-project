@@ -158,11 +158,9 @@ public class DeliveryServiceImpl implements DeliveryService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public ResDeliveryOrderSearchDTO getAllDeliveryBy(List<Long> orderIdList){
-		List<Delivery> deliveryList = deliveryRepository.findAllByOrderIdInAndDeletedByIsNull(orderIdList);
-		if(deliveryList.size() != orderIdList.size()){
-			throw new IllegalArgumentException(new ApiException(ErrorMessage.NOF_FOUND_DELIVERY_LIST));
-		}
+	public ResDeliveryOrderSearchDTO getAllDeliveryBy(Long userId) {
+		Long deliveryAgentId = agentService.getDeliveryAgentByUserId(userId).getDeliveryAgentId();
+		List<Long> deliveryList = deliveryRepository.findOrderIdsByAgentId(deliveryAgentId);
 
 		return ResDeliveryOrderSearchDTO.from(deliveryList);
 	}

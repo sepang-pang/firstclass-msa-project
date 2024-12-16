@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 public class DeliveryRepositoryImpl implements DeliveryRepository {
 	private final DeliveryJpaRepository deliveryJpaRepository;
 
+	private final DeliveryQueryRepository deliveryQueryRepository;
+
 	@Override
 	public Delivery save(Delivery delivery) {
 		return deliveryJpaRepository.save(delivery);
@@ -28,11 +30,6 @@ public class DeliveryRepositoryImpl implements DeliveryRepository {
 	@Override
 	public Optional<Delivery> findById(Long deliveryId) {
 		return deliveryJpaRepository.findById(deliveryId);
-	}
-
-	@Override
-	public List<Delivery> findAllByOrderIdInAndDeletedByIsNull(List<Long> orderIdList) {
-		return deliveryJpaRepository.findAllByOrderIdInAndDeletedByIsNull(orderIdList);
 	}
 
 	@Override

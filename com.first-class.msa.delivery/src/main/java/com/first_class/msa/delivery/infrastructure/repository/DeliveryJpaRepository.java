@@ -10,7 +10,6 @@ public interface DeliveryJpaRepository extends JpaRepository<Delivery, Long> {
 
 	Optional<Delivery> findByIdAndDeletedByIsNotNull(Long deliveryId);
 
-	List<Delivery> findAllByOrderIdInAndDeletedByIsNull(List<Long> orderIdList);
 
 	boolean existsByIdAndOrderId(Long deliveryId, Long orderId);
 

@@ -12,7 +12,7 @@ import com.first_class.msa.agent.application.dto.ResDeliveryAgentDTO;
 import com.first_class.msa.agent.application.dto.ResDeliveryAgentGetByUserIdDTO;
 import com.first_class.msa.agent.application.dto.ResDeliveryAgentSearchDTO;
 import com.first_class.msa.agent.application.dto.ResGlobalDeliveryAgentDTO;
-import com.first_class.msa.agent.application.dto.ResHubDeliveryAgentDto;
+import com.first_class.msa.agent.application.dto.ResHubDeliveryAgentDTO;
 import com.first_class.msa.agent.application.dto.ResRoleGetByIdDTO;
 import com.first_class.msa.agent.domain.common.IsAvailable;
 import com.first_class.msa.agent.domain.common.Type;
@@ -182,7 +182,7 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 
 	@Override
 	@Transactional
-	public ResHubDeliveryAgentDto assignHubDeliveryAgent(Long hubId) {
+	public ResHubDeliveryAgentDTO assignHubDeliveryAgent(Long hubId) {
 		List<DeliveryAgent> agentList = deliveryAgentCacheService.getHubAgentList(hubId);
 		if (agentList == null || agentList.isEmpty()) {
 			agentList = deliveryAgentRepository.findByHubId(hubId);
@@ -207,7 +207,7 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 		int nextSequence = (currentSequence + 1) % agentList.size();
 		deliveryAgentCacheService.updateHubSequence(hubId, nextSequence);
 
-		return ResHubDeliveryAgentDto.from(assignedAgent.getId());
+		return ResHubDeliveryAgentDTO.from(assignedAgent.getId());
 	}
 
 

@@ -13,7 +13,9 @@ public interface DeliveryRepository {
 
 	Optional<Delivery> findById(Long deliveryId);
 
-	List<Delivery> findAllByOrderIdInAndDeletedByIsNull(List<Long> orderIdList);
-
 	boolean existsByIdAndOrderId(Long deliveryId, Long orderId);
+
+	List<Long> findOrderIdsByAgentId(Long agentId);
+
+	Optional<Delivery> findByOrderId(Long orderId);
 }

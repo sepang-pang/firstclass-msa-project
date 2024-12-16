@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.first_class.msa.agent.application.dto.ResDeliveryAgentGetByUserIdDTO;
 import com.first_class.msa.agent.application.dto.ResGlobalDeliveryAgentDTO;
-import com.first_class.msa.agent.application.dto.ResHubDeliveryAgentDto;
+import com.first_class.msa.agent.application.dto.ResHubDeliveryAgentDTO;
 import com.first_class.msa.agent.application.service.DeliveryAgentService;
 
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class ExternalAgentController {
 	}
 
 	@PostMapping("/external/agents/hubs/{hubId}")
-	public ResHubDeliveryAgentDto assignHubAgent(
+	public ResHubDeliveryAgentDTO assignHubAgent(
 		@PathVariable Long hubId
 	) {
 		return deliveryAgentService.assignHubDeliveryAgent(hubId);

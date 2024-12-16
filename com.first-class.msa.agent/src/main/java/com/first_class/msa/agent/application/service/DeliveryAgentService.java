@@ -6,7 +6,7 @@ import com.first_class.msa.agent.application.dto.ResDeliveryAgentDTO;
 import com.first_class.msa.agent.application.dto.ResDeliveryAgentGetByUserIdDTO;
 import com.first_class.msa.agent.application.dto.ResDeliveryAgentSearchDTO;
 import com.first_class.msa.agent.application.dto.ResGlobalDeliveryAgentDTO;
-import com.first_class.msa.agent.application.dto.ResHubDeliveryAgentDto;
+import com.first_class.msa.agent.application.dto.ResHubDeliveryAgentDTO;
 import com.first_class.msa.agent.domain.common.IsAvailable;
 import com.first_class.msa.agent.domain.common.Type;
 import com.first_class.msa.agent.presentation.dto.ReqDeliveryAgentPostDTO;
@@ -28,7 +28,7 @@ public interface DeliveryAgentService {
 
 	ResGlobalDeliveryAgentDTO assignGlobalDeliveryAgent();
 
-	ResHubDeliveryAgentDto assignHubDeliveryAgent(Long hubId);
+	ResHubDeliveryAgentDTO assignHubDeliveryAgent(Long hubId);
 
 	void putBy(Long userId, Long deliveryAgentId, ReqDeliveryAgentPutDTO reqDeliveryAgentPutDTO);
 
