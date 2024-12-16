@@ -2,6 +2,7 @@ package com.first_class.msa.product.application.service;
 
 import com.first_class.msa.product.application.dto.ResProductPostDTO;
 import com.first_class.msa.product.application.dto.ResProductSearchDTO;
+import com.first_class.msa.product.application.dto.external.ExternalResProductGetByIdInDTO;
 import com.first_class.msa.product.application.global.exception.custom.AuthorityException;
 import com.first_class.msa.product.application.global.exception.custom.BadRequestException;
 import com.first_class.msa.product.application.global.exception.custom.EntityAlreadyExistException;
@@ -10,6 +11,7 @@ import com.first_class.msa.product.domain.model.RoleType;
 import com.first_class.msa.product.domain.repository.ProductRepository;
 import com.first_class.msa.product.presentation.request.ReqProductPostDTO;
 import com.first_class.msa.product.presentation.request.ReqProductPutByIdDTO;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -88,6 +91,16 @@ public class ProductService {
         validateProductDeletionProcess(userId, roleForValidation, productForDeletion);
 
         productForDeletion.deleteProduct(account);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ExternalResProductGetByIdInDTO> getBy(List<Long> productIdList) {
+
+        List<Product> productListForMapping = getProductListBy(productIdList);
+
+        return productListForMapping.stream()
+                .map(ExternalResProductGetByIdInDTO::of)
+                .toList();
     }
 
 
@@ -180,5 +193,15 @@ public class ProductService {
         if (productRepository.existsByNameAndBusinessIdAndDeletedAtIsNull(name, businessId)) {
             throw new EntityAlreadyExistException("이미 존재하는 상품명입니다.");
         }
+    }
+
+    private List<Product> getProductListBy(List<Long> productIdList) {
+        List<Product> productList = productRepository.findByIdInAndDeletedAtIsNull(productIdList);
+
+        if (productList.isEmpty()) {
+            throw new EntityNotFoundException("유효하지 않은 상품 목록입니다.");
+        }
+
+        return productList;
     }
 }

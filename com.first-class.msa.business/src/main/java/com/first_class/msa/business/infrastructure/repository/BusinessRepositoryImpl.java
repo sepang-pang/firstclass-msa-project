@@ -32,6 +32,11 @@ public class BusinessRepositoryImpl implements BusinessRepository {
     }
 
     @Override
+    public Optional<Business> findByManagerIdAndDeletedAtIsNull(Long managerId) {
+        return jpaBusinessRepository.findByManagerIdAndDeletedAtIsNull(managerId);
+    }
+
+    @Override
     public Page<Business> findBusinessByDeletedAtIsNullWithConditions(Pageable pageable, String name, String address, String type, String sort) {
 
         return businessQueryRepository.findBusinessByDeletedAtIsNullWithConditions(pageable, name, address, type, sort);
