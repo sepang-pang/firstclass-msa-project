@@ -2,6 +2,7 @@ package com.first_class.msa.hub.application.service;
 
 import com.first_class.msa.hub.application.dto.ResHubSearchDTO;
 import com.first_class.msa.hub.application.dto.ResHubPostDTO;
+import com.first_class.msa.hub.application.dto.external.ExternalResHubGetByIdDTO;
 import com.first_class.msa.hub.domain.model.Hub;
 import com.first_class.msa.hub.domain.repository.HubRepository;
 import com.first_class.msa.hub.presentation.request.ReqHubPostDTO;
@@ -75,6 +76,11 @@ public class HubService {
     @Transactional(readOnly = true)
     public Long getHubIdBy(Long userId) {
         return hubRepository.findByManagerIdAndDeletedAtIsNull(userId);
+    }
+
+    @Transactional(readOnly = true)
+    public ExternalResHubGetByIdDTO getBy(Long hubId) {
+        return ExternalResHubGetByIdDTO.of(getHubBy(hubId));
     }
 
 

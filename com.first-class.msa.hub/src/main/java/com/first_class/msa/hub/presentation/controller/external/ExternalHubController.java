@@ -1,5 +1,6 @@
 package com.first_class.msa.hub.presentation.controller.external;
 
+import com.first_class.msa.hub.application.dto.external.ExternalResHubGetByIdDTO;
 import com.first_class.msa.hub.application.service.HubService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,5 +21,10 @@ public class ExternalHubController {
     @GetMapping("/external/hubs/user/{userId}/id")
     public Long getHubIdBy(@PathVariable Long userId) {
         return hubService.getHubIdBy(userId);
+    }
+
+    @GetMapping("/external/hubs/{hubId}")
+    ExternalResHubGetByIdDTO getHubBy(@PathVariable Long hubId) {
+        return hubService.getBy(hubId);
     }
 }
