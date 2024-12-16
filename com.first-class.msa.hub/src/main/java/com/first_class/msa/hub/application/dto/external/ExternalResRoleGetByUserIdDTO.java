@@ -5,6 +5,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ResRoleGetByUserIdDTO {
+public class ExternalResRoleGetByUserIdDTO {
     String role;
 }
