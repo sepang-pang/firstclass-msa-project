@@ -115,11 +115,11 @@ public class Delivery extends BaseTime {
 		return hubRoute.getArrivalHubId().equals(this.arrivalHubId) && newStatus == HubDeliveryStatus.ARRIVED_AT_HUB;
 	}
 
-	private void updateDeliveryStatus(DeliveryStatus newStatus) {
+	public void updateDeliveryStatus(DeliveryStatus newStatus) {
 		this.deliveryStatus = newStatus;
 	}
 
-	private void setDeleteAllHubDeliveryRoute(Long userId){
+	public void setDeleteAllHubDeliveryRoute(Long userId){
 		this.hubDeliveryRouteList.forEach(hubDeliveryRoute -> hubDeliveryRoute.setDeleteHubDeliveryRoute(userId));
 	}
 

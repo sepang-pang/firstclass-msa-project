@@ -6,6 +6,7 @@ import com.first_class.msa.delivery.application.dto.ExternalResBusinessGetByIdDT
 import com.first_class.msa.delivery.application.dto.ResDeliveryAgentGetByUserIdDTO;
 import com.first_class.msa.delivery.domain.common.UserRole;
 import com.first_class.msa.delivery.domain.model.Delivery;
+import com.first_class.msa.delivery.domain.model.HubDeliveryRoute;
 import com.first_class.msa.delivery.libs.exception.ApiException;
 import com.first_class.msa.delivery.libs.message.ErrorMessage;
 
@@ -114,6 +115,23 @@ public class AuthConditionServiceImpl implements AuthConditionService {
 			}
 		}
 	}
+
+	@Override
+	public void validateDeleteByAuthCondition(UserRole userRole, Long userId, Delivery delivery) {
+		switch (userRole) {
+			case MASTER -> {
+				return;
+			}
+			case HUB_MANAGER -> {
+				Long hubId = getHubIdBy(userId);
+				HubDeliveryRoute hubDeliveryRoute = delivery.getHubDeliveryRouteList().get(0);
+				if (!hubDeliveryRoute.getDepartureHubId().equals(hubId)){
+					throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_USER_ROLE_HUB_MANAGER));
+				}
+				}
+			}
+	}
+
 
 	private boolean getExistHubId(Long hubId) {
 		return hubService.existsBy(hubId);

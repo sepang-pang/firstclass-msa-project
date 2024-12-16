@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.first_class.msa.delivery.application.dto.ResDeliverySearchDTO;
 import com.first_class.msa.delivery.application.dto.ResRoleGetByIdDTO;
 import com.first_class.msa.delivery.domain.common.BusinessDeliveryStatus;
+import com.first_class.msa.delivery.domain.common.DeliveryStatus;
+import com.first_class.msa.delivery.domain.common.HubDeliveryStatus;
 import com.first_class.msa.delivery.domain.common.UserRole;
 import com.first_class.msa.delivery.domain.model.BusinessDeliveryRoute;
 import com.first_class.msa.delivery.domain.model.Delivery;
@@ -107,19 +109,48 @@ public class DeliveryServiceImpl implements DeliveryService {
 	}
 
 	@Override
-	@Transactional
-	public ResDeliverySearchDTO getSearchById(Long userId, Long deliveryId){
+	@Transactional(readOnly = true)
+	public ResDeliverySearchDTO getSearchById(Long userId, Long deliveryId) {
 		ResRoleGetByIdDTO resRoleGetByIdDTO = authService.getRoleBy(userId);
 		Delivery delivery = deliveryRepository.findById(deliveryId).orElseThrow(
 			() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOF_FOUND_DELIVERY))
 		);
-		authConditionService.validateSearchByAuthCondition(UserRole.valueOf(resRoleGetByIdDTO.getRole()), userId, delivery);
+		authConditionService.validateSearchByAuthCondition(UserRole.valueOf(resRoleGetByIdDTO.getRole()), userId,
+			delivery);
 		return ResDeliverySearchDTO.from(delivery);
 	}
 
 	private Delivery findByIdANDIsNotNull(Long deliveryId) {
 		return deliveryRepository.findByIdAndIsNotNULL(deliveryId).orElseThrow(
 			() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOF_FOUND_DELIVERY)));
+	}
+
+	@Override
+	@Transactional
+	public void deleteDeliveryById(Long userId, Long deliveryId) {
+		ResRoleGetByIdDTO resRoleGetByIdDTO = authService.getRoleBy(userId);
+		Delivery delivery = deliveryRepository.findById(deliveryId).orElseThrow(
+			() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOF_FOUND_DELIVERY))
+		);
+		if (!delivery.getDeliveryStatus().equals(DeliveryStatus.READY)
+			&&
+			!delivery.
+				getHubDeliveryRouteList()
+				.get(0)
+				.getHubDeliveryStatus()
+				.equals(HubDeliveryStatus.WAITING_FOR_TRANSIT)
+		) {
+			throw new IllegalArgumentException(new ApiException(ErrorMessage.NOF_FOUND_DELIVERY));
+		}
+		authConditionService.validateDeleteByAuthCondition(
+			UserRole.valueOf(resRoleGetByIdDTO.getRole()),
+			userId,
+			delivery
+		);
+		delivery.updateDeliveryStatus(DeliveryStatus.CANCELLED);
+		delivery.setDeleteAllHubDeliveryRoute(userId);
+		delivery.getBusinessDeliveryRoute().setBusinessDeliveryRoute(userId);
+		delivery.setDeleteDelivery(userId);
 	}
 
 }

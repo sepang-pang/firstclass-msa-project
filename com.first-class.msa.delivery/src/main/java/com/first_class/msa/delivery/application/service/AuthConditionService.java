@@ -11,6 +11,8 @@ public interface AuthConditionService {
 
 	void validateSearchByAuthCondition(UserRole userRole, Long userId, Delivery delivery);
 
+	void validateDeleteByAuthCondition(UserRole userRole, Long userId, Delivery delivery);
+
 
 
 

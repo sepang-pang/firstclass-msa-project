@@ -24,4 +24,6 @@ public interface DeliveryService {
 
 	ResDeliverySearchDTO getSearchById(Long userId, Long deliveryId);
 
+	void deleteDeliveryById(Long userId, Long deliveryId);
+
 }

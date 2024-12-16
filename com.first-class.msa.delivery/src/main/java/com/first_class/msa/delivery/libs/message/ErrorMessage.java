@@ -26,6 +26,7 @@ public enum ErrorMessage {
 	SEQUENCE_NOT_MINUS(HttpStatus.BAD_REQUEST, "시퀀수는 음수일 수 없습니다."),
 	INVALID_HUB_STATUS(HttpStatus.BAD_REQUEST,"잘못된 상태 접근 입니다."),
 	INVALID_BUSINESS_STATUS(HttpStatus.BAD_REQUEST, "잘못된 상태 접근입니다."),
+	ALREADY_DELIVERY_START(HttpStatus.BAD_REQUEST, "이미 배송이 출발하여 취소가 불가능 합니다."),
 	NOT_FOUND_HUB_DELIVERY_ROUTE(HttpStatus.NOT_FOUND, "허브 배송 경로 정보가 없습니다.");
 
 

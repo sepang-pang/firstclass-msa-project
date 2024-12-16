@@ -2,6 +2,7 @@ package com.first_class.msa.delivery.presentation.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -75,6 +76,20 @@ public class DeliveryController {
 			.code(HttpStatus.OK.value())
 			.message("배송 조회 성공")
 			.data(deliveryService.getSearchById(userId, deliveryId))
+			.build(),
+			HttpStatus.OK
+		);
+	}
+
+	@DeleteMapping("/{deliveryId}")
+	public ResponseEntity<SuccessResponseDTO<Void>> deleteDeliveryById(
+		@RequestHeader("X-User-Id") Long userId,
+		@PathVariable Long deliveryId
+	){
+		deliveryService.deleteDeliveryById(userId, deliveryId);
+		return new ResponseEntity<>(SuccessResponseDTO.<Void>builder()
+			.code(HttpStatus.OK.value())
+			.message("배송 취소 성공")
 			.build(),
 			HttpStatus.OK
 		);
