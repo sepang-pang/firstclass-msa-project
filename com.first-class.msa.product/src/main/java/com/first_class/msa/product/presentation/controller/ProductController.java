@@ -2,7 +2,7 @@ package com.first_class.msa.product.presentation.controller;
 
 import com.first_class.msa.product.application.dto.ResProductPostDTO;
 import com.first_class.msa.product.application.dto.ResProductSearchDTO;
-import com.first_class.msa.product.application.dto.SuccessResponseDTO;
+import com.first_class.msa.product.application.global.success.SuccessResponseDTO;
 import com.first_class.msa.product.application.service.ProductService;
 import com.first_class.msa.product.presentation.request.ReqProductPostDTO;
 import com.first_class.msa.product.presentation.request.ReqProductPutByIdDTO;
