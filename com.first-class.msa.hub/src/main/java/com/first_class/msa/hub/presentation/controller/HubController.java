@@ -61,9 +61,6 @@ public class HubController {
                                                             @PathVariable(name = "hubId") Long hubId,
                                                             @Valid @RequestBody ReqHubPutByIdDTO dto) {
 
-        // --
-        // TODO : DataIntegrityViolationException 예외처리
-        // --
         hubService.putBy(userId, account, hubId, dto);
 
         return new ResponseEntity<>(
