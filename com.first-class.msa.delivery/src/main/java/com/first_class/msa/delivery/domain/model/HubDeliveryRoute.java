@@ -109,4 +109,9 @@ public class HubDeliveryRoute extends BaseTime{
 		this.setDeletedBy(userId);
 	}
 
+	public void setCreateByAndUpdateBy(Long userId){
+		this.setCreatedBy(userId);
+		this.setUpdatedBy(userId);
+	}
+
 }

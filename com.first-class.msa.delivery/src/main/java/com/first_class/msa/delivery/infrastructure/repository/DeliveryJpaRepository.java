@@ -8,7 +8,7 @@ import com.first_class.msa.delivery.domain.model.Delivery;
 
 public interface DeliveryJpaRepository extends JpaRepository<Delivery, Long> {
 
-	Optional<Delivery> findByIdAndDeletedByIsNotNull(Long deliveryId);
+	Optional<Delivery> findByIdAndDeletedByIsNull(Long deliveryId);
 
 
 	boolean existsByIdAndOrderId(Long deliveryId, Long orderId);

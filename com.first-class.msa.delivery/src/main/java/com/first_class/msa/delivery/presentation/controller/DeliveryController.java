@@ -46,7 +46,7 @@ public class DeliveryController {
 		);
 	}
 
-	@PutMapping("/{deliveryId}/hubs/{businessDeliveryRouteId}")
+	@PutMapping("/{deliveryId}/arrival/{businessDeliveryRouteId}")
 	public ResponseEntity<SuccessResponseDTO<Void>> businessDeliveryStatusPutBy(
 		@RequestHeader("X-User-Id") Long userId,
 		@PathVariable Long deliveryId,

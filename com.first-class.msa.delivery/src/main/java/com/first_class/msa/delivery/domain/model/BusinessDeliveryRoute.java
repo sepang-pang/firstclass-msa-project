@@ -44,10 +44,10 @@ public class BusinessDeliveryRoute extends BaseTime {
 	private Address address;
 
 	@Column(name = "expected_distance")
-	private Long expectedDistance;
+	private Double expectedDistance;
 
 	@Column(name = "expected_time")
-	private Long expectedTime;
+	private Double expectedTime;
 
 	@Column(name = "actual_distance")
 	private Long actualDistance;
@@ -71,6 +71,7 @@ public class BusinessDeliveryRoute extends BaseTime {
 			.departureHubId(departureHubId)
 			.deliveryBusinessId(deliveryBusinessId)
 			.address(address)
+			.businessDeliveryStatus(BusinessDeliveryStatus.READY)
 			.build();
 	}
 
@@ -79,8 +80,8 @@ public class BusinessDeliveryRoute extends BaseTime {
 	}
 
 	public void updateExpectedTimeAndDistance(Long expectedTime, Long expectedDistance) {
-		this.expectedTime = expectedTime;
-		this.expectedDistance = expectedDistance;
+		this.expectedTime = expectedTime / 1000.0 / 60.0;
+		this.expectedDistance = expectedDistance / 1000.0;
 
 	}
 
@@ -91,7 +92,7 @@ public class BusinessDeliveryRoute extends BaseTime {
 
 	private void validateStatusTransition(BusinessDeliveryStatus newStatus) {
 		if (this.businessDeliveryStatus == BusinessDeliveryStatus.READY
-			&& newStatus != BusinessDeliveryStatus.OUT_FOR_DELIVERY
+			&& newStatus == BusinessDeliveryStatus.DELIVERED
 		) {
 			throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_BUSINESS_STATUS));
 		}
@@ -102,9 +103,14 @@ public class BusinessDeliveryRoute extends BaseTime {
 		}
 	}
 
-	public void setBusinessDeliveryRoute(Long userId){
+	public void setBusinessDeliveryRoute(Long userId) {
 		this.setDeletedAt(LocalDateTime.now());
 		this.setDeletedBy(userId);
+	}
+
+	public void setCreateByAndUpdateBy(Long userId) {
+		this.setCreatedBy(userId);
+		this.setUpdatedBy(userId);
 	}
 
 }

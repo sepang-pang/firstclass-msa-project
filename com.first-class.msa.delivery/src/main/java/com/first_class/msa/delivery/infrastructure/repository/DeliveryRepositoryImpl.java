@@ -23,8 +23,8 @@ public class DeliveryRepositoryImpl implements DeliveryRepository {
 	}
 
 	@Override
-	public Optional<Delivery> findByIdAndIsNotNULL(Long deliveryId) {
-		return deliveryJpaRepository.findByIdAndDeletedByIsNotNull(deliveryId);
+	public Optional<Delivery> findByIdAndIsNULL(Long deliveryId) {
+		return deliveryJpaRepository.findByIdAndDeletedByIsNull(deliveryId);
 	}
 
 	@Override

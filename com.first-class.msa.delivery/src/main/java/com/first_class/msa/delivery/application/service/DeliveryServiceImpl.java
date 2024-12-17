@@ -26,9 +26,11 @@ import com.first_class.msa.delivery.presentation.dto.ReqBusinessDeliveryPutDTO;
 import com.first_class.msa.delivery.presentation.dto.ReqHubDeliveryPutDTO;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class DeliveryServiceImpl implements DeliveryService {
 
 	private final DeliveryRepository deliveryRepository;
@@ -42,15 +44,18 @@ public class DeliveryServiceImpl implements DeliveryService {
 	@RabbitListener(queues = RabbitMQConfig.DELIVERY_QUEUE)
 	@Transactional
 	public void handleOrderCreateDeliveryEvent(OrderCreateDeliveryEvent event) {
-
+		log.info("메세지 수신" + event);
 		Delivery delivery = Delivery.createDelivery(
 			event.getOrderId(),
 			event.getDepartureHubId(),
 			event.getArrivalHubId()
 		);
-		List<HubDeliveryRoute> hubDeliveryRouteList = hubDeliveryService.CreateHubDeliveryRoute(delivery);
+		List<HubDeliveryRoute> hubDeliveryRouteList
+			= hubDeliveryService.CreateHubDeliveryRoute(event.getUserId(), delivery);
+
 		BusinessDeliveryRoute businessDeliveryRoute
 			= businessDeliveryService.createBusinessDeliveryRoute(
+			event.getUserId(),
 			event.getArrivalHubId(),
 			event.getDeliveryBusinessId(),
 			event.getAddress()
@@ -125,7 +130,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 	}
 
 	private Delivery findByIdANDIsNotNull(Long deliveryId) {
-		return deliveryRepository.findByIdAndIsNotNULL(deliveryId).orElseThrow(
+		return deliveryRepository.findByIdAndIsNULL(deliveryId).orElseThrow(
 			() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOF_FOUND_DELIVERY)));
 	}
 

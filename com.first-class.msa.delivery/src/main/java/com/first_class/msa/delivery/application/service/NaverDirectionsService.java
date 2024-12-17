@@ -36,7 +36,7 @@ public class NaverDirectionsService {
 		// 1. 도착지 주소 -> 좌표 변환
 		String goalCoordinates = getCoordinatesFromAddress(destinationAddress);
 		if (goalCoordinates == null) {
-			throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_USER_ROLE));
+			throw new IllegalArgumentException(new ApiException(ErrorMessage.NOT_FOUND_ADDRESS));
 		}
 
 		// 2. Directions API 호출
@@ -59,20 +59,27 @@ public class NaverDirectionsService {
 	}
 
 	private String getCoordinatesFromAddress(String address) {
-		String url = UriComponentsBuilder.fromHttpUrl(geocodingUrl)
-			.queryParam("query", address)
-			.toUriString();
+		String url = geocodingUrl + "?query=" + address;
 
+		System.out.println("Request URL: " + url);
+
+		// 요청 헤더 설정
 		HttpHeaders headers = new HttpHeaders();
-		headers.set("X-NCP-APIGW-API-KEY-ID", clientId);
-		headers.set("X-NCP-APIGW-API-KEY", clientSecret);
+		headers.set("X-NCP-APIGW-API-KEY-ID", clientId);  // 클라이언트 ID
+		headers.set("X-NCP-APIGW-API-KEY", clientSecret); // 클라이언트 시크릿
+		headers.set("Accept", "application/json");        // JSON 응답 명시
 
+		// 요청 엔터티 생성
 		HttpEntity<String> entity = new HttpEntity<>(headers);
 
+		// RestTemplate 요청
 		ResponseEntity<String> response = restTemplate.exchange(
 			url, org.springframework.http.HttpMethod.GET, entity, String.class);
 
-		// Geocoding API 응답에서 위도와 경도를 추출
+		// 응답 로그 출력
+		System.out.println("HTTP Status Code: " + response.getStatusCode());
+		System.out.println("Response Body: " + response.getBody());
+
 		return parseCoordinates(response.getBody());
 	}
 
