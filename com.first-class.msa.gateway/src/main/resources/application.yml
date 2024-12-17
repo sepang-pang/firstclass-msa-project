@@ -17,7 +17,7 @@ spring:
         - id: agent-service
           uri: lb://agent-service
           predicates:
-            - Path=/agent/**
+            - Path=/agents/**
 
         - id: business-service
           uri: lb://business-service
@@ -27,7 +27,7 @@ spring:
         - id: delivery-service
           uri: lb://delivery-service
           predicates:
-            - Path=/delivery/**
+            - Path=/deliverys/**
 
         - id: hub-service
           uri: lb://hub-service
@@ -42,7 +42,7 @@ spring:
         - id: order-service
           uri: lb://order-service
           predicates:
-            - Path=/order/**
+            - Path=/orders/**
 
         - id: product-service
           uri: lb://product-service
