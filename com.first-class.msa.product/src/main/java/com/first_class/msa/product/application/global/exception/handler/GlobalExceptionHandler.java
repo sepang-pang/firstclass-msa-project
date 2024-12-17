@@ -4,6 +4,7 @@ import com.first_class.msa.product.application.global.exception.custom.Authority
 import com.first_class.msa.product.application.global.exception.custom.BadRequestException;
 import com.first_class.msa.product.application.global.exception.custom.EntityAlreadyExistException;
 import com.first_class.msa.product.application.global.exception.custom.ExceptionResponseDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +13,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
 @RestControllerAdvice
+@Slf4j(topic = "GlobalExceptionHandler Log")
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(EntityAlreadyExistException.class)
     public ResponseEntity<ExceptionResponseDTO<Object>> handleEntityAlreadyExistException(Exception e) {
+        log.error("EntityAlreadyExistException 발생: {}", e.getMessage(), e);
         return new ResponseEntity<>(
                 ExceptionResponseDTO.builder()
                         .code(HttpStatus.BAD_REQUEST.value())
@@ -27,6 +30,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ExceptionResponseDTO<Object>> handleBadRequestException(Exception e) {
+        log.error("BadRequestException 발생: {}", e.getMessage(), e);
         return new ResponseEntity<>(
                 ExceptionResponseDTO.builder()
                         .code(HttpStatus.BAD_REQUEST.value())
@@ -38,6 +42,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthorityException.class)
     public ResponseEntity<ExceptionResponseDTO<Object>> handleAuthorityException(Exception e) {
+        log.error("AuthorityException 발생: {}", e.getMessage(), e);
         return new ResponseEntity<>(
                 ExceptionResponseDTO.builder()
                         .code(HttpStatus.FORBIDDEN.value())
@@ -49,6 +54,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ExceptionResponseDTO<Object>> handleDataIntegrityViolationException(Exception e) {
+        log.error("DataIntegrityViolationException 발생: {}", e.getMessage(), e);
         return new ResponseEntity<>(
                 ExceptionResponseDTO.builder()
                         .code(HttpStatus.BAD_REQUEST.value())
