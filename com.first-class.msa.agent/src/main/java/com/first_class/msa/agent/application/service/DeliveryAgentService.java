@@ -26,7 +26,7 @@ public interface DeliveryAgentService {
 
 	ResDeliveryAgentSearchDTO.DeliveryAgentDetailDTO getDeliveryAgentById(Long userId, Long deliverAgentId);
 
-	ResGlobalDeliveryAgentDTO assignGlobalDeliveryAgent();
+	ResGlobalDeliveryAgentDTO assignGlobalDeliveryAgent(Long hubId);
 
 	ResHubDeliveryAgentDTO assignHubDeliveryAgent(Long hubId);
 

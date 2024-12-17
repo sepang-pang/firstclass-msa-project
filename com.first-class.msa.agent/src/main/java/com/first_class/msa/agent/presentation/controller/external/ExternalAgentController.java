@@ -19,9 +19,9 @@ public class ExternalAgentController {
 
 	private final DeliveryAgentService deliveryAgentService;
 
-	@PostMapping("/external/agents/global")
-	public ResGlobalDeliveryAgentDTO assignGlobalAgent() {
-		return deliveryAgentService.assignGlobalDeliveryAgent();
+	@PostMapping("/external/agents/global/{hubId}")
+	public ResGlobalDeliveryAgentDTO assignGlobalAgent(@PathVariable Long hubId) {
+		return deliveryAgentService.assignGlobalDeliveryAgent(hubId);
 	}
 
 	@PostMapping("/external/agents/hubs/{hubId}")

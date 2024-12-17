@@ -42,13 +42,6 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 
 		Long hubId = reqDeliveryAgentPostDTO.getHubId();
 		Integer maxSequence;
-		Sequence sequence;
-
-		DeliveryAgent deliveryAgent;
-
-		if (reqDeliveryAgentPostDTO.getType().equals(Type.HUB_AGENT)) {
-			hubId = null;
-		}
 
 		authConditionService.validateCreateUserRole(
 			UserRole.valueOf(resRoleGetByIdDTO.getRole()),
@@ -56,22 +49,22 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 			userId
 		);
 
-		if (hubId != null) {
-			maxSequence = deliveryAgentRepository.findMaxSequenceByHubId(hubId);
+		if (reqDeliveryAgentPostDTO.getType() == Type.HUB_AGENT) {
+			maxSequence = deliveryAgentRepository.findMaxSequenceByHubIdAndTypeHub(hubId);
 		} else {
-			maxSequence = deliveryAgentRepository.findMaxSequenceByHubIdIsNull();
+			maxSequence = deliveryAgentRepository.findMaxSequenceByHubIdAndTypeDelivery(hubId);
 		}
-		sequence = new Sequence(maxSequence + 1);
+		Sequence sequence = new Sequence(maxSequence + 1);
 
-		deliveryAgent = DeliveryAgent.createDeliveryAgent(
-			userId,
+		DeliveryAgent deliveryAgent = DeliveryAgent.createDeliveryAgent(
+			reqDeliveryAgentPostDTO.getUserId(),
 			reqDeliveryAgentPostDTO.getSlackId(),
-			hubId,
+			reqDeliveryAgentPostDTO.getHubId(),
 			reqDeliveryAgentPostDTO.getType(),
 			sequence
 		);
 
-		deliveryAgent.setCreatedByAndUpdateBy(userId);
+		deliveryAgent.setCreatedByAndUpdateBy(reqDeliveryAgentPostDTO.getUserId());
 		deliveryAgent = deliveryAgentRepository.save(deliveryAgent);
 		return ResDeliveryAgentDTO.from(deliveryAgent);
 	}
@@ -132,43 +125,24 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 		return ResDeliveryAgentGetByUserIdDTO.from(deliveryAgent);
 	}
 
-	/**
-	 * 허브간 배송 허브에 국한되지 않고 사용하기 때문에 global로 표시
-	 * 1. Redis에서 허브 간 배송 담당자 목록 가져오기
-	 * 2. 캐시에 없으면 DB에서 가져와 캐시에 저장
-	 * 3. Redis에서 현재 순번 가져오기
-	 * 4. 현재 순번에 해당하는 담당자 배정
-	 * 5. 다음 순번 계산 및 Redis에 업데이트
-	 */
 	@Override
 	@Transactional
-	public ResGlobalDeliveryAgentDTO assignGlobalDeliveryAgent() {
-		List<DeliveryAgent> agentList = deliveryAgentCacheService.getGlobalAgentList();
-		if (agentList == null || agentList.isEmpty()) {
+	public ResGlobalDeliveryAgentDTO assignGlobalDeliveryAgent(Long hubId) {
+		DeliveryAgent agent = deliveryAgentCacheService.getGlobalAgent(hubId);
 
-			agentList = deliveryAgentRepository.findByHubIdIsNull();
-			if (agentList.isEmpty()) {
-				throw new IllegalArgumentException(new ApiException(ErrorMessage.NOT_FOUND_GLOBAL_DELIVERY_AGENT_LIST));
+		if (agent == null) {
+			// 캐시에 없으면 DB에서 조회
+			agent = deliveryAgentRepository.findByDeliveryIdAndHubId(hubId);
+
+			if (agent == null) {
+				throw new IllegalArgumentException(new ApiException(ErrorMessage.NOT_FOUND_GLOBAL_DELIVERY_AGENT));
 			}
-			deliveryAgentCacheService.saveGlobalAgentList(agentList);
+
+			// 조회된 에이전트를 캐시에 저장
+			deliveryAgentCacheService.saveGlobalAgent(hubId, agent);
 		}
 
-		List<DeliveryAgent> activeAgentList = agentList.stream()
-			.filter(agent -> agent.getIsAvailable() == IsAvailable.ENABLE)
-			.toList();
-
-		if (activeAgentList.isEmpty()) {
-			throw new IllegalArgumentException(new ApiException(ErrorMessage.NO_ACTIVE_GLOBAL_DELIVERY_AGENT));
-		}
-
-		int currentSequence = deliveryAgentCacheService.getGlobalSequence();
-
-		DeliveryAgent assignedAgent = agentList.get(currentSequence);
-
-		int nextSequence = (currentSequence + 1) % agentList.size();
-		deliveryAgentCacheService.updateGlobalSequence(nextSequence);
-
-		return ResGlobalDeliveryAgentDTO.from(assignedAgent.getId());
+		return ResGlobalDeliveryAgentDTO.from(agent.getId());
 	}
 
 	/**
@@ -247,17 +221,9 @@ public class DeliveryAgentServiceImpl implements DeliveryAgentService {
 
 	private void updateCacheAfterDeletion(DeliveryAgent deliveryAgent) {
 		if (deliveryAgent.getType().equals(Type.HUB_AGENT)) {
-			List<DeliveryAgent> agentList = deliveryAgentCacheService.getGlobalAgentList();
-			int currentSequence = deliveryAgentCacheService.getGlobalSequence();
+			DeliveryAgent agent = deliveryAgentCacheService.getGlobalAgent(deliveryAgent.getHubId());
 
-			agentList = agentList.stream()
-				.filter(agent -> !agent.getId().equals(deliveryAgent.getId()))
-				.collect(Collectors.toList());
-
-			int adjustedSequence = adjustSequenceAfterDeletion(currentSequence, agentList.size());
-			deliveryAgentCacheService.updateGlobalSequence(adjustedSequence);
-
-			deliveryAgentCacheService.saveGlobalAgentList(agentList);
+			deliveryAgentCacheService.saveGlobalAgent(agent.getHubId(), agent);
 		} else {
 			Long hubId = deliveryAgent.getHubId();
 			List<DeliveryAgent> agentList = deliveryAgentCacheService.getHubAgentList(hubId);

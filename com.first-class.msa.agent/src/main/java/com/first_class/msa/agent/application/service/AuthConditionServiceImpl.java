@@ -23,11 +23,7 @@ public class AuthConditionServiceImpl implements AuthConditionService {
 				return;
 			}
 			case HUB_MANAGER -> {
-				if(hubId == null){
-					return;
-				} else {
-					validateHubManager(hubId, userId);
-				}
+				validateHubManager(hubId, userId);
 			}
 			case BUSINESS_MANAGER, DELIVERY_MANAGER ->
 				throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_USER_ROLE));
@@ -39,17 +35,13 @@ public class AuthConditionServiceImpl implements AuthConditionService {
 	public void validateSearchUserRole(UserRole userRole, Long userId, Long hubId) {
 
 		switch (userRole) {
-			case MASTER-> {
-				if(hubId != null) {
+			case MASTER -> {
+				if (hubId != null) {
 					validateExistHubId(hubId);
 				}
 			}
 			case HUB_MANAGER -> {
-				if(hubId != null){
-					validateHubManager(userId, hubId);
-				} else {
-					throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_USER_ROLE));
-				}
+				validateHubManager(userId, hubId);
 			}
 			case BUSINESS_MANAGER, DELIVERY_MANAGER ->
 				throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_USER_ROLE));
@@ -60,7 +52,7 @@ public class AuthConditionServiceImpl implements AuthConditionService {
 	public void validateSearchDetailUserRole(UserRole userRole, Long userId, DeliveryAgent deliveryAgent) {
 
 		switch (userRole) {
-			case MASTER-> {
+			case MASTER -> {
 			}
 			case HUB_MANAGER -> validateHubManager(userId, deliveryAgent.getHubId());
 			case DELIVERY_MANAGER -> validateMatchDeliveryAgentByUserId(userId, deliveryAgent);
@@ -69,12 +61,11 @@ public class AuthConditionServiceImpl implements AuthConditionService {
 		}
 	}
 
-
 	@Override
 	public void validateUpdateAndDeleteUserRole(UserRole userRole, Long userId, DeliveryAgent deliveryAgent) {
 
 		switch (userRole) {
-			case MASTER-> {
+			case MASTER -> {
 			}
 			case HUB_MANAGER -> validateHubManager(userId, deliveryAgent.getHubId());
 			case DELIVERY_MANAGER, BUSINESS_MANAGER ->
@@ -82,8 +73,8 @@ public class AuthConditionServiceImpl implements AuthConditionService {
 		}
 	}
 
-	private void validateExistHubId(Long hubId){
-		if(!getExistHubId(hubId)){
+	private void validateExistHubId(Long hubId) {
+		if (!getExistHubId(hubId)) {
 			throw new IllegalArgumentException(new ApiException(ErrorMessage.NOT_FOUND_HUB));
 		}
 	}
@@ -94,12 +85,11 @@ public class AuthConditionServiceImpl implements AuthConditionService {
 		}
 	}
 
-	private void validateMatchDeliveryAgentByUserId(Long userId, DeliveryAgent deliveryAgent){
-		if(!userId.equals(deliveryAgent.getUserId())){
+	private void validateMatchDeliveryAgentByUserId(Long userId, DeliveryAgent deliveryAgent) {
+		if (!userId.equals(deliveryAgent.getUserId())) {
 			throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_USER_ROLE_DELIVERY_MANAGER));
 		}
 	}
-
 
 	private boolean getExistHubId(Long hubId) {
 		return hubService.existsBy(hubId);
