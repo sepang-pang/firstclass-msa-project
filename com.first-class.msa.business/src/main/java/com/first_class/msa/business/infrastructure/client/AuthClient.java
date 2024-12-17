@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "auth-service")
 public interface AuthClient extends AuthService {
 
-    @GetMapping("/auth/{userId}")
+    @GetMapping("/external/users/{userId}")
     ResRoleGetByUserIdDTO getRoleBy(@PathVariable(name = "userId") Long userId);
 }
