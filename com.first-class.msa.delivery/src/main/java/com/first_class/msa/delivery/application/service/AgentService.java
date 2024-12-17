@@ -6,7 +6,7 @@ import com.first_class.msa.delivery.application.dto.ResHubDeliveryAgentDTO;
 
 public interface AgentService {
 
-	ResGlobalDeliveryAgentDTO assignGlobalAgent();
+	ResGlobalDeliveryAgentDTO assignGlobalAgent(Long hubId);
 
 	ResHubDeliveryAgentDTO assignHubAgent(Long hubId);
 
