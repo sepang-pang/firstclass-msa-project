@@ -4,10 +4,10 @@ import com.first_class.msa.orders.domain.model.Order;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -27,6 +27,7 @@ public class OrderCreateDeliveryEvent {
 			.departureHubId(order.getHubId())
 			.deliveryBusinessId(order.getDeliveryBusinessId())
 			.arrivalHubId(order.getArrivalHubId())
+			.address(order.getAddress().getValue())
 			.build();
 	}
 }

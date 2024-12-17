@@ -1,10 +1,10 @@
 package com.first_class.msa.orders.infrastructure.event;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDeleteDeliveryEvent {
