@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.first_class.msa.agent.application.dto.ResDTO;
 import com.first_class.msa.agent.application.dto.ResDeliveryAgentDTO;
-import com.first_class.msa.agent.application.dto.ResDeliveryAgentGetByUserIdDTO;
 import com.first_class.msa.agent.application.dto.ResDeliveryAgentSearchDTO;
-import com.first_class.msa.agent.application.dto.ResGlobalDeliveryAgentDTO;
-import com.first_class.msa.agent.application.dto.ResHubDeliveryAgentDto;
 import com.first_class.msa.agent.application.service.DeliveryAgentService;
 import com.first_class.msa.agent.domain.common.IsAvailable;
 import com.first_class.msa.agent.domain.common.Type;
@@ -112,21 +109,6 @@ public class AgentController {
 		);
 	}
 
-	@PostMapping("/external/global")
-	public ResGlobalDeliveryAgentDTO assignGlobalAgent() {
-		return deliveryAgentService.assignGlobalDeliveryAgent();
-	}
 
-	@PostMapping("/external/hubs/{hubId}")
-	public ResHubDeliveryAgentDto assignHubAgent(
-		@PathVariable Long hubId
-	) {
-		return deliveryAgentService.assignHubDeliveryAgent(hubId);
-	}
-
-	@GetMapping("/external/agents")
-	public ResDeliveryAgentGetByUserIdDTO getDeliveryAgentByUserId(@RequestParam Long userId){
-		return deliveryAgentService.getDeliveryAgentByUserId(userId);
-	}
 
 }

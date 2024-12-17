@@ -1,5 +1,16 @@
 package com.first_class.msa.product.application.service;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.first_class.msa.product.application.dto.ResProductPostDTO;
 import com.first_class.msa.product.application.dto.ResProductSearchDTO;
 import com.first_class.msa.product.application.dto.external.ExternalResProductGetByIdInDTO;
@@ -9,19 +20,14 @@ import com.first_class.msa.product.application.global.exception.custom.EntityAlr
 import com.first_class.msa.product.domain.model.Product;
 import com.first_class.msa.product.domain.model.RoleType;
 import com.first_class.msa.product.domain.repository.ProductRepository;
+import com.first_class.msa.product.infrastructure.configuration.RabbitMQConfig;
+import com.first_class.msa.product.infrastructure.event.OrderCreateProductEvent;
+import com.first_class.msa.product.infrastructure.massaging.ProductEventPublisher;
 import com.first_class.msa.product.presentation.request.ReqProductPostDTO;
 import com.first_class.msa.product.presentation.request.ReqProductPutByIdDTO;
+
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +37,7 @@ public class ProductService {
     private final AuthService authService;
     private final HubService hubService;
     private final BusinessService businessService;
+    private final ProductEventPublisher productEventPublisher;
 
     @Transactional
     public ResProductPostDTO postBy(Long userId, String account, ReqProductPostDTO dto) {
@@ -203,5 +210,42 @@ public class ProductService {
         }
 
         return productList;
+    }
+
+    @Transactional
+    @RabbitListener(queues = RabbitMQConfig.PRODUCT_QUEUE)
+    public void handleOrderCreateProductEvent(OrderCreateProductEvent event) {
+        try {
+            List<Long> productIdList =
+                event
+                    .getOrderLineDTO()
+                    .stream()
+                    .map(OrderCreateProductEvent.OrderLineDTO::getProductId)
+                    .toList();
+
+            if(event.getOrderLineDTO().size() != productIdList.size()){
+                throw new IllegalArgumentException("상품 정보를 가져오지 못했습니다.");
+            }
+
+            List<Product> productList = productRepository.findByIdInAndDeletedAtIsNull(productIdList);
+
+            for (Product product: productList) {
+                for (OrderCreateProductEvent.OrderLineDTO orderLineDTO : event.getOrderLineDTO()) {
+                    if(product.getId().equals(orderLineDTO.getProductId())){
+                        if(product.getQuantity() - orderLineDTO.getCount() < 0){
+                            throw new IllegalArgumentException("상품 정보를 업데이트 할 수 없습니다.");
+                        } else {
+                            product.updateQuantity(orderLineDTO.getCount());
+                            break;
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            productEventPublisher.publishFailedOrder(event.getOrderId());
+            throw e;
+        }
+
+
     }
 }

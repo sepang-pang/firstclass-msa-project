@@ -21,12 +21,14 @@ public interface DeliveryAgentRepository {
 
 	Optional<DeliveryAgent> findById(Long deliveryAgentId);
 
-	Integer findMaxSequenceByHubId(Long hubId);
+	public Integer findMaxSequenceByHubIdAndTypeHub(Long hubId);
 
-	Integer findMaxSequenceByHubIdIsNull();
+	public Integer findMaxSequenceByHubIdAndTypeDelivery(Long hubId);
 
-	List<DeliveryAgent> findByHubIdIsNull();
+	DeliveryAgent findByDeliveryIdAndHubId(Long hubId);
 	List<DeliveryAgent> findByHubId(Long hubId);
 
 	Optional<DeliveryAgent> findByUserId(Long userId);
+
+
 }

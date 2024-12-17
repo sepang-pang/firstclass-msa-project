@@ -6,6 +6,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.first_class.msa.delivery.application.dto.ResDeliveryOrderSearchDTO;
 import com.first_class.msa.delivery.application.dto.ResDeliverySearchDTO;
 import com.first_class.msa.delivery.application.dto.ResRoleGetByIdDTO;
 import com.first_class.msa.delivery.domain.common.BusinessDeliveryStatus;
@@ -17,6 +18,7 @@ import com.first_class.msa.delivery.domain.model.Delivery;
 import com.first_class.msa.delivery.domain.model.HubDeliveryRoute;
 import com.first_class.msa.delivery.domain.repository.DeliveryRepository;
 import com.first_class.msa.delivery.infrastructure.config.RabbitMQConfig;
+import com.first_class.msa.delivery.infrastructure.event.OrderCancelDeliveryEvent;
 import com.first_class.msa.delivery.infrastructure.event.OrderCreateDeliveryEvent;
 import com.first_class.msa.delivery.libs.exception.ApiException;
 import com.first_class.msa.delivery.libs.message.ErrorMessage;
@@ -24,9 +26,11 @@ import com.first_class.msa.delivery.presentation.dto.ReqBusinessDeliveryPutDTO;
 import com.first_class.msa.delivery.presentation.dto.ReqHubDeliveryPutDTO;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class DeliveryServiceImpl implements DeliveryService {
 
 	private final DeliveryRepository deliveryRepository;
@@ -34,20 +38,24 @@ public class DeliveryServiceImpl implements DeliveryService {
 	private final BusinessDeliveryService businessDeliveryService;
 	private final AuthConditionService authConditionService;
 	private final AuthService authService;
+	private final AgentService agentService;
 
 	@Override
 	@RabbitListener(queues = RabbitMQConfig.DELIVERY_QUEUE)
 	@Transactional
 	public void handleOrderCreateDeliveryEvent(OrderCreateDeliveryEvent event) {
-
+		log.info("메세지 수신" + event);
 		Delivery delivery = Delivery.createDelivery(
 			event.getOrderId(),
 			event.getDepartureHubId(),
 			event.getArrivalHubId()
 		);
-		List<HubDeliveryRoute> hubDeliveryRouteList = hubDeliveryService.CreateHubDeliveryRoute(delivery);
+		List<HubDeliveryRoute> hubDeliveryRouteList
+			= hubDeliveryService.CreateHubDeliveryRoute(event.getUserId(), delivery);
+
 		BusinessDeliveryRoute businessDeliveryRoute
 			= businessDeliveryService.createBusinessDeliveryRoute(
+			event.getUserId(),
 			event.getArrivalHubId(),
 			event.getDeliveryBusinessId(),
 			event.getAddress()
@@ -78,7 +86,8 @@ public class DeliveryServiceImpl implements DeliveryService {
 		if (delivery.updateHubDeliveryRouteState(
 			userId,
 			hubDeliveryRouteId,
-			reqHubDeliveryPutDTO.getHubDeliveryStatus())
+			reqHubDeliveryPutDTO.getHubDeliveryStatus()
+		)
 		) {
 			businessDeliveryService.assignAgentToBusinessDeliveryRoute(delivery.getBusinessDeliveryRoute());
 			delivery.getBusinessDeliveryRoute().updateBusinessDeliveryStatus(BusinessDeliveryStatus.READY);
@@ -121,7 +130,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 	}
 
 	private Delivery findByIdANDIsNotNull(Long deliveryId) {
-		return deliveryRepository.findByIdAndIsNotNULL(deliveryId).orElseThrow(
+		return deliveryRepository.findByIdAndIsNULL(deliveryId).orElseThrow(
 			() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOF_FOUND_DELIVERY)));
 	}
 
@@ -151,6 +160,34 @@ public class DeliveryServiceImpl implements DeliveryService {
 		delivery.setDeleteAllHubDeliveryRoute(userId);
 		delivery.getBusinessDeliveryRoute().setBusinessDeliveryRoute(userId);
 		delivery.setDeleteDelivery(userId);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public ResDeliveryOrderSearchDTO getAllDeliveryBy(Long userId) {
+		Long deliveryAgentId = agentService.getDeliveryAgentByUserId(userId).getDeliveryAgentId();
+		List<Long> deliveryList = deliveryRepository.findOrderIdsByAgentId(deliveryAgentId);
+
+		return ResDeliveryOrderSearchDTO.from(deliveryList);
+
+	}
+
+	@Override
+	public boolean existDeliveryBy(Long orderId, Long userId) {
+		Long deliveryId = agentService.getDeliveryAgentByUserId(userId).getDeliveryAgentId();
+		return deliveryRepository.existsByIdAndOrderId(deliveryId, orderId);
+	}
+
+	@Transactional
+	@RabbitListener(queues = RabbitMQConfig.ORDER_FAILED_KEY)
+	public void cancelOrder(OrderCancelDeliveryEvent event) {
+		Delivery delivery = deliveryRepository.findByOrderId(event.getOrderId()).orElseThrow(
+			() -> new IllegalArgumentException(new ApiException(ErrorMessage.NOF_FOUND_DELIVERY))
+		);
+		delivery.setDeleteAllHubDeliveryRoute(event.getUserId());
+		delivery.getBusinessDeliveryRoute().setBusinessDeliveryRoute(event.getUserId());
+		delivery.setDeleteDelivery(event.getUserId());
+
 	}
 
 }

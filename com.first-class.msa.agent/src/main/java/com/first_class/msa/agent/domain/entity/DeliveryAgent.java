@@ -46,7 +46,7 @@ public class DeliveryAgent {
 	@Column(name = "user_id", nullable = false)
 	private Long userId;
 
-	@Column(name = "hud_id")
+	@Column(name = "hub_id", nullable = false)
 	private Long hubId;
 
 	@Column(name = "slack_id", nullable = false)

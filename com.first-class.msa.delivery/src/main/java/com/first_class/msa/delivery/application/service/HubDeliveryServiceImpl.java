@@ -22,10 +22,11 @@ public class HubDeliveryServiceImpl implements HubDeliveryService {
 
 	@Override
 	@Transactional
-	public List<HubDeliveryRoute> CreateHubDeliveryRoute(Delivery delivery) {
+	public List<HubDeliveryRoute> CreateHubDeliveryRoute(Long userId, Delivery delivery) {
 		ResHubTransitInfoGetDTO resHubTransitInfoGetDTO
 			= hubService.getBy(delivery.getDepartureHubId(), delivery.getArrivalHubId());
-		ResGlobalDeliveryAgentDTO resGlobalDeliveryAgentDTO = agentService.assignGlobalAgent();
+		ResGlobalDeliveryAgentDTO resGlobalDeliveryAgentDTO
+			= agentService.assignGlobalAgent(delivery.getDepartureHubId());
 		int sequenceNum = 0;
 		List<HubDeliveryRoute> hubDeliveryRouteList = new ArrayList<>();
 
@@ -33,8 +34,7 @@ public class HubDeliveryServiceImpl implements HubDeliveryService {
 			: resHubTransitInfoGetDTO.getHubTransitInfoDTOList()){
 
 			Sequence sequence = new Sequence(++sequenceNum);
-			hubDeliveryRouteList.add(
-				HubDeliveryRoute.createHubDeliveryRoute(
+			HubDeliveryRoute hubDeliveryRoute = HubDeliveryRoute.createHubDeliveryRoute(
 				hubTransitInfo.getDepartureHubId(),
 				hubTransitInfo.getArrivalHubId(),
 				hubTransitInfo.getDistance(),
@@ -42,8 +42,10 @@ public class HubDeliveryServiceImpl implements HubDeliveryService {
 				sequence,
 				resGlobalDeliveryAgentDTO.getDeliveryAgentId(),
 				delivery
-				)
 			);
+			hubDeliveryRoute.setCreateByAndUpdateBy(userId);
+
+			hubDeliveryRouteList.add(hubDeliveryRoute);
 		}
 
 		return hubDeliveryRouteList;

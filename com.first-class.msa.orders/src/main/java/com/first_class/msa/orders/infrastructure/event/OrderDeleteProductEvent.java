@@ -5,10 +5,10 @@ import java.util.List;
 import com.first_class.msa.orders.application.dto.ResOrderDTO;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDeleteProductEvent {

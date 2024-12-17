@@ -26,17 +26,20 @@ public class DeliveryAgentCacheService {
 	private final ObjectMapper objectMapper;
 
 
-	public List<DeliveryAgent> getGlobalAgentList() {
-		Object data = redisTemplate.opsForValue().get(GLOBAL_AGENTS_KEY);
+	public DeliveryAgent getGlobalAgent(Long hubId) {
+		Object data = redisTemplate.opsForValue().get(GLOBAL_AGENTS_KEY + hubId);
 		if (data == null) {
-			return Collections.emptyList();
+			return null;
 		}
-		return objectMapper.convertValue(data, new TypeReference<List<DeliveryAgent>>() {});
+		return objectMapper.convertValue(data, DeliveryAgent.class);
 	}
 
+	public void saveGlobalAgent(Long hubId, DeliveryAgent agent) {
+		redisTemplate.opsForValue().set(GLOBAL_AGENTS_KEY + hubId, agent);
+	}
 
-	public void saveGlobalAgentList(List<DeliveryAgent> agents) {
-		redisTemplate.opsForValue().set(GLOBAL_AGENTS_KEY, agents);
+	public void clearHubAgent(Long hubId) {
+		redisTemplate.delete(GLOBAL_AGENTS_KEY + hubId);
 	}
 
 

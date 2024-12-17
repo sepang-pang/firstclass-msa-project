@@ -7,8 +7,6 @@ import org.springframework.stereotype.Component;
 import com.first_class.msa.orders.application.dto.AuthSearchConditionDTO;
 import com.first_class.msa.orders.application.dto.ResBusinessDTO;
 import com.first_class.msa.orders.application.dto.ResDeliveryOrderSearchDTO;
-import com.first_class.msa.orders.application.dto.ResDeliveryOrderSearchDetailDTO;
-import com.first_class.msa.orders.application.dto.ResHubDTO;
 import com.first_class.msa.orders.domain.model.Order;
 import com.first_class.msa.orders.domain.model.UserRole;
 import com.first_class.msa.orders.libs.exception.ApiException;
@@ -80,15 +78,13 @@ public class AuthConditionServiceImpl implements AuthConditionService{
 	}
 
 	private void validateDeliveryManager(Long userId, Order order) {
-		ResDeliveryOrderSearchDetailDTO deliveryDetail = deliveryService.getDeliveryBy(userId, order.getId());
-		if (!deliveryDetail.getOrderId().equals(order.getId())) {
+		if (deliveryService.existDeliveryBy(order.getId(), userId)) {
 			throw new IllegalArgumentException(new ApiException(ErrorMessage.INVALID_USER_ROLE_DELIVERY_MANAGER));
 		}
 	}
 
 	private Long getHubId(Long userId) {
-		ResHubDTO hubDTO = hubService.getHubBy(userId);
-		return hubDTO.getHubId();
+		return hubService.getHubByID(userId);
 	}
 
 	private Long getBusinessId(Long userId) {

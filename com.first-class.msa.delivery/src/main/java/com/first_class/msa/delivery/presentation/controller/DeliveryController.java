@@ -21,11 +21,11 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/delivery")
+@RequestMapping("/deliverys")
 public class DeliveryController {
 	private final DeliveryService deliveryService;
 
-	@PutMapping("/{deliveryId}/hub/{hubDeliveryRouteId}")
+	@PutMapping("/{deliveryId}/hubs/{hubDeliveryRouteId}")
 	public ResponseEntity<SuccessResponseDTO<Void>> HubStatusRoutePutBy(
 		@RequestHeader("X-User-Id") Long userId,
 		@PathVariable Long deliveryId,
@@ -46,7 +46,7 @@ public class DeliveryController {
 		);
 	}
 
-	@PutMapping("/{deliveryId}/hub/{businessDeliveryRouteId}")
+	@PutMapping("/{deliveryId}/arrival/{businessDeliveryRouteId}")
 	public ResponseEntity<SuccessResponseDTO<Void>> businessDeliveryStatusPutBy(
 		@RequestHeader("X-User-Id") Long userId,
 		@PathVariable Long deliveryId,

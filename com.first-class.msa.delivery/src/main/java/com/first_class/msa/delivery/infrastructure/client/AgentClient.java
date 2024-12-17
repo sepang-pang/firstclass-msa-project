@@ -14,10 +14,10 @@ import com.first_class.msa.delivery.application.service.AgentService;
 @FeignClient(name = "agent-service")
 public interface AgentClient extends AgentService {
 
-	@PostMapping("/external/global")
-	ResGlobalDeliveryAgentDTO assignGlobalAgent();
+	@PostMapping("/external/agents/global/{hubId}")
+	ResGlobalDeliveryAgentDTO assignGlobalAgent(@PathVariable Long hubId);
 
-	@PostMapping("/external/hubs/{hubId}")
+	@PostMapping("/external/agents/hubs/{hubId}")
 	ResHubDeliveryAgentDTO assignHubAgent(@PathVariable Long hubId);
 
 	@GetMapping("/external/agents")

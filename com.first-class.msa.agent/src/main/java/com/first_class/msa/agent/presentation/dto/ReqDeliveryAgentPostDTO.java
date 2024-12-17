@@ -6,6 +6,7 @@ import lombok.Getter;
 
 @Getter
 public class ReqDeliveryAgentPostDTO {
+	private Long userId;
 	private Long hubId;
 	private String slackId;
 	private Type type;

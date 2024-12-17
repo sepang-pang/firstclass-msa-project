@@ -1,5 +1,6 @@
 package com.first_class.msa.delivery.application.service;
 
+import com.first_class.msa.delivery.application.dto.ResDeliveryOrderSearchDTO;
 import com.first_class.msa.delivery.application.dto.ResDeliverySearchDTO;
 import com.first_class.msa.delivery.infrastructure.event.OrderCreateDeliveryEvent;
 import com.first_class.msa.delivery.presentation.dto.ReqBusinessDeliveryPutDTO;
@@ -26,4 +27,6 @@ public interface DeliveryService {
 
 	void deleteDeliveryById(Long userId, Long deliveryId);
 
+	ResDeliveryOrderSearchDTO getAllDeliveryBy(Long userId);
+	boolean existDeliveryBy(Long orderId, Long userId);
 }

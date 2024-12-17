@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.first_class.msa.orders.application.dto.ResOrderDTO;
 import com.first_class.msa.orders.domain.model.Order;
 import com.first_class.msa.orders.infrastructure.config.RabbitMQConfig;
+import com.first_class.msa.orders.infrastructure.event.OrderCancelDeliveryEvent;
 import com.first_class.msa.orders.infrastructure.event.OrderCreateDeliveryEvent;
 import com.first_class.msa.orders.infrastructure.event.OrderCreateProductEvent;
 import com.first_class.msa.orders.infrastructure.event.OrderDeleteDeliveryEvent;
@@ -47,4 +48,11 @@ public class OrderEventServiceImpl implements OrderEventService{
 		OrderDeleteDeliveryEvent orderDeleteDeliveryEvent = new OrderDeleteDeliveryEvent(orderId, userId);
 		orderEventPublisher.publishEvent(RabbitMQConfig.ORDER_DELETED_DELIVERY_KEY, orderDeleteDeliveryEvent);
 	}
+
+	@Override
+	public void orderCancelEvent(Long userId, Long orderId){
+		OrderCancelDeliveryEvent orderCancelDeliveryEvent = OrderCancelDeliveryEvent.of(userId, orderId);
+		orderEventPublisher.publishEvent(RabbitMQConfig.ORDER_FAILED_KEY, orderId);
+	}
+
 }

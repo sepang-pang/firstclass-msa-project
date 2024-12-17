@@ -38,18 +38,8 @@ public class DeliveryAgentRepositoryImpl implements DeliveryAgentRepository {
 	}
 
 	@Override
-	public Integer findMaxSequenceByHubId(Long hubId){
-		return deliveryAgentJpaRepository.findMaxSequenceByHubId(hubId);
-	}
-
-	@Override
-	public Integer findMaxSequenceByHubIdIsNull() {
-		return deliveryAgentJpaRepository.findMaxSequenceByHubIdIsNull();
-	}
-
-	@Override
-	public List<DeliveryAgent> findByHubIdIsNull() {
-		return deliveryAgentJpaRepository.findByHubIdIsNull();
+	public DeliveryAgent findByDeliveryIdAndHubId(Long hubId) {
+		return deliveryAgentJpaRepository.findByDeliveryIdAndHubId(hubId);
 	}
 
 	@Override
@@ -62,4 +52,13 @@ public class DeliveryAgentRepositoryImpl implements DeliveryAgentRepository {
 		return deliveryAgentJpaRepository.findByUserIdAndDeletedByIsNull(userId);
 	}
 
+	@Override
+	public Integer findMaxSequenceByHubIdAndTypeHub(Long hubId) {
+		return deliveryAgentJpaRepository.findMaxSequenceByHubIdAndTypeHub(hubId);
+	}
+
+	@Override
+	public Integer findMaxSequenceByHubIdAndTypeDelivery(Long hubId) {
+		return deliveryAgentJpaRepository.findMaxSequenceByHubIdAndTypeDelivery(hubId);
+	}
 }
