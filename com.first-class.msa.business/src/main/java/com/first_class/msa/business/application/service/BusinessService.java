@@ -111,7 +111,7 @@ public class BusinessService {
     private void validateBusinessCreationProcess(Long userId, ReqBusinessPostDTO dto, String roleForValidation) {
 
         // NOTE : 권한 검증
-        validateUserRole(roleForValidation, Set.of(RoleType.MANAGER, RoleType.HUB_MANAGER));
+        validateUserRole(roleForValidation, Set.of(RoleType.MASTER, RoleType.HUB_MANAGER));
 
         // NOTE : 허브 관리자 검증
         if (Objects.equals(roleForValidation, RoleType.HUB_MANAGER)) {
@@ -128,7 +128,7 @@ public class BusinessService {
     private void validateBusinessModificationProcess(Long userId, ReqBusinessPutByIdDTO dto, String roleForValidation, Business businessForModification) {
 
         // NOTE : 권한 검증
-        validateUserRole(roleForValidation, Set.of(RoleType.MANAGER, RoleType.HUB_MANAGER, RoleType.BUSINESS_MANAGER));
+        validateUserRole(roleForValidation, Set.of(RoleType.MASTER, RoleType.HUB_MANAGER, RoleType.BUSINESS_MANAGER));
 
         switch (roleForValidation) {
             case RoleType.HUB_MANAGER ->
