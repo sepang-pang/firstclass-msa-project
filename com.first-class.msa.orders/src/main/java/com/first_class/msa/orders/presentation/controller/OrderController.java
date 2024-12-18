@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class OrderController {
 	private final OrderService orderService;
 
-	@PostMapping("/{businessId}")
+	@PostMapping("/business/{businessId}")
 	public ResponseEntity<SuccessResponseDTO<ResOrderDTO>> postBy(
 		@PathVariable Long businessId,
 		@RequestHeader("X-User-Id") Long userId,
