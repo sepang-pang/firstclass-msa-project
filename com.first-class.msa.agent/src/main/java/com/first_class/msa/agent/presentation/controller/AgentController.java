@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.first_class.msa.agent.application.dto.ResDTO;
 import com.first_class.msa.agent.application.dto.ResDeliveryAgentDTO;
 import com.first_class.msa.agent.application.dto.ResDeliveryAgentSearchDTO;
 import com.first_class.msa.agent.application.service.DeliveryAgentService;
 import com.first_class.msa.agent.domain.common.IsAvailable;
 import com.first_class.msa.agent.domain.common.Type;
+import com.first_class.msa.agent.libs.dto.SuccessResponseDTO;
 import com.first_class.msa.agent.presentation.dto.ReqDeliveryAgentPostDTO;
 import com.first_class.msa.agent.presentation.dto.ReqDeliveryAgentPutDTO;
 
@@ -33,12 +33,12 @@ public class AgentController {
 	private final DeliveryAgentService deliveryAgentService;
 
 	@PostMapping()
-	public ResponseEntity<ResDTO<ResDeliveryAgentDTO>> postBy(
+	public ResponseEntity<SuccessResponseDTO<ResDeliveryAgentDTO>> postBy(
 		@RequestHeader(name = "X-User-Id") Long userId,
 		@RequestBody ReqDeliveryAgentPostDTO deliveryAgentDTO
 	) {
 		return new ResponseEntity<>(
-			ResDTO.<ResDeliveryAgentDTO>builder()
+			SuccessResponseDTO.<ResDeliveryAgentDTO>builder()
 				.code(HttpStatus.CREATED.value())
 				.message("배송 관리자 생성 성공")
 				.data(deliveryAgentService.postBy(userId, deliveryAgentDTO))
@@ -48,7 +48,7 @@ public class AgentController {
 	}
 
 	@GetMapping()
-	public ResponseEntity<ResDTO<ResDeliveryAgentSearchDTO>> getSearchBy(
+	public ResponseEntity<SuccessResponseDTO<ResDeliveryAgentSearchDTO>> getSearchBy(
 		@RequestHeader(name = "X-User-Id") Long userId,
 		@RequestParam(required = false) Long hubId,
 		@RequestParam(required = false) Type type,
@@ -56,7 +56,7 @@ public class AgentController {
 		Pageable pageable
 	) {
 		return new ResponseEntity<>(
-			ResDTO.<ResDeliveryAgentSearchDTO>builder()
+			SuccessResponseDTO.<ResDeliveryAgentSearchDTO>builder()
 				.code(HttpStatus.OK.value())
 				.message("배송 관리자 조회 성공")
 				.data(deliveryAgentService.getSearchDeliveryAgentBy(userId, hubId, type, isAvailable, pageable))
@@ -66,12 +66,12 @@ public class AgentController {
 	}
 
 	@GetMapping("/{deliveryAgentId}")
-	public ResponseEntity<ResDTO<ResDeliveryAgentSearchDTO.DeliveryAgentDetailDTO>> getSearchDetailBy(
+	public ResponseEntity<SuccessResponseDTO<ResDeliveryAgentSearchDTO.DeliveryAgentDetailDTO>> getSearchDetailBy(
 		@RequestHeader(name = "X-User-Id") Long userId,
 		@PathVariable(name = "deliveryAgentId") Long deliveryAgentId
 	) {
 		return new ResponseEntity<>(
-			ResDTO.<ResDeliveryAgentSearchDTO.DeliveryAgentDetailDTO>builder()
+			SuccessResponseDTO.<ResDeliveryAgentSearchDTO.DeliveryAgentDetailDTO>builder()
 				.code(HttpStatus.OK.value())
 				.message("배송 관리자 단건 조회 성공")
 				.data(deliveryAgentService.getDeliveryAgentById(userId, deliveryAgentId))
@@ -81,13 +81,13 @@ public class AgentController {
 	}
 
 	@PutMapping("/{deliveryAgentId}")
-	public ResponseEntity<ResDTO<Void>> putBy(
+	public ResponseEntity<SuccessResponseDTO<Void>> putBy(
 		@PathVariable(name = "deliveryAgentId") Long deliveryAgentId,
 		@RequestHeader(name = "X-User-Id") Long userId,
 		@RequestBody ReqDeliveryAgentPutDTO reqDeliveryAgentPutDTO
 	) {
 		deliveryAgentService.putBy(userId, deliveryAgentId, reqDeliveryAgentPutDTO);
-		return new ResponseEntity<>(ResDTO.<Void>builder()
+		return new ResponseEntity<>(SuccessResponseDTO.<Void>builder()
 			.code(HttpStatus.OK.value())
 			.message("배송 담당자 정보 수정 성공")
 			.build(),
@@ -96,12 +96,12 @@ public class AgentController {
 	}
 
 	@DeleteMapping("/{deliveryAgentId}")
-	public ResponseEntity<ResDTO<Void>> deleteBy(
+	public ResponseEntity<SuccessResponseDTO<Void>> deleteBy(
 		@PathVariable(name = "deliveryAgentId") Long deliveryAgentId,
 		@RequestHeader(name = "X-User-Id") Long userId
 	) {
 		deliveryAgentService.deleteBy(userId, deliveryAgentId);
-		return new ResponseEntity<>(ResDTO.<Void>builder()
+		return new ResponseEntity<>(SuccessResponseDTO.<Void>builder()
 			.code(HttpStatus.OK.value())
 			.message("배송 담당자 정보 삭제 성공")
 			.build(),

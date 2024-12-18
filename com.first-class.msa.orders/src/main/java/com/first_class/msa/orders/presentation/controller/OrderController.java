@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.first_class.msa.orders.application.dto.ResDTO;
 import com.first_class.msa.orders.application.dto.ResOrderDTO;
 import com.first_class.msa.orders.application.dto.ResOrderSearchDTO;
 import com.first_class.msa.orders.application.service.OrderService;
@@ -28,13 +27,13 @@ public class OrderController {
 	private final OrderService orderService;
 
 	@PostMapping("/{businessId}")
-	public ResponseEntity<ResDTO<ResOrderDTO>> postBy(
+	public ResponseEntity<SuccessResponseDTO<ResOrderDTO>> postBy(
 		@PathVariable Long businessId,
 		@RequestHeader("X-User-Id") Long userId,
 		@RequestBody ReqOrderPostDTO reqOrderPostDTO)
 	{
 		return new ResponseEntity<>(
-			ResDTO.<ResOrderDTO>builder()
+			SuccessResponseDTO.<ResOrderDTO>builder()
 				.code(HttpStatus.CREATED.value())
 				.message("주문 생성 성공")
 				.data(orderService.postBy(businessId, userId, reqOrderPostDTO))
@@ -45,12 +44,12 @@ public class OrderController {
 	}
 
 	@GetMapping
-	public ResponseEntity<ResDTO<ResOrderSearchDTO>> getAllOrderBy(
+	public ResponseEntity<SuccessResponseDTO<ResOrderSearchDTO>> getAllOrderBy(
 		@RequestHeader("X-User-Id") Long userId,
 		Pageable pageable
 	){
 		return new ResponseEntity<>(
-			ResDTO.<ResOrderSearchDTO>builder()
+			SuccessResponseDTO.<ResOrderSearchDTO>builder()
 				.code(HttpStatus.OK.value())
 				.message("주문 조회 성공")
 				.data(orderService.getAllOrderBy(userId, pageable))
@@ -60,12 +59,12 @@ public class OrderController {
 	}
 
 	@GetMapping("/{orderId}")
-	public ResponseEntity<ResDTO<ResOrderDTO>> getOrderDetailBy(
+	public ResponseEntity<SuccessResponseDTO<ResOrderDTO>> getOrderDetailBy(
 		@RequestHeader("X-User-Id") Long userId,
 		@PathVariable Long orderId
 	){
 		return new ResponseEntity<>(
-			ResDTO.<ResOrderDTO>builder()
+			SuccessResponseDTO.<ResOrderDTO>builder()
 				.code(HttpStatus.OK.value())
 				.message("주문 상세 조회 성공")
 				.data(orderService.getOrderDetailBy(userId ,orderId))
