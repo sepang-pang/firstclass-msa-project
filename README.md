@@ -71,5 +71,40 @@
 | **특정 채널 메시지 동기화**            | `POST`          | `/messages/sync/{channelId}`         | 지정된 Slack 채널의 메시지를 동기화                                      |
 | **메시지 수정**                       | `PUT`           | `/messages/update`                   | Slack 메시지 수정                                                        |
 | **메시지 삭제**                       | `DELETE`        | `/messages/{messageId}`              | 메시지 ID를 기반으로 메시지 삭제                                         |
+<br>
 
+- order-service
+
+| **기능**           | **HTTP Method** | **엔드포인트**                      | **설명**                     |
+|------------------|----------------|--------------------------------|----------------------------|
+| **주문 생성**        | `POST`         | `/orders/business/{businessId}` | 주문 정보를 통해 주문 생성            |
+| **주문 전체 조회**     | `GET`          | `/orders`                      | 권한에 따른 주몬 동적 전체 조회         |
+| **주문 단건 조회**     | `GET`          | `/orders/{orderId}`            | 권한에 따른 주문 단건 상세조회          |
+| **주문 삭제**        | `DELETE`       | `/orders/{orderId}`            | 권한별 주문 취소 배송 시작 전 상태에서만 가능 |
+<br>
+
+- agent-service
+
+| **기능**                | **HTTP Method** | **엔드포인트**                 | **설명**                           |
+|-----------------------|----------------|---------------------------|----------------------------------|
+| **배송관리자 생성**          | `POST`         | `/agents`                 | 회원 정보와 배송 관리자 역할 정보를 통한 배송 관리자 생성 |
+| **배송관리자 전체 조회**       | `POST`         | `/agents`                 | 권한별 배송관리자 동적 전체 조회               |
+| **배송관리자 단건 조회**       | `POST`         | `/agents/{deliveryAgentId}` | 권한별 배송관리자 단건 조회                  |
+| **배송관리자 정보 수정**       | `PUT`          | `/agents/{deliveryAgentId}` | 권한별 배송관리자 정보 수정 및 활성 상태 변경       |
+| **배송관리자 삭제**          | `DELETE`       | `/agents/{orderId}`       | 주문 취소 배송 시작 전 상태에서만 가능           |
+| **허브간 배송관리자 할당 요청**   | `POST`         | `/external/agents/global/{hubId}`  | 허브간 배송관리자 배정 요청                  |
+| **허브 업체간 배송관리자 할당 요청** | `POST`         |  `/external/agents/hubs/{hubId}`   | 허브 업체간 배송관리자 배정 요청               |
+| **배송관리자 정보 확인**       | `GET`          |  `/external/agents`   | 배송관리자 정보 조회                      |
+<br>
+
+- delivery-service
+
+| **기능**                     | **HTTP Method** | **엔드포인트**                 | **설명**              |
+|----------------------------|-----------------|---------------------------|---------------------|
+| **허브간 배송 상태변경**            | `PUT`           | `/{deliveryId}/hubs/{hubDeliveryRouteId}` | 권한별 허브간 업체의 배송 상태 변경 |
+| **허브 업체간 배송 상태변경**         | `PUT`           | `/deliverys/arrival/{businessDeliveryRouteId}` | 권한별 허브 업체간 배송 상태 변경 |
+| **배송 단건조회**                | `GET`           | `/deliverys/{deliveryId}` | 권한별 배송 단건 상세조회      |
+| **배송 취소**                  | `DELETE`        | `/deliverys/{deliveryId}`       | 배송 취소 배송 시작전 취소 가능  |
+| **주문한 회원의 배송 전체 정보 확인 조회** | `GET`           | `/external/orders/deliveries`  | 주문자의 전체 배송 정보 확인 조회 |
+| **배송 정보 확인 조회**            | `GET`           |  `/external/orders/{orderId}/deliveries`   | 주문자의 배송 정보 존재 확인 조회 |
 
