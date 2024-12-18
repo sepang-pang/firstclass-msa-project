@@ -36,9 +36,9 @@
 - 2024-12-5 ~ 2024-12-17
 
 ## 3. ERD 
-![image](https://github.com/user-attachments/assets/95a74aa7-2135-432c-af78-f73dbe2fd2e3) <br>
+![image](https://github.com/user-attachments/assets/95a74aa7-2135-432c-af78-f73dbe2fd2e3) <br><br>
 ## 4. 아키텍쳐
-
+![image (1)](https://github.com/user-attachments/assets/6c2c92b1-81f5-425d-9e91-4e883b893437)
 
 
 ## 5. 역할 분담
